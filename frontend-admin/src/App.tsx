@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import AdminLogin from './pages/AdminLogin';
 import Signup from './pages/Signup';
@@ -18,6 +18,8 @@ import Footer from './components/Footer';
 import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
+  const location = useLocation();
+
   return (
     <ThemeProvider>
       <Routes>
@@ -93,7 +95,7 @@ function App() {
           }
         />
       </Routes>
-      <Footer />
+      {location.pathname !== '/' && <Footer />}
     </ThemeProvider>
   );
 }
