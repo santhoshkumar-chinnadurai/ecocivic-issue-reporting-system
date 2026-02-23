@@ -20,7 +20,7 @@ const AdminLogin = () => {
             const res = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/auth/login`, { email, password });
             const user = res.data.user;
 
-            if (user.role !== 'ADMIN') {
+            if (user.role !== 'ADMIN' && user.role !== 'OFFICIAL') {
                 setError('ACCESS DENIED: Insufficient Clearance Levels.');
                 return;
             }

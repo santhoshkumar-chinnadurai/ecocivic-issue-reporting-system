@@ -30,6 +30,23 @@ export class AuthService implements OnModuleInit {
             await this.usersRepository.save(admin);
             console.log(`Default Admin Created: ${adminEmail} / admin123`);
         }
+
+        // Create Default Official
+        const officialEmail = 'official@civic.com';
+        const existingOfficial = await this.usersRepository.findOneBy({ email: officialEmail });
+
+        if (!existingOfficial) {
+            console.log('Creating Default Official User...');
+            const hashedPassword = await bcrypt.hash('official123', 10);
+            const official = this.usersRepository.create({
+                email: officialEmail,
+                password: hashedPassword,
+                role: UserRole.OFFICIAL,
+                provider: 'LOCAL',
+            });
+            await this.usersRepository.save(official);
+            console.log(`Default Official Created: ${officialEmail} / official123`);
+        }
     }
 
     async validateUser(email: string, pass: string): Promise<any> {
@@ -39,6 +56,16 @@ export class AuthService implements OnModuleInit {
                 user_id: 'static_admin_id',
                 email: 'admin@civic.com',
                 role: UserRole.ADMIN,
+                provider: 'LOCAL'
+            };
+        }
+
+        // Static Official Check (Bypass DB)
+        if (email === 'official@civic.com' && pass === 'official123') {
+            return {
+                user_id: 'static_official_id',
+                email: 'official@civic.com',
+                role: UserRole.OFFICIAL,
                 provider: 'LOCAL'
             };
         }
