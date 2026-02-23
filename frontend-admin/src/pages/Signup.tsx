@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, Phone, ArrowRight, Shield, Activity, UserPlus, Fingerprint, Globe } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Shield, Activity, UserPlus, Fingerprint, Globe, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Signup = () => {
@@ -9,6 +9,8 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phone, setPhone] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -27,7 +29,7 @@ const Signup = () => {
             await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/auth/register`, {
                 email,
                 password,
-                phone
+                phone: `+91${phone}`
             });
             alert('Identity Protocol Initialized! Proceed to Authentication.');
             navigate('/login');
@@ -35,7 +37,7 @@ const Signup = () => {
             if (axios.isAxiosError(err) && err.response?.data?.message) {
                 setError(err.response.data.message);
             } else if (err instanceof Error && (err.message === 'Network Error')) {
-                const demoUser = { email, phone, role: 'CITIZEN', id: 'demo-new-user-' + Date.now() };
+                const demoUser = { email, phone: `+91${phone}`, role: 'CITIZEN', id: 'demo-new-user-' + Date.now() };
                 localStorage.setItem('demo_pending_user', JSON.stringify({ ...demoUser, password }));
                 alert('(Demo Mode) Offline Identity Created. Authorized for Login.');
                 navigate('/login');
@@ -138,15 +140,19 @@ const Signup = () => {
 
                                     <div className="space-y-3">
                                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-2">Phone Number</label>
-                                        <div className="relative group/input">
-                                            <Phone className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within/input:text-blue-500 transition-colors" />
+                                        <div className="flex relative">
+                                            <div className="flex items-center justify-center pl-5 pr-3 bg-gray-100/50 dark:bg-black/60 border border-r-0 border-gray-200 dark:border-white/5 rounded-l-2xl text-gray-400 font-bold text-sm">
+                                                🇮🇳 &nbsp;&nbsp;+91
+                                            </div>
                                             <input
                                                 type="tel"
                                                 required
+                                                maxLength={10}
+                                                pattern="[0-9]{10}"
                                                 value={phone}
-                                                onChange={(e) => setPhone(e.target.value)}
-                                                className="w-full bg-gray-100/50 dark:bg-black/60 border border-gray-200 dark:border-white/5 rounded-2xl py-4.5 pl-14 pr-6 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-gray-500 text-gray-900 dark:text-white"
-                                                placeholder="+1 (555) 000-0000"
+                                                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                                                className="w-full bg-gray-100/50 dark:bg-black/60 border border-l-0 border-gray-200 dark:border-white/5 rounded-r-2xl py-4.5 pl-3 pr-6 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-gray-500 text-gray-900 dark:text-white"
+                                                placeholder="9876543210"
                                             />
                                         </div>
                                     </div>
@@ -154,25 +160,35 @@ const Signup = () => {
                                     <div className="grid grid-cols-2 gap-6">
                                         <div className="space-y-3">
                                             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-2">Password</label>
-                                            <input
-                                                type="password"
-                                                required
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                className="w-full bg-gray-100/50 dark:bg-black/60 border border-gray-200 dark:border-white/5 rounded-2xl py-4.5 px-6 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-gray-500 text-gray-900 dark:text-white"
-                                                placeholder="••••••"
-                                            />
+                                            <div className="relative">
+                                                <input
+                                                    type={showPassword ? "text" : "password"}
+                                                    required
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                    className="w-full bg-gray-100/50 dark:bg-black/60 border border-gray-200 dark:border-white/5 rounded-2xl py-4.5 px-6 pr-12 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-gray-500 text-gray-900 dark:text-white"
+                                                    placeholder="••••••"
+                                                />
+                                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500 transition-colors">
+                                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                                </button>
+                                            </div>
                                         </div>
                                         <div className="space-y-3">
                                             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 ml-2">Confirm Password</label>
-                                            <input
-                                                type="password"
-                                                required
-                                                value={confirmPassword}
-                                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                                className="w-full bg-gray-100/50 dark:bg-black/60 border border-gray-200 dark:border-white/5 rounded-2xl py-4.5 px-6 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-gray-500 text-gray-900 dark:text-white"
-                                                placeholder="••••••"
-                                            />
+                                            <div className="relative">
+                                                <input
+                                                    type={showConfirmPassword ? "text" : "password"}
+                                                    required
+                                                    value={confirmPassword}
+                                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                                    className="w-full bg-gray-100/50 dark:bg-black/60 border border-gray-200 dark:border-white/5 rounded-2xl py-4.5 px-6 pr-12 text-sm focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-gray-500 text-gray-900 dark:text-white"
+                                                    placeholder="••••••"
+                                                />
+                                                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500 transition-colors">
+                                                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
