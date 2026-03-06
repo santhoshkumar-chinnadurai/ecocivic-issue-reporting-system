@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Activity, Shield, Users, Radio, MapPin, Clock, ArrowRight, Cpu, Zap, Wifi } from 'lucide-react';
+import { Activity, Users, Radio, MapPin, Clock, ArrowRight, Cpu, Zap, Wifi, ShieldAlert, Monitor as MonitorIcon } from 'lucide-react';
 import Layout from '../components/Layout';
 import DashboardMap from '../components/DashboardMap';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -95,12 +95,12 @@ const Monitor = () => {
 
     const StatusBadge = ({ status }: { status: string }) => {
         const colors: Record<string, string> = {
-            'OPEN': 'text-red-400 border-red-500/30 bg-red-500/10',
+            'OPEN': 'text-red-400 border-red-500/30 bg-red-500/10 shadow-[0_0_10px_rgba(239,68,68,0.2)]',
             'IN_PROGRESS': 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10',
-            'RESOLVED': 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10'
+            'RESOLVED': 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10'
         };
         return (
-            <span className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter border rounded-sm ${colors[status] || 'text-gray-400 border-gray-500/30 bg-gray-500/10'}`}>
+            <span className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-widest border rounded-xl ${colors[status] || 'text-gray-400 border-gray-500/30 bg-gray-500/10'}`}>
                 {status}
             </span>
         );
@@ -108,146 +108,178 @@ const Monitor = () => {
 
     return (
         <Layout userRole="ADMIN">
-            <div className="max-w-[1600px] mx-auto h-[calc(100vh-8rem)] flex flex-col gap-4 text-cyan-50 font-mono">
+            <div className="max-w-[1600px] mx-auto h-[calc(100vh-8rem)] flex flex-col gap-5 text-gray-200 mt-4 pb-6">
+
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 shrink-0 z-10">
+                    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                        <div className="flex items-center gap-3 mb-1">
+                            <MonitorIcon className="text-indigo-400" size={28} />
+                            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">System Monitor</h1>
+                        </div>
+                        <p className="text-indigo-300/80 font-medium text-sm tracking-wide uppercase">Real-time infrastructure & incident telemetry</p>
+                    </motion.div>
+                </div>
 
                 {/* Tactical Header / System Pulse */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 shrink-0">
-                    <div className="bg-black/60 border border-cyan-500/20 p-3 rounded-sm flex flex-col relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-1 opacity-20"><Cpu size={14} /></div>
-                        <span className="text-[10px] text-cyan-500/60 uppercase font-black">Core Load</span>
-                        <div className="flex items-end gap-2 mt-1">
-                            <span className="text-2xl font-black">{metrics.cpu}%</span>
-                            <div className="flex-1 h-1.5 bg-cyan-900/40 mb-1.5 rounded-full overflow-hidden">
-                                <motion.div animate={{ width: `${metrics.cpu}%` }} className="h-full bg-cyan-500" />
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+                    className="grid grid-cols-2 md:grid-cols-5 gap-4 shrink-0"
+                >
+                    <div className="bg-white/[0.02] backdrop-blur-3xl border border-white/10 p-5 rounded-3xl flex flex-col relative overflow-hidden group shadow-xl hover:bg-white/[0.04] transition-colors">
+                        <div className="absolute top-4 right-4 p-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"><Cpu size={16} /></div>
+                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Core Load</span>
+                        <div className="flex flex-col gap-3 mt-2">
+                            <span className="text-4xl font-black text-white">{metrics.cpu}%</span>
+                            <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                <motion.div animate={{ width: `${metrics.cpu}%` }} className="h-full bg-indigo-500" />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-black/60 border border-purple-500/20 p-3 rounded-sm flex flex-col relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-1 opacity-20"><Zap size={14} /></div>
-                        <span className="text-[10px] text-purple-500/60 uppercase font-black">Memory Stack</span>
-                        <div className="flex items-end gap-2 mt-1">
-                            <span className="text-2xl font-black">{metrics.mem}%</span>
-                            <div className="flex-1 h-1.5 bg-purple-900/40 mb-1.5 rounded-full overflow-hidden">
+
+                    <div className="bg-white/[0.02] backdrop-blur-3xl border border-white/10 p-5 rounded-3xl flex flex-col relative overflow-hidden group shadow-xl hover:bg-white/[0.04] transition-colors">
+                        <div className="absolute top-4 right-4 p-2 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20"><Zap size={16} /></div>
+                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Memory Stack</span>
+                        <div className="flex flex-col gap-3 mt-2">
+                            <span className="text-4xl font-black text-white">{metrics.mem}%</span>
+                            <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
                                 <motion.div animate={{ width: `${metrics.mem}%` }} className="h-full bg-purple-500" />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-black/60 border border-emerald-500/20 p-3 rounded-sm flex flex-col relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-1 opacity-20"><Wifi size={14} /></div>
-                        <span className="text-[10px] text-emerald-500/60 uppercase font-black">Sync Latency</span>
-                        <div className="flex items-end gap-2 mt-1">
-                            <span className="text-2xl font-black">{metrics.lat}ms</span>
-                            <div className="flex-1 h-1.5 bg-emerald-900/40 mb-1.5 rounded-full overflow-hidden">
+
+                    <div className="bg-white/[0.02] backdrop-blur-3xl border border-white/10 p-5 rounded-3xl flex flex-col relative overflow-hidden group shadow-xl hover:bg-white/[0.04] transition-colors">
+                        <div className="absolute top-4 right-4 p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><Wifi size={16} /></div>
+                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Sync Latency</span>
+                        <div className="flex flex-col gap-3 mt-2">
+                            <span className="text-4xl font-black text-white">{metrics.lat}ms</span>
+                            <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
                                 <div className="h-full bg-emerald-500 w-[20%]" />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-black/60 border border-yellow-500/20 p-3 rounded-sm flex flex-col relative overflow-hidden">
-                        <span className="text-[10px] text-yellow-500/60 uppercase font-black">Active Units</span>
-                        <div className="flex items-end gap-2 mt-1">
-                            <span className="text-2xl font-black">
+
+                    <div className="bg-white/[0.02] backdrop-blur-3xl border border-white/10 p-5 rounded-3xl flex flex-col relative overflow-hidden group shadow-xl hover:bg-white/[0.04] transition-colors">
+                        <div className="absolute top-4 right-4 p-2 rounded-xl bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"><Users size={16} /></div>
+                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Total Users</span>
+                        <div className="flex items-end gap-2 mt-2">
+                            <span className="text-4xl font-black text-white">
                                 {String(backendStats?.totalUsers || 0).padStart(3, '0')}
                             </span>
-                            <Shield size={16} className="text-yellow-500 mb-1.5 opacity-50" />
                         </div>
                     </div>
-                    <div className="hidden md:flex bg-cyan-500/10 border border-cyan-500/40 p-3 rounded-sm flex-col justify-center items-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-500/5 via-transparent to-transparent animate-pulse" />
-                        <span className="text-[10px] text-cyan-400 uppercase font-black tracking-widest">Operation Clock</span>
-                        <span className="text-xl font-black tracking-tighter">{metrics.uptime}</span>
+
+                    <div className="hidden md:flex bg-indigo-500/10 border border-indigo-500/30 p-5 rounded-3xl flex-col justify-center items-center relative overflow-hidden shadow-[0_0_30px_rgba(99,102,241,0.15)] group">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/20 via-transparent to-transparent animate-pulse" />
+                        <span className="text-[10px] text-indigo-400 uppercase font-bold tracking-widest z-10 mb-1">Operation Clock</span>
+                        <span className="text-4xl font-black text-white font-mono tracking-tight z-10 shadow-sm">{metrics.uptime}</span>
+                        <div className="absolute bottom-4 flex items-center gap-2">
+                            <div className="h-2 w-2 rounded-full bg-indigo-400 animate-ping" />
+                            <span className="text-[10px] text-indigo-400/80 font-bold uppercase tracking-widest relative z-10">Uplink Active</span>
+                        </div>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Main Control Grid */}
-                <div className="flex-1 grid grid-cols-12 gap-4 min-h-0">
-
-                    {/* LEFT: Tactical Map (Cyber Style) */}
-                    <div className="col-span-12 lg:col-span-8 flex flex-col gap-4">
-                        <div className="flex-1 bg-black/80 border border-cyan-500/30 rounded-sm relative overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.1)]">
-                            <div className="absolute top-0 left-0 right-0 p-3 z-10 bg-gradient-to-b from-black to-transparent flex justify-between items-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                    className="flex-1 grid grid-cols-12 gap-5 min-h-0"
+                >
+                    {/* LEFT: Tactical Map (Glass Style) */}
+                    <div className="col-span-12 lg:col-span-8 flex flex-col gap-5">
+                        <div className="flex-1 bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-3xl relative overflow-hidden shadow-2xl flex flex-col">
+                            <div className="p-5 border-b border-white/5 bg-white/[0.01] flex justify-between items-center shrink-0">
                                 <div className="flex items-center gap-3">
-                                    <div className="h-2 w-2 rounded-full bg-cyan-500 animate-ping" />
-                                    <h2 className="text-xs font-black uppercase tracking-[0.2em]">Geospatial Incident Array</h2>
+                                    <MapPin size={18} className="text-indigo-400" />
+                                    <h2 className="text-sm font-bold uppercase tracking-widest text-white">Geospatial Array</h2>
                                 </div>
                                 <div className="flex gap-2">
-                                    <button className="text-[10px] bg-cyan-500/20 hover:bg-cyan-500/40 px-2 py-1 rounded-sm border border-cyan-500/30 transition-all uppercase">Vector</button>
-                                    <button className="text-[10px] bg-cyan-500/20 hover:bg-cyan-500/40 px-2 py-1 rounded-sm border border-cyan-500/30 transition-all uppercase">Thermal</button>
+                                    <button className="text-[10px] font-bold text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-xl transition-all uppercase tracking-widest">Standard</button>
+                                    <button className="text-[10px] font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/30 px-3 py-1.5 rounded-xl transition-all uppercase tracking-widest">Heatmap</button>
                                 </div>
                             </div>
 
-                            {/* Scanning Overlay Effect */}
-                            <div className="absolute inset-0 pointer-events-none z-10">
-                                <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-500/30 animate-[scan_4s_linear_infinite]" />
-                                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,118,0.06))] bg-[length:100%_2px,3px_100%] opacity-20" />
-                            </div>
-
-                            <div className="h-full w-full [&>div]:h-full [&>div]:mb-0 [&>div]:rounded-none [&>div]:border-0 [&>div>div]:h-full grayscale-[0.5] invert-[0.05] brightness-[0.8] contrast-[1.2]">
-                                <DashboardMap />
+                            <div className="flex-1 w-full relative">
+                                {/* Map container without heavy image manipulation from cyber theme */}
+                                <div className="absolute inset-0 [&>div]:h-full [&>div]:mb-0 [&>div]:border-0 [&>div>div]:h-full opacity-90 mix-blend-screen brightness-110 saturate-150">
+                                    <DashboardMap />
+                                </div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                             </div>
                         </div>
 
                         {/* BOTTOM: System Console (Logs) */}
-                        <div className="h-32 bg-black/90 border border-green-500/30 rounded-sm p-3 relative overflow-hidden flex flex-col">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Activity size={14} className="text-green-500 animate-pulse" />
-                                <span className="text-[10px] text-green-500/80 uppercase font-bold">System Operations Log</span>
+                        <div className="h-32 bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-5 relative overflow-hidden flex flex-col shadow-xl font-mono text-xs">
+                            <div className="flex items-center gap-3 mb-3 shrink-0">
+                                <Activity size={16} className="text-indigo-400 opacity-80" />
+                                <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">System Event Log</span>
                             </div>
-                            <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scrollbar text-[11px] text-green-500/70 space-y-1">
+                            <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scrollbar text-gray-500 space-y-2 pr-2">
                                 {logs.length === 0 ? (
-                                    <div className="animate-pulse">Establishing uplink connection...</div>
+                                    <div className="text-indigo-400/60 animate-pulse flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full" />
+                                        Establishing secure connection...
+                                    </div>
                                 ) : (
                                     logs.map((log, i) => (
-                                        <div key={i} className="flex gap-2">
-                                            <span className="opacity-40">::</span>
-                                            <span>{log}</span>
+                                        <div key={i} className="flex gap-3 items-start group">
+                                            <span className="text-indigo-500/40 mt-0.5">❯</span>
+                                            <span className="group-hover:text-gray-300 transition-colors">{log}</span>
                                         </div>
                                     ))
                                 )}
                             </div>
-                            <div className="absolute bottom-1 right-2 text-[8px] text-green-500/20 uppercase">SECURE_UPLINK_ENCRYPTED</div>
                         </div>
                     </div>
 
                     {/* RIGHT: Active Threats / Feed */}
-                    <div className="col-span-12 lg:col-span-4 bg-black/60 border border-cyan-500/20 flex flex-col rounded-sm overflow-hidden">
-                        <div className="p-3 border-b border-cyan-500/20 bg-cyan-500/5 flex justify-between items-center">
-                            <h2 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
-                                <Radio className="text-cyan-500 animate-pulse" size={14} /> Active Feed
+                    <div className="col-span-12 lg:col-span-4 bg-white/[0.02] backdrop-blur-3xl border border-white/10 flex flex-col rounded-3xl overflow-hidden shadow-2xl">
+                        <div className="p-5 border-b border-white/10 bg-white/[0.01] flex justify-between items-center shrink-0">
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-white flex items-center gap-3">
+                                <Radio className="text-indigo-400" size={18} /> LIVE FEED
                             </h2>
-                            <span className="text-[10px] bg-red-500/20 text-red-500 px-2 rounded-full border border-red-500/20 animate-pulse">LIVE</span>
+                            <span className="text-[10px] font-bold bg-red-500/10 text-red-500 px-3 py-1 rounded-full border border-red-500/20 uppercase tracking-widest flex items-center gap-1.5 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+                                <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-ping" />
+                                ACTIVE
+                            </span>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar">
+                        <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
                             <AnimatePresence initial={false}>
                                 {loading ? (
-                                    <div className="py-20 text-center text-cyan-500/40 text-xs animate-pulse">Interrogating Database...</div>
+                                    <div className="py-20 flex flex-col items-center justify-center text-gray-500 space-y-4">
+                                        <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+                                        <span className="text-[10px] uppercase tracking-widest font-bold">Querying Network...</span>
+                                    </div>
                                 ) : (
                                     reports.map((report) => (
                                         <motion.div
                                             key={report.report_id}
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             animate={{ opacity: 1, scale: 1 }}
-                                            whileHover={{ x: 5, backgroundColor: 'rgba(6,182,212,0.1)' }}
-                                            className="bg-black/40 border border-cyan-500/10 p-3 rounded-sm transition-all cursor-pointer group relative overflow-hidden"
+                                            whileHover={{ y: -2, backgroundColor: 'rgba(255,255,255,0.06)' }}
+                                            className="bg-white/[0.03] border border-white/5 p-4 rounded-2xl transition-all cursor-pointer group relative overflow-hidden hover:border-white/20 hover:shadow-xl"
                                             onClick={() => navigate(`/issues/${report.report_id}`)}
                                         >
-                                            <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-cyan-500/0 group-hover:bg-cyan-500 transition-all" />
-                                            <div className="flex justify-between items-start mb-1">
+                                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500/0 group-hover:bg-indigo-500 transition-all duration-300" />
+                                            <div className="flex justify-between items-start mb-3">
                                                 <StatusBadge status={report.status} />
-                                                <span className="text-[10px] text-white/40 flex items-center gap-1">
-                                                    <Clock size={10} />
+                                                <span className="text-[10px] font-bold text-gray-500 flex items-center gap-1.5 tracking-wider font-mono">
+                                                    <Clock size={12} className="opacity-70" />
                                                     {new Date(report.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
-                                            <h4 className="text-sm font-black text-white group-hover:text-cyan-400 transition-colors uppercase leading-tight mb-1">
+                                            <h4 className="text-base font-bold text-gray-200 group-hover:text-white transition-colors leading-tight mb-3">
                                                 {report.title}
                                             </h4>
-                                            <div className="flex items-center justify-between text-[10px] text-cyan-500/50">
-                                                <span className="flex items-center gap-1 truncate max-w-[80%]">
-                                                    <MapPin size={10} className="text-red-500/60" />
-                                                    {report.location}
+                                            <div className="flex items-center justify-between text-xs font-medium text-gray-400">
+                                                <span className="flex items-center gap-2 truncate max-w-[85%] bg-black/20 px-2 py-1 rounded-lg">
+                                                    <MapPin size={12} className="text-indigo-400 shrink-0" />
+                                                    <span className="truncate">{report.location}</span>
                                                 </span>
-                                                <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
+                                                <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-colors shrink-0">
+                                                    <ArrowRight size={12} />
+                                                </div>
                                             </div>
                                         </motion.div>
                                     ))
@@ -256,28 +288,25 @@ const Monitor = () => {
                         </div>
 
                         {/* Footer Mini Stats */}
-                        <div className="p-3 border-t border-cyan-500/20 bg-black flex justify-between items-center text-[10px]">
+                        <div className="p-4 border-t border-white/10 bg-black/40 flex justify-between items-center text-[10px] shrink-0 font-bold uppercase tracking-widest text-gray-500">
                             <div className="flex gap-4">
-                                <span className="flex items-center gap-1"><Users size={12} className="text-cyan-500" /> {backendStats?.totalUsers || 0} Registered</span>
-                                <span className="flex items-center gap-1"><Shield size={12} className="text-yellow-500" /> {backendStats?.total || 0} Reports</span>
+                                <span className="flex items-center gap-1.5"><ShieldAlert size={14} className="text-indigo-500" /> {backendStats?.total || 0} Reports</span>
                             </div>
-                            <span className="animate-pulse text-green-500 italic">SYSTEM_READY</span>
+                            <span className="text-emerald-500 flex items-center gap-1.5">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                SYSTEM OPTIMAL
+                            </span>
                         </div>
                     </div>
 
-                </div>
+                </motion.div>
             </div>
 
-            {/* Custom Scanline CSS */}
             <style>{`
-                @keyframes scan {
-                    from { transform: translateY(-100%); }
-                    to { transform: translateY(100vh); }
-                }
-                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-                .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(6,182,212,0.2); border-radius: 10px; }
-                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(6,182,212,0.4); }
+                .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
             `}</style>
         </Layout>
     );

@@ -1,14 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Camera, Mail, Phone, Shield, Calendar, Trash2, Save } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Camera, Mail, Phone, Shield, Calendar, Trash2, Save, User as UserIcon, Activity } from 'lucide-react';
+import { motion } from 'framer-motion';
 import api from '../api/axios';
-
-const BACKGROUNDS = [
-    'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80'
-];
+import Layout from '../components/Layout';
 
 const UserProfile = () => {
     const { id } = useParams();
@@ -22,7 +17,6 @@ const UserProfile = () => {
     });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [currentBg, setCurrentBg] = useState(0);
     const [deleting, setDeleting] = useState(false);
 
     // Get logged in user to check permissions
@@ -56,10 +50,6 @@ const UserProfile = () => {
     };
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentBg((prev) => (prev + 1) % BACKGROUNDS.length);
-        }, 12000);
-
         const fetchUser = async () => {
             try {
                 const targetId = id || (loggedInUser?.id || loggedInUser?.user_id);
@@ -98,7 +88,6 @@ const UserProfile = () => {
         };
 
         fetchUser();
-        return () => clearInterval(interval);
     }, [id]);
 
     const handleSave = async (e: React.FormEvent) => {
@@ -137,179 +126,172 @@ const UserProfile = () => {
         }
     };
 
-    if (loading) return (
-        <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
-            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-    );
-
     const canEdit = true; // Allow editing for demo purposes mostly
 
     return (
-        <div className="min-h-screen relative flex overflow-hidden text-white font-sans selection:bg-blue-500 selection:text-white">
-            {/* Dynamic Background */}
-            <div className="fixed inset-0 z-0 bg-gray-900">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={currentBg}
-                        initial={{ opacity: 0, scale: 1.05 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 2 }}
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${BACKGROUNDS[currentBg]})` }}
-                    />
-                </AnimatePresence>
-                <div className="absolute inset-0 bg-black/70 backdrop-blur-[3px]"></div>
-            </div>
-
-            <div className="relative z-10 w-full max-w-4xl mx-auto px-4 py-12 flex flex-col justify-center min-h-screen">
+        <Layout userRole={loggedInUser?.role}>
+            <div className="max-w-5xl mx-auto pb-24 mt-4">
+                {/* Header Sequence */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-8"
+                    className="mb-8 flex flex-col items-start gap-4"
                 >
                     <button
                         onClick={() => navigate(-1)}
-                        className="flex items-center text-gray-400 hover:text-white transition-colors mb-4 group"
+                        className="flex items-center text-sm font-bold tracking-widest uppercase text-gray-400 hover:text-indigo-400 bg-white/[0.02] hover:bg-indigo-500/10 border border-white/5 hover:border-indigo-500/30 px-4 py-2 rounded-xl transition-all group"
                     >
                         <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                        Back to Dashboard
+                        Return
                     </button>
-                    <h1 className="text-4xl font-bold tracking-tight">Profile Settings</h1>
-                    <p className="text-gray-400 mt-2">Manage your account details and preferences.</p>
+                    <div>
+                        <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight flex items-center gap-3">
+                            <UserIcon className="text-indigo-400" size={32} />
+                            Profile Configuration
+                        </h1>
+                        <p className="text-indigo-300/80 font-medium text-sm mt-2 tracking-wide uppercase">Identity and Security Credentials</p>
+                    </div>
                 </motion.div>
 
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.1 }}
-                    className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
-                >
-                    <div className="md:flex">
+                {loading ? (
+                    <div className="flex flex-col items-center justify-center p-24 space-y-4 bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-3xl mt-8">
+                        <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-sm font-bold tracking-widest text-gray-500 uppercase">Synchronizing Records...</span>
+                    </div>
+                ) : (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.98, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ delay: 0.1, type: "spring", stiffness: 100 }}
+                        className="bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl mt-8 flex flex-col md:flex-row"
+                    >
                         {/* Sidebar / Avatar Section */}
-                        <div className="md:w-1/3 bg-black/20 p-8 flex flex-col items-center border-b md:border-b-0 md:border-r border-white/10">
-                            <div className="relative mb-6">
-                                <div className="h-32 w-32 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 p-1 shadow-xl shadow-blue-500/20">
-                                    <div className="h-full w-full rounded-full bg-gray-900 flex items-center justify-center text-white text-5xl font-bold">
+                        <div className="md:w-[35%] bg-black/40 p-10 flex flex-col items-center border-b md:border-b-0 md:border-r border-white/10 relative overflow-hidden group">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 pointer-events-none" />
+
+                            <div className="relative mb-8 z-10 group-hover:scale-105 transition-transform duration-500">
+                                <div className="h-36 w-36 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-500 p-[2px] shadow-[0_0_30px_rgba(99,102,241,0.2)] rotate-3 group-hover:rotate-6 transition-all">
+                                    <div className="h-full w-full rounded-[22px] bg-[#0A0A0A] flex items-center justify-center text-white text-6xl font-black -rotate-3 group-hover:-rotate-6 transition-all shadow-inner">
                                         {userData.email?.[0]?.toUpperCase() || 'U'}
                                     </div>
                                 </div>
-                                <button className="absolute bottom-0 right-0 p-2 bg-blue-600 rounded-full hover:bg-blue-500 transition-colors shadow-lg border border-gray-900">
-                                    <Camera className="h-4 w-4 text-white" />
+                                <button className="absolute -bottom-3 -right-3 p-3 bg-indigo-500 rounded-2xl hover:bg-indigo-400 transition-all shadow-xl rotate-12 hover:rotate-0 hover:scale-110 border-2 border-[#111]">
+                                    <Camera className="h-5 w-5 text-white" />
                                 </button>
                             </div>
 
-                            <h2 className="text-xl font-bold text-white text-center break-all">{userData.email || 'User'}</h2>
-                            <div className="mt-2 px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-bold rounded-full border border-blue-500/30">
+                            <h2 className="text-2xl font-black text-white text-center break-all z-10">{userData.email || 'User Account'}</h2>
+                            <div className="mt-3 px-4 py-1.5 bg-indigo-500/10 text-indigo-400 text-xs font-black tracking-widest uppercase rounded-xl border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.15)] z-10">
                                 {userData.role || 'CITIZEN'}
                             </div>
 
-                            <div className="mt-8 w-full space-y-4">
-                                <div className="p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Pass Score</div>
-                                    <div className="text-2xl font-bold text-green-400">98%</div>
+                            <div className="mt-10 w-full space-y-4 z-10">
+                                <div className="p-5 bg-white/[0.03] rounded-2xl border border-white/5 hover:bg-white/[0.06] transition-colors relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-3 opacity-10"><Shield size={32} /></div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-1">Clearance Level</div>
+                                    <div className="text-3xl font-black text-emerald-400">98<span className="text-xl text-emerald-400/50">%</span></div>
                                 </div>
-                                <div className="p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Reports</div>
-                                    <div className="text-2xl font-bold text-blue-400">12</div>
+                                <div className="p-5 bg-white/[0.03] rounded-2xl border border-white/5 hover:bg-white/[0.06] transition-colors relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-3 opacity-10"><Activity size={32} /></div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-1">Total Reports</div>
+                                    <div className="text-3xl font-black text-indigo-400">12<span className="text-xl text-indigo-400/50">#</span></div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Form Section */}
-                        <div className="md:w-2/3 p-8">
-                            <form onSubmit={handleSave} className="space-y-6">
-                                <h3 className="text-lg font-semibold text-white border-b border-white/10 pb-4 mb-6">
-                                    Personal Information
+                        <div className="md:w-[65%] p-10 bg-transparent relative z-10">
+                            <form onSubmit={handleSave} className="space-y-8">
+                                <h3 className="text-xs font-black tracking-[0.2em] text-gray-500 uppercase border-b border-white/5 pb-4 mb-8">
+                                    Personal Credentials
                                 </h3>
 
-                                <div className="grid grid-cols-1 gap-6">
+                                <div className="grid grid-cols-1 gap-7">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
+                                        <label className="block text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-2">Primary Email</label>
                                         <div className="relative group">
-                                            <Mail className="absolute left-4 top-3.5 h-5 w-5 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
+                                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                                             <input
                                                 type="email"
                                                 value={userData.email || ''}
                                                 onChange={e => setUserData({ ...userData, email: e.target.value })}
                                                 disabled={!canEdit}
-                                                className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                                                className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.02] transition-all shadow-inner disabled:opacity-50"
                                             />
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
+                                        <label className="block text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-2">Secure Comm Link</label>
                                         <div className="relative group">
-                                            <Phone className="absolute left-4 top-3.5 h-5 w-5 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
+                                            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                                             <input
                                                 type="tel"
                                                 value={userData.phone_number || ''}
                                                 onChange={e => setUserData({ ...userData, phone_number: e.target.value })}
                                                 disabled={!canEdit}
-                                                className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
+                                                className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.02] transition-all shadow-inner disabled:opacity-50"
                                                 placeholder="+1 (555) 000-0000"
                                             />
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-400 mb-2">Role</label>
-                                            <div className="relative">
-                                                <Shield className="absolute left-4 top-3.5 h-5 w-5 text-gray-500" />
+                                            <label className="block text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-2">Assigned Role</label>
+                                            <div className="relative border border-white/5 bg-white/[0.01] rounded-2xl overflow-hidden pointer-events-none">
+                                                <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-indigo-500/60" />
                                                 <input
                                                     type="text"
                                                     value={userData.role || ''}
                                                     disabled
-                                                    className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-12 pr-4 text-gray-400 cursor-not-allowed"
+                                                    className="w-full bg-transparent py-4 pl-12 pr-4 text-gray-300 font-bold tracking-wider"
                                                 />
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-400 mb-2">Joined Date</label>
-                                            <div className="relative">
-                                                <Calendar className="absolute left-4 top-3.5 h-5 w-5 text-gray-500" />
+                                            <label className="block text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-2">System Entry Date</label>
+                                            <div className="relative border border-white/5 bg-white/[0.01] rounded-2xl overflow-hidden pointer-events-none">
+                                                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-purple-500/60" />
                                                 <input
                                                     type="text"
-                                                    value={new Date(userData.created_at).toLocaleDateString()}
+                                                    value={new Date(userData.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                                                     disabled
-                                                    className="w-full bg-white/5 border border-white/5 rounded-xl py-3 pl-12 pr-4 text-gray-400 cursor-not-allowed"
+                                                    className="w-full bg-transparent py-4 pl-12 pr-4 text-gray-300 font-bold"
                                                 />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="pt-6 border-t border-white/10 flex justify-between">
+                                <div className="pt-8 mt-4 border-t border-white/5 flex flex-col sm:flex-row justify-between gap-4">
                                     {loggedInUser?.role === 'ADMIN' && (
                                         <button
                                             type="button"
                                             onClick={handleDelete}
                                             disabled={deleting || !canEdit}
-                                            className="flex items-center px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-xl font-bold transition-all disabled:opacity-50"
+                                            className="flex items-center justify-center px-6 py-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-2xl font-bold transition-all disabled:opacity-50 cursor-pointer"
                                         >
-                                            <Trash2 className="h-5 w-5 mr-2" />
-                                            {deleting ? 'Deleting...' : 'Delete User'}
+                                            <Trash2 className="h-5 w-5 mr-3" />
+                                            {deleting ? 'Executing...' : 'Terminate Account'}
                                         </button>
                                     )}
                                     <button
                                         type="submit"
                                         disabled={saving || !canEdit}
-                                        className="flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white rounded-xl font-bold shadow-lg shadow-blue-500/20 transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+                                        className="sm:ml-auto flex items-center justify-center px-8 py-4 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-bold tracking-wide shadow-xl shadow-indigo-500/20 transition-all transform hover:-translate-y-1 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                                     >
-                                        <Save className="h-5 w-5 mr-2" />
-                                        {saving ? 'Saving...' : 'Save Changes'}
+                                        <Save className="h-5 w-5 mr-3" />
+                                        {saving ? 'Encrypting...' : 'Save Configuration'}
                                     </button>
                                 </div>
                             </form>
                         </div>
-                    </div>
-                </motion.div>
+                    </motion.div>
+                )}
             </div>
-        </div>
+        </Layout>
     );
-}
+};
 
 export default UserProfile;

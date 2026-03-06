@@ -47,6 +47,23 @@ export class AuthService implements OnModuleInit {
             await this.usersRepository.save(official);
             console.log(`Default Official Created: ${officialEmail} / official123`);
         }
+
+        // Create Default Worker
+        const workerEmail = 'worker@civic.com';
+        const existingWorker = await this.usersRepository.findOneBy({ email: workerEmail });
+
+        if (!existingWorker) {
+            console.log('Creating Default Worker User...');
+            const hashedPassword = await bcrypt.hash('worker123', 10);
+            const worker = this.usersRepository.create({
+                email: workerEmail,
+                password: hashedPassword,
+                role: UserRole.WORKER,
+                provider: 'LOCAL',
+            });
+            await this.usersRepository.save(worker);
+            console.log(`Default Worker Created: ${workerEmail} / worker123`);
+        }
     }
 
     async validateUser(email: string, pass: string): Promise<any> {
@@ -66,6 +83,16 @@ export class AuthService implements OnModuleInit {
                 user_id: 'static_official_id',
                 email: 'official@civic.com',
                 role: UserRole.OFFICIAL,
+                provider: 'LOCAL'
+            };
+        }
+
+        // Static Worker Check (Bypass DB)
+        if (email === 'worker@civic.com' && pass === 'worker123') {
+            return {
+                user_id: 'static_worker_id',
+                email: 'worker@civic.com',
+                role: UserRole.WORKER,
                 provider: 'LOCAL'
             };
         }

@@ -4,6 +4,7 @@ export enum UserRole {
     CITIZEN = 'CITIZEN',
     ADMIN = 'ADMIN',
     OFFICIAL = 'OFFICIAL',
+    WORKER = 'WORKER',
 }
 
 @Entity('users')
@@ -32,6 +33,9 @@ export class User {
 
     @Column({ nullable: true })
     fcm_token: string;
+
+    @Column({ default: 0 })
+    points: number;
 
     @CreateDateColumn()
     created_at: Date;

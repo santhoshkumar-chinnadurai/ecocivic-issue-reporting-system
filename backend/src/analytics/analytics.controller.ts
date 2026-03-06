@@ -38,8 +38,10 @@ export class AnalyticsController {
 
     @Get('heatmap')
     async getHeatmapData() {
-        // Return Lat/Lng points of all reports
-        const reports = await this.reportsRepository.find({ select: { latitude: true, longitude: true } });
-        return reports.map(r => [Number(r.latitude), Number(r.longitude)]);
+        // Return full reports for rich map visualization
+        const reports = await this.reportsRepository.find({
+            select: ['report_id', 'latitude', 'longitude', 'category', 'status', 'created_at']
+        });
+        return reports;
     }
 }

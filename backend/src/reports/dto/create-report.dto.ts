@@ -28,4 +28,8 @@ export class CreateReportDto {
     @IsNumber()
     @IsNotEmpty()
     longitude: number;
+
+    @IsOptional()
+    @IsString()
+    priority?: string;
 }

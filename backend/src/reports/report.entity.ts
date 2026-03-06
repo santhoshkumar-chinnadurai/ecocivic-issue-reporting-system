@@ -9,6 +9,13 @@ export enum ReportStatus {
     REJECTED = 'REJECTED',
 }
 
+export enum ReportPriority {
+    LOW = 'LOW',
+    MEDIUM = 'MEDIUM',
+    HIGH = 'HIGH',
+    CRITICAL = 'CRITICAL',
+}
+
 @Entity('reports')
 export class Report {
     @PrimaryGeneratedColumn('uuid')
@@ -26,6 +33,13 @@ export class Report {
 
     @Column({ type: 'text', nullable: true })
     description: string;
+
+    @Column({
+        type: 'simple-enum',
+        enum: ReportPriority,
+        default: ReportPriority.MEDIUM,
+    })
+    priority: ReportPriority;
 
     @Column({ nullable: true })
     location: string;
@@ -51,6 +65,16 @@ export class Report {
 
     @Column({ nullable: true })
     assigned_department: string;
+
+    @Column({ nullable: true })
+    assigned_worker_id: string;
+
+    @ManyToOne(() => User, { onDelete: 'SET NULL', nullable: true })
+    @JoinColumn({ name: 'assigned_worker_id' })
+    assigned_worker: User;
+
+    @Column({ type: 'text', nullable: true })
+    proof_image_url: string;
 
     @CreateDateColumn()
     created_at: Date;

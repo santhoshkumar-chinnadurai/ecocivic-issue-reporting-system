@@ -7,12 +7,15 @@ import { ReportsService } from './reports.service';
 import { ReportsController } from './reports.controller';
 import { Report } from './report.entity';
 
+import { UsersModule } from '../users/users.module';
+
 @Module({
     imports: [
         TypeOrmModule.forFeature([Report]),
         AiModule,
         RoutingModule,
-        NotificationModule
+        NotificationModule,
+        UsersModule
     ],
     controllers: [ReportsController],
     providers: [ReportsService],

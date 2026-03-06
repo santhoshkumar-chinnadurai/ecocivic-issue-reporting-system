@@ -51,4 +51,18 @@ export class ReportsController {
     assignDepartment(@Param('id') id: string, @Body('department') department: string) {
         return this.reportsService.assignDepartment(id, department);
     }
+
+    @Patch(':id/assign-worker')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRole.ADMIN, UserRole.OFFICIAL)
+    assignWorker(@Param('id') id: string, @Body('workerId') workerId: string) {
+        return this.reportsService.assignWorker(id, workerId);
+    }
+
+    @Patch(':id/submit-proof')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRole.WORKER)
+    submitProof(@Param('id') id: string, @Body('proofImageUrl') proofImageUrl: string) {
+        return this.reportsService.submitProof(id, proofImageUrl);
+    }
 }

@@ -18,29 +18,26 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const DashboardMap = () => {
-    const [heatmapData, setHeatmapData] = useState<[number, number][]>([]);
+    const [reports, setReports] = useState<any[]>([]);
 
     useEffect(() => {
-        const fetchHeatmapData = async () => {
+        const fetchMapData = async () => {
             try {
                 const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/analytics/heatmap`);
-                // Ensure data is in correct format [lat, lng]
-                setHeatmapData(res.data);
+                setReports(res.data);
             } catch (error) {
                 console.error("Failed to fetch map data", error);
             }
         };
 
-        fetchHeatmapData();
+        fetchMapData();
     }, []);
 
     // Placeholder data if API returns empty (for demo)
-    const displayData = heatmapData.length > 0 ? heatmapData : [
-        [12.9716, 77.5946], // Bangalore
-        [12.9800, 77.6000],
-        [12.9600, 77.5800],
-        [12.9700, 77.6100],
-        [12.9500, 77.5700]
+    const displayData = reports.length > 0 ? reports : [
+        { latitude: 12.9716, longitude: 77.5946, category: 'Pothole', status: 'OPEN', report_id: '1' },
+        { latitude: 12.9800, longitude: 77.6000, category: 'Garbage', status: 'IN_PROGRESS', report_id: '2' },
+        { latitude: 12.9600, longitude: 77.5800, category: 'Street Light', status: 'RESOLVED', report_id: '3' },
     ];
 
     return (
@@ -53,13 +50,23 @@ const DashboardMap = () => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         className="map-tiles"
                     />
-                    {displayData.map((pos, idx) => (
-                        <Marker key={idx} position={pos as [number, number]}>
-                            <Popup>
-                                Reported Issue #{idx + 1}
-                            </Popup>
-                        </Marker>
-                    ))}
+                    {displayData.map((report, idx) => {
+                        const lat = Number(report.latitude);
+                        const lng = Number(report.longitude);
+                        if (isNaN(lat) || isNaN(lng)) return null;
+
+                        return (
+                            <Marker key={report.report_id || idx} position={[lat, lng]}>
+                                <Popup>
+                                    <div className="font-sans">
+                                        <h4 className="font-bold text-sm mb-1">{report.category || 'Issue'}</h4>
+                                        <p className="text-xs text-gray-600 mb-1">Status: <span className="font-semibold">{report.status}</span></p>
+                                        <a href={`/issues/${report.report_id}`} className="text-xs text-blue-500 hover:underline">View Details</a>
+                                    </div>
+                                </Popup>
+                            </Marker>
+                        );
+                    })}
                 </MapContainer>
             </div>
         </div>

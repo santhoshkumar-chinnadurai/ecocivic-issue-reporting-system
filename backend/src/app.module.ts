@@ -10,6 +10,7 @@ import { AiModule } from './ai/ai.module';
 import { UsersModule } from './users/users.module';
 import { User } from './users/user.entity';
 import { Report } from './reports/report.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
@@ -37,6 +38,7 @@ import { Report } from './reports/report.entity';
         AnalyticsModule,
         AiModule,
         UsersModule,
+        ScheduleModule.forRoot(),
     ],
     controllers: [],
     providers: [],

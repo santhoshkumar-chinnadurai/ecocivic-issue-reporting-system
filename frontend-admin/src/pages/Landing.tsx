@@ -1,334 +1,299 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, ArrowRight, Users, CheckCircle, Moon, Sun, Zap, MousePointer2, Truck, Trash2, AlertTriangle, Box, Layers } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useTheme } from '../context/ThemeContext';
+import { Shield, ArrowRight, Activity, Users, Settings, BarChart3, Play } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
+
+const AnimatedCounter = ({ value, duration = 2 }: { value: number, duration?: number }) => {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        let startTime: number | null = null;
+        let animationFrame: number;
+
+        const animate = (timestamp: number) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const percentage = Math.min(progress / (duration * 1000), 1);
+
+            const easeProgress = percentage === 1 ? 1 : 1 - Math.pow(2, -10 * percentage);
+            setCount(Math.floor(easeProgress * value));
+
+            if (percentage < 1) {
+                animationFrame = requestAnimationFrame(animate);
+            }
+        };
+
+        animationFrame = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(animationFrame);
+    }, [value, duration]);
+
+    return <span>{count.toLocaleString()}</span>;
+};
 
 const Landing = () => {
-    const { theme, toggleTheme } = useTheme();
-    const { scrollY } = useScroll();
-    const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-    const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+    const { scrollYProgress } = useScroll();
+    const yHero = useTransform(scrollYProgress, [0, 1], [0, 300]);
+    const opacityHero = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
-    const stats = [
-        { label: 'Reports Filed', value: '2,840', icon: Shield, color: 'text-cyan-400' },
-        { label: 'Resolutions', value: '94%', icon: CheckCircle, color: 'text-emerald-400' },
-        { label: 'Active Citizens', value: '1,200+', icon: Users, color: 'text-purple-400' },
-        { label: 'Avg Response', value: '< 4h', icon: Zap, color: 'text-amber-400' },
+    const features = [
+        { title: "AI Allocation", desc: "Smart routing of issues to the right department.", icon: Settings, color: "text-indigo-400" },
+        { title: "Live Tracking", desc: "Real-time updates on your reported civic issues.", icon: Activity, color: "text-cyan-400" },
+        { title: "Worker App", desc: "Dedicated interfaces for ground staff efficiency.", icon: Users, color: "text-purple-400" },
+        { title: "Analytics", desc: "Transparent governance with public data.", icon: BarChart3, color: "text-emerald-400" },
+    ];
+
+    const workflowSteps = [
+        { role: "Citizen", action: "Reports an issue with photo & GPS." },
+        { role: "AI System", action: "Categorizes & assigns priority." },
+        { role: "Official", action: "Approves & dispatches worker." },
+        { role: "Worker", action: "Resolves & uploads proof." },
     ];
 
     return (
-        <div className="min-h-screen relative overflow-x-hidden bg-white dark:bg-[#020617] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-500 selection:bg-cyan-500 selection:text-black">
+        <div className="min-h-screen bg-gray-50 dark:bg-[#0A0A0A] text-gray-900 dark:text-white font-sans selection:bg-indigo-500/30 overflow-hidden relative transition-colors duration-300">
+            {/* Parallax Background Noise & Blobs */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay"></div>
 
-            {/* Premium Liquid Background */}
-            <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
                 <motion.div
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        x: [0, 100, 0],
-                        y: [0, -50, 0],
-                    }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] bg-gradient-to-br from-cyan-500/10 to-blue-600/10 rounded-full blur-[120px]"
+                    animate={{ x: [0, 50, 0], y: [0, -50, 0] }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px]"
                 />
                 <motion.div
-                    animate={{
-                        scale: [1, 1.3, 1],
-                        x: [0, -100, 0],
-                        y: [0, 50, 0],
-                    }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                    className="absolute -bottom-[20%] -left-[10%] w-[70%] h-[70%] bg-gradient-to-tr from-purple-600/10 to-pink-500/10 rounded-full blur-[120px]"
+                    animate={{ x: [0, -50, 0], y: [0, 50, 0] }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-cyan-600/20 rounded-full blur-[120px]"
                 />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] brightness-100 contrast-150 mix-blend-overlay"></div>
             </div>
 
-            {/* Glass Navigation */}
-            <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-3xl transition-all duration-300">
-                <div className="max-w-7xl mx-auto px-6 lg:px-12">
-                    <div className="flex justify-between h-20 items-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="flex items-center space-x-3 group cursor-pointer"
-                        >
-                            <div className="h-11 w-11 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.4)] group-hover:rotate-[10deg] transition-transform duration-500">
-                                <Shield className="h-6 w-6 text-white" />
-                            </div>
-                            <span className="text-2xl font-black tracking-tighter text-gray-900 dark:text-white uppercase italic">CivicConnect</span>
-                        </motion.div>
-
-                        <div className="hidden md:flex items-center space-x-12">
-                            <Link to="/about" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 hover:text-cyan-400 transition-all hover:tracking-[0.3em]">About System</Link>
-                            <Link to="/admin/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 hover:text-cyan-400 transition-all hover:tracking-[0.3em]">Admin Portal</Link>
+            {/* Navigation */}
+            <nav className="fixed top-0 w-full z-50 border-b border-gray-200 dark:border-white/5 bg-white/80 dark:bg-black/20 backdrop-blur-xl transition-colors duration-300">
+                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+                    <div className="flex items-center gap-2 cursor-pointer group">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-400 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                            <Shield size={18} className="text-white" />
                         </div>
-
-                        <div className="flex items-center space-x-6">
-                            <button
-                                onClick={toggleTheme}
-                                className="p-2.5 rounded-xl bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/10 transition-all border border-gray-200 dark:border-white/10"
-                            >
-                                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-                            </button>
-                            <Link to="/signup" className="group relative px-8 py-3 rounded-full overflow-hidden font-black text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-cyan-500/20 active:scale-95">
-                                <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 animate-gradient-xy"></span>
-                                <span className="relative flex items-center gap-2 text-white">
-                                    Get Started <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                                </span>
-                            </Link>
-                        </div>
+                        <span className="font-semibold text-lg tracking-tight">Civic</span>
+                    </div>
+                    <div className="hidden md:flex items-center gap-8 text-sm text-gray-600 dark:text-gray-400">
+                        <a href="#features" className="hover:text-gray-900 dark:hover:text-white transition-colors">Features</a>
+                        <a href="#workflow" className="hover:text-gray-900 dark:hover:text-white transition-colors">Workflow</a>
+                        <Link to="/about" className="hover:text-gray-900 dark:hover:text-white transition-colors">About</Link>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <ThemeToggle />
+                        <Link to="/admin/login" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors hidden sm:block">Admin</Link>
+                        <Link to="/signup" className="text-sm px-4 py-2 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-all border border-gray-200 dark:border-white/10">Sign In</Link>
                     </div>
                 </div>
             </nav>
 
-            {/* Main Content */}
-            <main className="relative z-10">
+            <main className="relative z-10 pt-32">
                 {/* Hero Section */}
-                <header className="relative pt-48 pb-32 lg:pt-64 lg:pb-48">
-                    <div className="max-w-7xl mx-auto px-6 lg:px-12">
-                        <div className="flex flex-col items-center text-center">
-                            <motion.div
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-cyan-500 dark:text-cyan-400 text-[10px] font-black uppercase tracking-[0.4em] mb-12 shadow-[0_0_20px_rgba(6,182,212,0.1)]"
-                            >
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-                                </span>
-                                System Operational • Live Reporting
-                            </motion.div>
-
-                            <motion.div style={{ y: y1, opacity }}>
-                                <h1 className="text-7xl md:text-[9rem] font-black tracking-tighter mb-10 leading-[0.85] text-gray-900 dark:text-white uppercase italic">
-                                    Civic <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Reporting.</span>
-                                </h1>
-                            </motion.div>
-
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.4 }}
-                                className="max-w-2xl text-xl text-gray-500 dark:text-gray-400 font-medium leading-relaxed mb-16 px-4"
-                            >
-                                Empowering citizens with a high-speed, transparent interface for municipal issue tracking. Report hazards. Track resolutions. Improve your city.
-                            </motion.p>
-
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
-                                className="flex flex-col sm:flex-row gap-6 justify-center w-full max-w-xl"
-                            >
-                                <Link to="/signup" className="flex-1 px-10 py-5 bg-gray-900 dark:bg-white text-white dark:text-black font-black uppercase tracking-[0.2em] transform transition-all hover:scale-105 shadow-2xl hover:shadow-cyan-500/20 text-xs">
-                                    Report Issue
-                                </Link>
-                                <Link to="/login" className="flex-1 px-10 py-5 bg-white/50 dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-black uppercase tracking-[0.2em] hover:bg-white/80 dark:hover:bg-white/10 transition-all text-xs">
-                                    View Dashboard
-                                </Link>
-                            </motion.div>
-                        </div>
-
-                        {/* Tactical Frame */}
+                <section className="min-h-[80vh] flex flex-col items-center justify-center px-6 relative">
+                    <motion.div style={{ y: yHero, opacity: opacityHero }} className="text-center max-w-4xl mx-auto">
                         <motion.div
-                            initial={{ opacity: 0, y: 100 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.7, duration: 1.2, ease: "circOut" }}
-                            className="mt-32 relative mx-auto max-w-6xl group"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-md mb-8"
                         >
-                            <div className="absolute -inset-[2px] bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-                            <div className="relative bg-[#020617] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)]">
-                                <div className="h-10 bg-white/5 border-b border-white/10 flex items-center px-6 gap-2">
-                                    <div className="flex gap-1.5">
-                                        <div className="w-3 h-3 rounded-full bg-red-500/40"></div>
-                                        <div className="w-3 h-3 rounded-full bg-yellow-500/40"></div>
-                                        <div className="w-3 h-3 rounded-full bg-green-500/40"></div>
-                                    </div>
-                                    <div className="flex-1 flex justify-center">
-                                        <div className="px-6 py-1 bg-black/60 rounded-full text-[9px] font-mono text-cyan-500/60 uppercase tracking-[0.3em] border border-cyan-500/20">
-                                            CIVIC_CONNECT_V4.0_PUBLIC
-                                        </div>
-                                    </div>
-                                    <MousePointer2 size={14} className="text-gray-600" />
-                                </div>
-                                <div className="aspect-video relative overflow-hidden group">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&q=80&w=2613&ixlib=rb-4.0.3"
-                                        alt="City Dashboard"
-                                        className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent"></div>
+                            <span className="flex h-2 w-2 relative">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            </span>
+                            <span className="text-xs font-medium text-gray-700 dark:text-gray-300 tracking-wide">System Online</span>
+                        </motion.div>
 
-                                    {/* Liquid HUD Elements */}
-                                    <div className="absolute top-10 left-10 p-6 backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl border-l-4 border-l-cyan-500">
-                                        <h4 className="text-xs font-black uppercase tracking-widest text-white mb-2">Live Incident Map</h4>
-                                        <div className="space-y-2">
-                                            <div className="h-1.5 w-32 bg-white/10 rounded-full overflow-hidden">
-                                                <motion.div animate={{ x: [-128, 128] }} transition={{ duration: 2, repeat: Infinity }} className="h-full w-full bg-cyan-500" />
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }}
+                            className="text-5xl md:text-8xl font-bold tracking-tighter mb-6 leading-tight"
+                        >
+                            Smart Cities.<br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Powered by You.</span>
+                        </motion.h1>
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
+                            className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed"
+                        >
+                            Report issues, track resolutions, and build a better community with our AI-driven civic reporting platform.
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}
+                            className="flex flex-col sm:flex-row justify-center gap-4"
+                        >
+                            <Link to="/signup" className="group relative flex items-center justify-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-black rounded-full font-medium transition-transform hover:scale-105 overflow-hidden shadow-lg shadow-gray-400/20 dark:shadow-none">
+                                <span>Report an Issue</span>
+                                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                <div className="absolute inset-0 bg-white/10 dark:bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity blur-md"></div>
+                            </Link>
+                            <Link to="/login" className="flex items-center justify-center gap-2 px-8 py-4 bg-black/5 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-full font-medium hover:bg-black/10 dark:hover:bg-white/10 transition-all hover:scale-105">
+                                <Play size={16} className="text-indigo-500 dark:text-gray-400" />
+                                Track Complaint
+                            </Link>
+                        </motion.div>
+                    </motion.div>
+                </section>
+
+                {/* Dashboard Preview Section */}
+                <section className="py-24 px-6 relative">
+                    <div className="max-w-5xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1 }}
+                            className="relative rounded-2xl md:rounded-[2.5rem] p-2 md:p-6 bg-white/60 dark:bg-white/5 backdrop-blur-2xl border border-gray-200 dark:border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-2xl overflow-hidden group hover:shadow-[0_40px_80px_rgba(79,70,229,0.15)] transition-shadow duration-700"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 to-cyan-500/5 dark:from-indigo-500/10 dark:to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+                            <div className="bg-white dark:bg-[#0A0A0A] rounded-xl md:rounded-3xl border border-gray-200 dark:border-white/10 overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                                {/* Mac OS Window controls */}
+                                <div className="h-10 bg-gray-50 dark:bg-white/5 border-b border-gray-200 dark:border-white/10 flex items-center px-4 gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-[#FF5F56]"></div>
+                                    <div className="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
+                                    <div className="w-3 h-3 rounded-full bg-[#27C93F]"></div>
+                                    <div className="flex-1 text-center text-xs text-gray-500 font-medium">Dashboard Preview</div>
+                                </div>
+
+                                <div className="p-6 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="col-span-1 md:col-span-2 space-y-6">
+                                        <div className="flex gap-4">
+                                            <div className="flex-1 p-6 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/5 hover:border-indigo-500/50 transition-colors">
+                                                <div className="text-gray-500 dark:text-gray-400 text-sm mb-2">Total Complaints</div>
+                                                <div className="text-4xl font-bold"><AnimatedCounter value={12489} /></div>
                                             </div>
-                                            <div className="h-1.5 w-24 bg-white/10 rounded-full overflow-hidden">
-                                                <motion.div animate={{ x: [-96, 96] }} transition={{ duration: 1.5, repeat: Infinity }} className="h-full w-full bg-blue-500" />
+                                            <div className="flex-1 p-6 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/5 hover:border-cyan-500/50 transition-colors">
+                                                <div className="text-gray-500 dark:text-gray-400 text-sm mb-2">Resolved</div>
+                                                <div className="text-4xl font-bold text-cyan-600 dark:text-cyan-400"><AnimatedCounter value={11204} /></div>
+                                            </div>
+                                            <div className="flex-1 p-6 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/5 hover:border-purple-500/50 transition-colors hidden sm:block">
+                                                <div className="text-gray-500 dark:text-gray-400 text-sm mb-2">Active Workers</div>
+                                                <div className="text-4xl font-bold text-purple-600 dark:text-purple-400"><AnimatedCounter value={342} /></div>
                                             </div>
                                         </div>
+                                        <div className="h-48 rounded-2xl bg-gradient-to-r from-gray-100 dark:from-white/5 to-transparent border border-gray-200 dark:border-white/5 p-6 flex items-end gap-2 overflow-hidden">
+                                            {[40, 70, 45, 90, 65, 85, 100].map((h, i) => (
+                                                <motion.div
+                                                    key={i}
+                                                    initial={{ height: 0 }}
+                                                    whileInView={{ height: `${h}%` }}
+                                                    viewport={{ once: true }}
+                                                    transition={{ delay: i * 0.1, duration: 0.8 }}
+                                                    className="flex-1 bg-indigo-500/50 hover:bg-indigo-400 transition-colors rounded-t-sm"
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <div className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Recent Activity</div>
+                                        {[
+                                            { title: "Pothole Fixed", time: "2m ago", status: "success" },
+                                            { title: "Streetlight Broken", time: "15m ago", status: "pending" },
+                                            { title: "Water Leak Reported", time: "1h ago", status: "progress" },
+                                            { title: "Garbage Cleared", time: "3h ago", status: "success" },
+                                        ].map((item, i) => (
+                                            <div key={i} className="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/5 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-white/10 hover:scale-[1.02] transition-all">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`w-2 h-2 rounded-full ${item.status === 'success' ? 'bg-green-500 dark:bg-green-400' : item.status === 'pending' ? 'bg-amber-500 dark:bg-amber-400' : 'bg-blue-500 dark:bg-blue-400'} ${item.status === 'progress' ? 'animate-pulse' : ''}`} />
+                                                    <div className="text-sm font-medium text-gray-700 dark:text-gray-200">{item.title}</div>
+                                                </div>
+                                                <div className="text-xs text-gray-500">{item.time}</div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
                         </motion.div>
                     </div>
-                </header>
-
-                {/* Glass Metrics Strip */}
-                <section className="py-20 relative px-6 group">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="bg-white/40 dark:bg-white/[0.02] backdrop-blur-3xl border border-gray-200 dark:border-white/10 rounded-[3rem] p-12 shadow-2xl group-hover:border-cyan-500/30 transition-all duration-500">
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
-                                {stats.map((stat, i) => (
-                                    <div key={i} className="flex flex-col items-center lg:items-start group/stat">
-                                        <div className="flex items-center gap-4 mb-4">
-                                            <div className="p-3 bg-gray-100 dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/10 group-hover/stat:rotate-[15deg] group-hover/stat:scale-110 transition-all duration-500">
-                                                <stat.icon size={20} className={stat.color} />
-                                            </div>
-                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">{stat.label}</span>
-                                        </div>
-                                        <div className="text-5xl font-black text-gray-900 dark:text-white italic tracking-tighter leading-none">{stat.value}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
                 </section>
 
-                {/* Operations Grid */}
-                <section className="py-40 px-6">
+                {/* Features Section */}
+                <section id="features" className="py-32 px-6">
                     <div className="max-w-7xl mx-auto">
-                        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
-                            <div className="max-w-2xl">
-                                <motion.span className="text-cyan-500 font-black uppercase tracking-[0.3em] text-[10px] mb-4 block italic">Service Categories</motion.span>
-                                <h2 className="text-6xl md:text-7xl font-black tracking-tighter text-gray-900 dark:text-white uppercase italic leading-[0.9]">
-                                    Community <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">Services.</span>
-                                </h2>
-                            </div>
-                            <p className="text-gray-500 dark:text-gray-400 font-medium text-lg leading-relaxed max-w-sm">
-                                Specialized reporting channels for every aspect of city infrastructure and public welfare.
-                            </p>
+                        <div className="text-center mb-20">
+                            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Intelligent Infrastructure</h2>
+                            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">A unified ecosystem connecting citizens directly to the mechanisms of their city.</p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {[
-                                { icon: Truck, title: 'Transport', desc: 'Potholes, signal failures, and obstruction reporting.', color: 'from-blue-500 to-cyan-400', iconColor: 'text-cyan-400' },
-                                { icon: Trash2, title: 'Sanitation', desc: 'Garbage collection delays and waste management issues.', color: 'from-emerald-500 to-teal-400', iconColor: 'text-emerald-400' },
-                                { icon: Zap, title: 'Utilities', desc: 'Power outages, water leaks, and street light failures.', color: 'from-amber-500 to-orange-400', iconColor: 'text-amber-400' },
-                                { icon: AlertTriangle, title: 'Public Safety', desc: 'Hazards, vandalism, and community safety concerns.', color: 'from-purple-500 to-pink-400', iconColor: 'text-red-400' },
-                            ].map((item, idx) => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {features.map((feature, i) => (
                                 <motion.div
-                                    whileHover={{ y: -10 }}
-                                    key={idx}
-                                    className="relative group/card"
+                                    key={i}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.1, duration: 0.8 }}
+                                    whileHover={{ y: -5 }}
+                                    className="p-8 rounded-3xl bg-white/80 dark:bg-white/[0.03] backdrop-blur-lg border border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/20 hover:bg-white dark:hover:bg-white/[0.05] shadow-sm hover:shadow-xl transition-all group"
                                 >
-                                    <div className={`absolute - inset - px rounded - 3xl bg - gradient - to - br ${item.color} opacity - 0 group - hover / card: opacity - 10 dark: group - hover / card: opacity - 20 transition - all duration - 500`}></div>
-                                    <div className="bg-white/80 dark:bg-white/[0.01] backdrop-blur-xl p-10 rounded-3xl border border-gray-200 dark:border-white/5 group-hover/card:border-white/20 transition-all duration-500 shadow-xl dark:shadow-none h-full flex flex-col">
-                                        <div className={`mb - 8 p - 4 rounded - 2xl bg - gray - 100 dark: bg - white / 5 border border - white / 5 w - fit ${item.iconColor} group - hover / card: scale - 110 transition - transform duration - 500`}>
-                                            <item.icon size={32} />
-                                        </div>
-                                        <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-6 uppercase tracking-tighter italic">{item.title}</h3>
-                                        <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-auto font-medium">{item.desc}</p>
-                                        <div className="mt-8 pt-8 border-t border-white/5">
-                                            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-cyan-500 opacity-0 group-hover/card:opacity-100 transition-opacity">
-                                                File Report <ArrowRight size={12} />
-                                            </div>
-                                        </div>
+                                    <div className="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                        <feature.icon className={feature.color} size={24} />
                                     </div>
+                                    <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{feature.desc}</p>
                                 </motion.div>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* Mission Section */}
-                <section className="py-64 relative flex flex-col items-center text-center px-6 overflow-hidden">
-                    <motion.div
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        className="absolute inset-0 z-0 bg-gray-900 pointer-events-none"
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent"></div>
-                    </motion.div>
+                {/* Workflow Section */}
+                <section id="workflow" className="py-32 px-6 bg-gradient-to-b from-transparent via-indigo-900/10 to-transparent relative">
+                    <div className="max-w-3xl mx-auto">
+                        <div className="text-center mb-20">
+                            <h2 className="text-4xl font-bold tracking-tight mb-4">Transparent Workflow</h2>
+                            <p className="text-gray-600 dark:text-gray-400">Seamless resolution from report to completion.</p>
+                        </div>
 
-                    <div className="relative z-10 max-w-4xl">
-                        <h2 className="text-6xl md:text-[8rem] font-black tracking-tighter text-white uppercase italic leading-[0.85] mb-12">
-                            Infrastructure <br /> <span className="text-cyan-400">Evolution.</span>
-                        </h2>
-                        <p className="text-xl md:text-2xl text-gray-400 font-medium mb-20 leading-relaxed px-4">
-                            We don't just fix problems; we upgrade the entire connection between citizens and their city. Join the network.
-                        </p>
-                        <Link to="/signup" className="group relative inline-flex items-center gap-6 px-12 py-6 bg-white text-black font-black uppercase tracking-[0.3em] hover:bg-cyan-400 transition-all rounded-full text-sm">
-                            Initialize Link <ArrowRight size={20} className="group-hover:translate-x-3 transition-transform duration-500" />
-                        </Link>
+                        <div className="relative border-l border-gray-200 dark:border-white/10 ml-6 md:mx-auto md:border-l-0">
+                            {/* Desktop Line */}
+                            <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gray-300 dark:via-white/10 to-transparent -translate-x-1/2"></div>
+
+                            <div className="space-y-12 relative">
+                                {workflowSteps.map((step, i) => (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true, margin: "-100px" }}
+                                        transition={{ duration: 0.8 }}
+                                        className={`relative flex flex-col md:flex-row items-center gap-8 ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
+                                    >
+                                        <div className="absolute left-[-29px] md:relative md:left-auto flex items-center justify-center w-14 h-14 rounded-full border-4 border-[#f8fafc] dark:border-[#0A0A0A] bg-white dark:bg-white/10 backdrop-blur-md text-gray-900 dark:text-white shadow shrink-0 z-10 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                                            <span className="text-lg font-bold">{i + 1}</span>
+                                        </div>
+
+                                        <div className={`w-full md:w-1/2 p-6 rounded-3xl bg-white/80 dark:bg-white/5 border border-gray-200 dark:border-white/5 hover:border-gray-400 dark:hover:border-white/20 shadow-sm transition-all backdrop-blur-md ${i % 2 === 0 ? 'md:text-right hover:-translate-x-1' : 'md:text-left hover:translate-x-1'}`}>
+                                            <h4 className="font-semibold text-xl text-indigo-600 dark:text-indigo-400 mb-2">{step.role}</h4>
+                                            <p className="text-gray-500 dark:text-gray-400 text-base">{step.action}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </section>
             </main>
 
-            {/* Tactical Glass Footer */}
-            <footer className="relative bg-white dark:bg-[#020617] py-24 border-t border-gray-200 dark:border-white/10 px-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-20 mb-24">
-                        <div className="col-span-1 md:col-span-2 space-y-10">
-                            <div className="flex items-center space-x-3">
-                                <div className="h-10 w-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-xl flex items-center justify-center shadow-2xl">
-                                    <Shield className="h-5 w-5 text-white" />
-                                </div>
-                                <span className="text-2xl font-black text-gray-900 dark:text-white italic tracking-tighter uppercase">CivicConnect</span>
-                            </div>
-                            <p className="text-gray-500 dark:text-gray-400 text-lg font-medium max-w-sm leading-relaxed">
-                                A modern urban reporting platform built for active citizenship. Secure. Transparent. Effective.
-                            </p>
-                        </div>
-                        <div className="space-y-10">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-cyan-500/80">Platform</h4>
-                            <ul className="space-y-6 text-xs font-black text-gray-400">
-                                <li><Link to="/about" className="hover:text-cyan-400 transition-all uppercase tracking-widest block">About System</Link></li>
-                                <li><Link to="/admin/login" className="hover:text-cyan-400 transition-all uppercase tracking-widest block">Admin Portal</Link></li>
-                                <li><a href="#" className="hover:text-cyan-400 transition-all uppercase tracking-widest block">User Guide</a></li>
-                            </ul>
-                        </div>
-                        <div className="space-y-10">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-cyan-500/80">Legal</h4>
-                            <ul className="space-y-6 text-xs font-black text-gray-400">
-                                <li><a href="#" className="hover:text-cyan-400 transition-all uppercase tracking-widest block">Privacy Policy</a></li>
-                                <li><a href="#" className="hover:text-cyan-400 transition-all uppercase tracking-widest block">Terms of Service</a></li>
-                                <li><a href="#" className="hover:text-cyan-400 transition-all uppercase tracking-widest block">Accessibility</a></li>
-                            </ul>
-                        </div>
+            {/* Footer */}
+            <footer className="border-t border-gray-200 dark:border-white/5 bg-white/40 dark:bg-black/40 pt-20 pb-10 px-6 relative z-10 transition-colors duration-300">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div className="flex items-center gap-2">
+                        <Shield className="text-indigo-600 dark:text-indigo-400" size={24} />
+                        <span className="font-semibold text-xl tracking-tight text-gray-900 dark:text-white">CivicConnect</span>
                     </div>
-                    <div className="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-gray-100 dark:border-white/5 gap-8">
-                        <div className="text-[9px] font-mono text-gray-500 uppercase tracking-[0.4em]">
-                            &copy; 2026 civic_connect_system // all_rights_reserved
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="p-2 border border-white/5 rounded-lg bg-white/5 hover:border-cyan-500/50 transition-colors cursor-pointer"><Box size={14} className="text-gray-600" /></div>
-                            <div className="p-2 border border-white/5 rounded-lg bg-white/5 hover:border-blue-500/50 transition-colors cursor-pointer"><Layers size={14} className="text-gray-600" /></div>
-                        </div>
+                    <div className="flex gap-8 text-sm text-gray-500 font-medium">
+                        <Link to="/about" className="hover:text-gray-900 dark:hover:text-white transition-colors">About</Link>
+                        <a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Privacy</a>
+                        <a href="#" className="hover:text-gray-900 dark:hover:text-white transition-colors">Terms</a>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                        &copy; 2026 Civic Connect. All rights reserved.
                     </div>
                 </div>
             </footer>
-
-            <style>{`
-@keyframes scan {
-                    from { transform: translateY(-100 %); }
-                    to { transform: translateY(110vh); }
-}
-                .animate - gradient - xy {
-    background - size: 400 % 400 %;
-    animation: gradient - xy 15s ease infinite;
-}
-@keyframes gradient - xy {
-    0 % { background- position: 0 % 50 %;
-}
-50 % { background- position: 100 % 50 %; }
-100 % { background- position: 0 % 50 %; }
-                }
-`}</style>
         </div>
     );
 };
