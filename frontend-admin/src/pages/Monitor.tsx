@@ -24,6 +24,7 @@ const Monitor = () => {
     const [loading, setLoading] = useState(true);
     const [logs, setLogs] = useState<string[]>([]);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const loggedInUser = JSON.parse(localStorage.getItem('user') || '{}');
 
     // Mock Live Metrics
     const [metrics, setMetrics] = useState({
@@ -34,12 +35,17 @@ const Monitor = () => {
     });
 
     const [backendStats, setBackendStats] = useState<{ totalUsers?: number; total?: number } | null>(null);
+    const [recentLogins, setRecentLogins] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/analytics/dashboard-stats`);
-                setBackendStats(res.data);
+                const [statsRes, loginsRes] = await Promise.all([
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/analytics/dashboard-stats`),
+                    axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/analytics/recent-logins`)
+                ]);
+                setBackendStats(statsRes.data);
+                setRecentLogins(loginsRes.data);
             } catch (err) {
                 console.error("Failed to fetch monitor stats", err);
             }
@@ -209,26 +215,60 @@ const Monitor = () => {
                         </div>
 
                         {/* BOTTOM: System Console (Logs) */}
-                        <div className="h-32 bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-5 relative overflow-hidden flex flex-col shadow-xl font-mono text-xs">
-                            <div className="flex items-center gap-3 mb-3 shrink-0">
-                                <Activity size={16} className="text-indigo-400 opacity-80" />
-                                <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">System Event Log</span>
-                            </div>
-                            <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scrollbar text-gray-500 space-y-2 pr-2">
-                                {logs.length === 0 ? (
-                                    <div className="text-indigo-400/60 animate-pulse flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full" />
-                                        Establishing secure connection...
-                                    </div>
-                                ) : (
-                                    logs.map((log, i) => (
-                                        <div key={i} className="flex gap-3 items-start group">
-                                            <span className="text-indigo-500/40 mt-0.5">❯</span>
-                                            <span className="group-hover:text-gray-300 transition-colors">{log}</span>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 h-48">
+                            <div className="bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-5 relative overflow-hidden flex flex-col shadow-xl font-mono text-xs">
+                                <div className="flex items-center gap-3 mb-3 shrink-0">
+                                    <Activity size={16} className="text-indigo-400 opacity-80" />
+                                    <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">System Event Log</span>
+                                </div>
+                                <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scrollbar text-gray-500 space-y-2 pr-2">
+                                    {logs.length === 0 ? (
+                                        <div className="text-indigo-400/60 animate-pulse flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full" />
+                                            Establishing secure connection...
                                         </div>
-                                    ))
-                                )}
+                                    ) : (
+                                        logs.map((log, i) => (
+                                            <div key={i} className="flex gap-3 items-start group">
+                                                <span className="text-indigo-500/40 mt-0.5">❯</span>
+                                                <span className="group-hover:text-gray-300 transition-colors">{log}</span>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
                             </div>
+
+                            {loggedInUser?.role === 'ADMIN' && (
+                                <div className="bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-3xl p-5 relative overflow-hidden flex flex-col shadow-xl text-xs">
+                                    <div className="flex items-center gap-3 mb-3 shrink-0">
+                                        <ShieldAlert size={16} className="text-rose-400 opacity-80" />
+                                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Security & Access Log</span>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
+                                        {recentLogins.length === 0 ? (
+                                            <div className="text-gray-500 py-4 text-center italic uppercase tracking-widest opacity-50">No recent logins captured</div>
+                                        ) : (
+                                            recentLogins.map((login, i) => (
+                                                <div key={i} className="flex items-center justify-between group p-2 rounded-xl bg-white/[0.01] hover:bg-white/[0.05] transition-all border border-transparent hover:border-white/5">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`p-1.5 rounded-lg ${login.role === 'ADMIN' ? 'bg-rose-500/10 text-rose-400' : 'bg-indigo-500/10 text-indigo-400'}`}>
+                                                            <Users size={14} />
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="font-bold text-gray-200">{login.email}</span>
+                                                            <span className="text-[10px] text-gray-500 font-mono">{login.last_ip} • {login.last_location || 'Resolving...'}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right flex flex-col">
+                                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${login.role === 'ADMIN' ? 'text-rose-500' : 'text-indigo-500'}`}>{login.role}</span>
+                                                        <span className="text-[9px] text-gray-500">{new Date(login.last_login_at || login.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

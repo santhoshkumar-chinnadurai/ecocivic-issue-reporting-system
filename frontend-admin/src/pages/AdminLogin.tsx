@@ -30,8 +30,8 @@ const AdminLogin = () => {
             localStorage.setItem('token', res.data.access_token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
             navigate('/dashboard');
-        } catch {
-            setError('VALIDATION FAILED: Invalid Command Credentials.');
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'VALIDATION FAILED: Invalid Command Credentials.');
         } finally {
             setLoading(false);
         }

@@ -44,4 +44,12 @@ export class AnalyticsController {
         });
         return reports;
     }
+    @Get('recent-logins')
+    async getRecentLogins() {
+        return this.usersRepository.find({
+            select: ['email', 'role', 'last_ip', 'last_location', 'last_login_at'],
+            order: { last_login_at: 'DESC' },
+            take: 10
+        });
+    }
 }

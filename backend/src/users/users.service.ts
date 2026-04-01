@@ -30,4 +30,18 @@ export class UsersService {
         const user = await this.findOne(id);
         await this.usersRepository.remove(user);
     }
+
+    async banUser(id: string, reason?: string): Promise<User> {
+        const user = await this.findOne(id);
+        user.is_banned = true;
+        user.ban_reason = reason || 'No reason provided';
+        return this.usersRepository.save(user);
+    }
+
+    async unbanUser(id: string): Promise<User> {
+        const user = await this.findOne(id);
+        user.is_banned = false;
+        user.ban_reason = null;
+        return this.usersRepository.save(user);
+    }
 }

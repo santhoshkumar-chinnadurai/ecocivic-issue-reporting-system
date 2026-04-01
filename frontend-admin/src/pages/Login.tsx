@@ -30,8 +30,8 @@ const Login = () => {
             localStorage.setItem('token', res.data.access_token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
             navigate('/dashboard');
-        } catch {
-            setError('Authentication Failed. Check credentials.');
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Authentication Failed. Check credentials.');
         } finally {
             setLoading(false);
         }

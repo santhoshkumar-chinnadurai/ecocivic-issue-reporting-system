@@ -174,8 +174,8 @@ const UsersList = () => {
                                                     <span className="flex items-center font-mono text-xs text-indigo-500 dark:text-indigo-400">
                                                         {user.last_ip || 'No IP Logged'}
                                                     </span>
-                                                    <span className="flex items-center text-xs truncate max-w-[150px]">
-                                                        {user.last_location || '-'}
+                                                    <span className="flex items-center text-[9px] opacity-60">
+                                                        {user.last_login_at ? new Date(user.last_login_at).toLocaleString() : 'Never'}
                                                     </span>
                                                 </div>
                                             </td>

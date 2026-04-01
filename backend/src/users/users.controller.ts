@@ -30,4 +30,18 @@ export class UsersController {
     async remove(@Param('id') id: string) {
         return this.usersService.remove(id);
     }
+
+    @Patch(':id/ban')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRole.ADMIN)
+    async banUser(@Param('id') id: string, @Body('reason') reason: string) {
+        return this.usersService.banUser(id, reason);
+    }
+
+    @Patch(':id/unban')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(UserRole.ADMIN)
+    async unbanUser(@Param('id') id: string) {
+        return this.usersService.unbanUser(id);
+    }
 }

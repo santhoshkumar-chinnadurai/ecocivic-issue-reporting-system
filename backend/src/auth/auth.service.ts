@@ -67,38 +67,11 @@ export class AuthService implements OnModuleInit {
     }
 
     async validateUser(email: string, pass: string): Promise<any> {
-        // Static Admin Check (Bypass DB)
-        if (email === 'admin@civic.com' && pass === 'admin123') {
-            return {
-                user_id: 'static_admin_id',
-                email: 'admin@civic.com',
-                role: UserRole.ADMIN,
-                provider: 'LOCAL'
-            };
-        }
-
-        // Static Official Check (Bypass DB)
-        if (email === 'official@civic.com' && pass === 'official123') {
-            return {
-                user_id: 'static_official_id',
-                email: 'official@civic.com',
-                role: UserRole.OFFICIAL,
-                provider: 'LOCAL'
-            };
-        }
-
-        // Static Worker Check (Bypass DB)
-        if (email === 'worker@civic.com' && pass === 'worker123') {
-            return {
-                user_id: 'static_worker_id',
-                email: 'worker@civic.com',
-                role: UserRole.WORKER,
-                provider: 'LOCAL'
-            };
-        }
-
         const user = await this.usersRepository.findOneBy({ email });
         if (user && await bcrypt.compare(pass, user.password)) {
+            if (user.is_banned) {
+                throw new UnauthorizedException('user account was banned by admin');
+            }
             const { password, ...result } = user;
             return result;
         }
@@ -107,7 +80,7 @@ export class AuthService implements OnModuleInit {
 
     async login(user: any, ipAddress?: string) {
         // Track IP and Location
-        if (ipAddress && user.user_id && !user.user_id.startsWith('static_')) {
+        if (ipAddress && user.user_id) {
             try {
                 // If it's a localhost IP from IPv6 mapped to IPv4
                 const isLocal = ipAddress === '::1' || ipAddress === '127.0.0.1' || ipAddress.includes('::ffff:127.0.0.1');
@@ -119,14 +92,17 @@ export class AuthService implements OnModuleInit {
                 // Fetch real user to save
                 const realUser = await this.usersRepository.findOneBy({ user_id: user.user_id });
                 if (realUser) {
-                    realUser.last_ip = ipAddress;
                     if (locationData && locationData.status === 'success') {
+                        realUser.last_ip = (isLocal && locationData.query) ? locationData.query : ipAddress;
                         realUser.last_location = `${locationData.city}, ${locationData.regionName}, ${locationData.country}`;
                     } else if (isLocal) {
+                         realUser.last_ip = ipAddress;
                          realUser.last_location = 'Localhost (Dev Environment)';
                     } else {
+                         realUser.last_ip = ipAddress;
                          realUser.last_location = 'Unknown';
                     }
+                    realUser.last_login_at = new Date();
                     await this.usersRepository.save(realUser);
                 }
             } catch (error) {

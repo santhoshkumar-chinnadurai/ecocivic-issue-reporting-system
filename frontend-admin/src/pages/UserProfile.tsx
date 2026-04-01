@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Camera, Mail, Phone, Shield, Calendar, Trash2, Save, User as UserIcon, Activity } from 'lucide-react';
+import { ArrowLeft, Camera, Mail, Phone, Shield, Calendar, Trash2, Save, User as UserIcon, Activity, MapPin, ShieldAlert } from 'lucide-react';
 import { motion } from 'framer-motion';
 import api from '../api/axios';
 import Layout from '../components/Layout';
@@ -13,6 +13,8 @@ const UserProfile = () => {
         phone_number: '',
         role: '',
         user_id: '',
+        last_ip: '',
+        last_location: '',
         created_at: new Date().toISOString()
     });
     const [loading, setLoading] = useState(true);
@@ -25,27 +27,47 @@ const UserProfile = () => {
 
     const handleDelete = async () => {
         const userId = userData.user_id || userData.id || id;
-
         if (!userId) {
             alert("Error: No user ID found to delete.");
             return;
         }
-
         if (!window.confirm(`Are you sure you want to delete user ${userData.email || 'this user'}? This action cannot be undone.`)) {
             return;
         }
-
         setDeleting(true);
         try {
-            console.log(`Attempting to delete user: ${userId}`);
             await api.delete(`/users/${userId}`);
             alert("User deleted successfully.");
-            navigate('/users'); // Navigate back to the list
+            navigate('/users');
         } catch (error: any) {
-            console.error("Failed to delete user", error.response?.data || error.message);
             alert(`Failed to delete user: ${error.response?.data?.message || error.message}`);
         } finally {
             setDeleting(false);
+        }
+    };
+
+    const handleBan = async () => {
+        const userId = userData.user_id || userData.id || id;
+        const reason = window.prompt("Enter reason for banning this user:", "Violated community guidelines");
+        if (reason === null) return;
+
+        try {
+            await api.patch(`/users/${userId}/ban`, { reason });
+            setUserData({ ...userData, is_banned: true, ban_reason: reason });
+            alert("User has been banned.");
+        } catch (error: any) {
+            alert(`Failed to ban user: ${error.response?.data?.message || error.message}`);
+        }
+    };
+
+    const handleUnban = async () => {
+        const userId = userData.user_id || userData.id || id;
+        try {
+            await api.patch(`/users/${userId}/unban`);
+            setUserData({ ...userData, is_banned: false, ban_reason: null });
+            alert("User has been unbanned.");
+        } catch (error: any) {
+            alert(`Failed to unban user: ${error.response?.data?.message || error.message}`);
         }
     };
 
@@ -185,6 +207,12 @@ const UserProfile = () => {
                                 {userData.role || 'CITIZEN'}
                             </div>
 
+                            {userData.is_banned && (
+                                <div className="mt-3 px-4 py-1.5 bg-red-500/10 text-red-500 text-[10px] font-black tracking-widest uppercase rounded-xl border border-red-500/30 animate-pulse z-10">
+                                    ACCOUNT BANNED
+                                </div>
+                            )}
+
                             <div className="mt-10 w-full space-y-4 z-10">
                                 <div className="p-5 bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/[0.06] transition-colors relative overflow-hidden shadow-sm dark:shadow-none">
                                     <div className="absolute top-0 right-0 p-3 opacity-[0.05] dark:opacity-10 text-emerald-600 dark:text-current"><Shield size={32} /></div>
@@ -261,21 +289,73 @@ const UserProfile = () => {
                                                 />
                                             </div>
                                         </div>
+
+                                        <div>
+                                            <label className="block text-[10px] font-bold tracking-widest uppercase text-gray-500 dark:text-gray-400 mb-2">Access IP Address</label>
+                                            <div className="relative border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.01] rounded-2xl overflow-hidden pointer-events-none shadow-sm dark:shadow-none">
+                                                <Activity className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-500/60" />
+                                                <input
+                                                    type="text"
+                                                    value={userData.last_ip || 'No IP Logged'}
+                                                    disabled
+                                                    className="w-full bg-transparent py-4 pl-12 pr-4 text-gray-700 dark:text-gray-300 font-mono text-xs"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-[10px] font-bold tracking-widest uppercase text-gray-500 dark:text-gray-400 mb-2">Current Geo Location</label>
+                                            <div className="relative border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/[0.01] rounded-2xl overflow-hidden pointer-events-none shadow-sm dark:shadow-none">
+                                                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-rose-500/60" />
+                                                <input
+                                                    type="text"
+                                                    value={userData.last_location || 'Location Pending...'}
+                                                    disabled
+                                                    className="w-full bg-transparent py-4 pl-12 pr-4 text-gray-700 dark:text-gray-300 font-bold"
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="pt-8 mt-4 border-t border-gray-200 dark:border-white/5 flex flex-col sm:flex-row justify-between gap-4">
-                                    {loggedInUser?.role === 'ADMIN' && (
-                                        <button
-                                            type="button"
-                                            onClick={handleDelete}
-                                            disabled={deleting || !canEdit}
-                                            className="flex items-center justify-center px-6 py-4 bg-red-50 dark:bg-red-500/10 hover:bg-red-100 dark:hover:bg-red-500/20 text-red-600 dark:text-red-500 border border-red-200 dark:border-red-500/20 rounded-2xl font-bold transition-all disabled:opacity-50 cursor-pointer shadow-sm dark:shadow-none"
-                                        >
-                                            <Trash2 className="h-5 w-5 mr-3" />
-                                            {deleting ? 'Executing...' : 'Terminate Account'}
-                                        </button>
-                                    )}
+                                <div className="pt-8 mt-4 border-t border-gray-200 dark:border-white/5 flex flex-wrap justify-between gap-4">
+                                    <div className="flex gap-4 flex-wrap">
+                                        {loggedInUser?.role === 'ADMIN' && (
+                                            <>
+                                                <button
+                                                    type="button"
+                                                    onClick={handleDelete}
+                                                    disabled={deleting || !canEdit}
+                                                    className="flex items-center justify-center px-6 py-4 bg-red-50 dark:bg-red-500/10 hover:bg-red-100 dark:hover:bg-red-500/20 text-red-600 dark:text-red-500 border border-red-200 dark:border-red-500/20 rounded-2xl font-bold transition-all disabled:opacity-50 cursor-pointer shadow-sm dark:shadow-none"
+                                                >
+                                                    <Trash2 className="h-5 w-5 mr-3" />
+                                                    {deleting ? 'Executing...' : 'Terminate'}
+                                                </button>
+
+                                                {userData.role !== 'ADMIN' && (
+                                                    userData.is_banned ? (
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleUnban}
+                                                            className="flex items-center justify-center px-6 py-4 bg-emerald-50 dark:bg-emerald-500/10 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-500 border border-emerald-200 dark:border-emerald-500/20 rounded-2xl font-bold transition-all cursor-pointer shadow-sm dark:shadow-none"
+                                                        >
+                                                            <Shield className="h-5 w-5 mr-3" />
+                                                            Reactivate Node
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleBan}
+                                                            className="flex items-center justify-center px-6 py-4 bg-orange-50 dark:bg-orange-500/10 hover:bg-orange-100 dark:hover:bg-orange-500/20 text-orange-600 dark:text-orange-500 border border-orange-200 dark:border-orange-500/20 rounded-2xl font-bold transition-all cursor-pointer shadow-sm dark:shadow-none"
+                                                        >
+                                                            <ShieldAlert className="h-5 w-5 mr-3" />
+                                                            Ban Node
+                                                        </button>
+                                                    )
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
                                     <button
                                         type="submit"
                                         disabled={saving || !canEdit}

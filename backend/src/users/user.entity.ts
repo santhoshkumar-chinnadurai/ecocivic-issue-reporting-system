@@ -43,6 +43,15 @@ export class User {
     @Column({ nullable: true })
     last_location: string;
 
+    @Column({ nullable: true })
+    last_login_at: Date;
+
+    @Column({ default: false })
+    is_banned: boolean;
+
+    @Column({ nullable: true })
+    ban_reason: string;
+
     @CreateDateColumn()
     created_at: Date;
 }
