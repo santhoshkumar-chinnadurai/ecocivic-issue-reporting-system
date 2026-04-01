@@ -21,17 +21,11 @@ const DashboardCharts: React.FC<DashboardChartsProps> = ({ stats }) => {
         pieData.push({ name: 'In Progress', value: stats.inProgress });
     }
 
-    // Mock Ward Data (or use real data if available in stats.wardPerformance)
+    // Restrict to real data, default to empty array if stats.wardPerformance is missing
     const wardData = stats.wardPerformance ? Object.keys(stats.wardPerformance).map(key => ({
         name: key,
         uv: stats.wardPerformance[key]
-    })) : [
-        { name: 'Ward 1', uv: 40 },
-        { name: 'Ward 2', uv: 30 },
-        { name: 'Ward 3', uv: 20 },
-        { name: 'Ward 4', uv: 27 },
-        { name: 'Ward 5', uv: 18 },
-    ];
+    })) : [];
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -40,10 +34,11 @@ const DashboardCharts: React.FC<DashboardChartsProps> = ({ stats }) => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="bg-white/40 dark:bg-black/40 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-6 shadow-lg"
+                className="bg-white dark:bg-white/[0.02] backdrop-blur-3xl border border-gray-200 dark:border-white/10 rounded-[2rem] p-8 shadow-xl relative overflow-hidden group"
             >
-                <h3 className="text-xl font-bold dark:text-white text-gray-900 mb-4">Report Status Distribution</h3>
-                <div className="h-64">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-indigo-500/10 transition-colors"></div>
+                <h3 className="text-xl font-bold dark:text-white text-gray-900 mb-6 relative z-10">Report Status Distribution</h3>
+                <div className="h-64 relative z-10">
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                             <Pie
@@ -74,10 +69,11 @@ const DashboardCharts: React.FC<DashboardChartsProps> = ({ stats }) => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="bg-white/40 dark:bg-black/40 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-6 shadow-lg"
+                className="bg-white dark:bg-white/[0.02] backdrop-blur-3xl border border-gray-200 dark:border-white/10 rounded-[2rem] p-8 shadow-xl relative overflow-hidden group"
             >
-                <h3 className="text-xl font-bold dark:text-white text-gray-900 mb-4">Ward Performance Score</h3>
-                <div className="h-64">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-fuchsia-500/10 transition-colors"></div>
+                <h3 className="text-xl font-bold dark:text-white text-gray-900 mb-6 relative z-10">Ward Performance Score</h3>
+                <div className="h-64 relative z-10">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={wardData}>
                             <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />

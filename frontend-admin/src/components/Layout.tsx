@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, ArrowLeft, Menu, X, LogOut } from 'lucide-react';
+import { Shield, ArrowLeft, Menu, X, LogOut, User, Activity, Users } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
 interface LayoutProps {
@@ -21,135 +21,159 @@ const Layout: React.FC<LayoutProps> = ({ children, userRole }) => {
 
     const isDashboard = location.pathname === '/dashboard';
 
-    return (
-        <div className="min-h-screen bg-gray-50 dark:bg-[#0A0A0A] text-gray-900 dark:text-white font-sans selection:bg-indigo-500/30 overflow-hidden relative flex flex-col transition-colors duration-300">
+    const getNavLinks = () => {
+        const links = [];
+        if (userRole === 'ADMIN') {
+            links.push({ path: '/users', label: 'Users', icon: Users });
+        }
+        links.push({ path: '/monitor', label: 'Monitor', icon: Activity });
+        links.push({ path: '/profile', label: 'Profile', icon: User });
+        return links;
+    };
 
-            {/* Parallax Background Noise & Blobs */}
+    return (
+        <div className="min-h-screen bg-gray-50 dark:bg-[#050505] text-gray-900 dark:text-white font-sans selection:bg-indigo-500/30 overflow-hidden relative flex flex-col transition-colors duration-500">
+
+            {/* Premium Ambient Background Elements */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] dark:opacity-[0.05] mix-blend-overlay"></div>
                 <motion.div
-                    animate={{ x: [0, -30, 0], y: [0, 30, 0] }}
+                    animate={{ scale: [1, 1.2, 1], rotate: [0, 45, 0] }}
                     transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[0%] right-[0%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[120px]"
+                    className="absolute top-[-20%] right-[-10%] w-[60%] h-[50vw] bg-indigo-500/10 dark:bg-indigo-600/15 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen"
                 />
                 <motion.div
-                    animate={{ x: [0, 40, 0], y: [0, -20, 0] }}
+                    animate={{ scale: [1, 1.3, 1], rotate: [0, -30, 0] }}
                     transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute bottom-[0%] left-[0%] w-[40%] h-[40%] bg-cyan-600/10 rounded-full blur-[120px]"
+                    className="absolute bottom-[-10%] left-[-20%] w-[50%] h-[50vw] bg-cyan-500/10 dark:bg-cyan-600/15 rounded-full blur-[140px] mix-blend-multiply dark:mix-blend-screen"
                 />
             </div>
 
-            {/* Header */}
-            <header className="relative z-50 bg-white/60 dark:bg-black/20 backdrop-blur-2xl border-b border-gray-200 dark:border-white/5 transition-colors">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
-                        {/* Logo / Back Button */}
+            {/* Floating Glassmorphic Header */}
+            <div className="w-full fixed top-0 z-50 px-4 sm:px-6 py-4 pointer-events-none">
+                <header className="max-w-7xl mx-auto pointer-events-auto bg-white/70 dark:bg-white/[0.03] backdrop-blur-3xl border border-gray-200/50 dark:border-white/10 rounded-3xl shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.2)] transition-all">
+                    <div className="flex justify-between items-center h-16 px-4 sm:px-6">
+                        {/* Logo / Back */}
                         <div className="flex items-center">
                             {!isDashboard ? (
-                                <Link to="/dashboard" className="flex items-center space-x-3 mr-8 group">
-                                    <div className="h-10 w-10 rounded-xl bg-black/5 dark:bg-white/5 flex items-center justify-center group-hover:bg-black/10 dark:group-hover:bg-white/10 transition-colors border border-gray-200 dark:border-white/5">
+                                <Link to="/dashboard" className="flex items-center space-x-3 group mr-4">
+                                    <div className="h-10 w-10 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-gray-200 dark:group-hover:bg-white/10 transition-colors border border-gray-200 dark:border-white/5">
                                         <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
                                     </div>
-                                    <span className="text-lg font-semibold tracking-tight text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                                    <span className="text-sm font-bold tracking-tight text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors hidden sm:block uppercase">
                                         Back
                                     </span>
                                 </Link>
                             ) : (
-                                <Link to="/dashboard" className="flex items-center space-x-3 mr-8 group">
-                                    <div className="h-10 w-10 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                                        <Shield className="h-5 w-5 text-white" />
+                                <Link to="/dashboard" className="flex items-center space-x-3 group">
+                                    <div className="relative h-10 w-10">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-xl blur-md opacity-40 dark:opacity-70 group-hover:opacity-100 transition-opacity"></div>
+                                        <div className="relative h-full w-full bg-white dark:bg-black/50 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-xl flex items-center justify-center shadow-sm">
+                                            <Shield className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                                        </div>
                                     </div>
-                                    <span className="text-xl font-bold tracking-tight hidden sm:block">
-                                        CivicConnect{userRole === 'ADMIN' && <span className="text-indigo-600 dark:text-indigo-400 font-medium ml-1 text-sm bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">ADMIN</span>}
-                                    </span>
+                                    <div className="hidden sm:flex flex-col">
+                                        <span className="text-lg font-black tracking-tight leading-tight text-gray-900 dark:text-white">CivicConnect</span>
+                                        {userRole && (
+                                            <span className={`text-[10px] font-bold tracking-widest uppercase leading-none mt-0.5 ${userRole === 'ADMIN' ? 'text-fuchsia-600 dark:text-fuchsia-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                                                {userRole}
+                                            </span>
+                                        )}
+                                    </div>
                                 </Link>
                             )}
                         </div>
 
-                        {/* Desktop Nav & Actions */}
-                        <div className="hidden md:flex items-center space-x-6">
-                            {isDashboard && (
-                                <nav className="flex space-x-1 mr-2">
-                                    {userRole === 'ADMIN' && (
-                                        <Link to="/users" className="px-4 py-2 rounded-full text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                                            Users
-                                        </Link>
-                                    )}
-                                    <Link to="/profile" className="px-4 py-2 rounded-full text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                                        Profile
-                                    </Link>
-                                    <Link to="/monitor" className="px-4 py-2 rounded-full text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                                        Monitor
-                                    </Link>
-                                </nav>
-                            )}
+                        {/* Desktop Nav */}
+                        <nav className="hidden md:flex items-center space-x-1 border border-gray-200/50 dark:border-white/5 p-1 rounded-2xl bg-gray-50/50 dark:bg-black/20">
+                            {getNavLinks().map((link) => (
+                                <Link
+                                    key={link.path}
+                                    to={link.path}
+                                    className={`relative px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
+                                        location.pathname === link.path
+                                            ? 'text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-500/20 shadow-sm border border-indigo-100 dark:border-indigo-500/20'
+                                            : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'
+                                    }`}
+                                >
+                                    <link.icon size={16} />
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </nav>
 
+                        {/* Actions */}
+                        <div className="hidden md:flex items-center space-x-3">
+                            <div className="h-8 w-[1px] bg-gray-200 dark:bg-white/10 mx-2"></div>
                             <ThemeToggle />
-
                             <button
                                 onClick={handleLogout}
-                                className="p-2.5 rounded-full bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 hover:text-red-700 dark:hover:text-red-300 transition-colors"
-                                aria-label="Logout"
+                                className="group flex items-center justify-center h-10 w-10 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors shadow-sm"
                                 title="Logout"
                             >
-                                <LogOut size={18} />
+                                <LogOut size={16} className="group-hover:scale-110 transition-transform" />
                             </button>
                         </div>
 
-                        {/* Mobile Menu Button */}
-                        <div className="flex md:hidden items-center space-x-4">
+                        {/* Mobile Menu Toggle */}
+                        <div className="flex md:hidden items-center space-x-3">
                             <ThemeToggle />
                             <button
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                                className="p-2 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400"
                             >
-                                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                             </button>
                         </div>
                     </div>
-                </div>
+                </header>
 
-                {/* Mobile Menu */}
+                {/* Mobile Menu Dropdown */}
                 <AnimatePresence>
                     {isMobileMenuOpen && (
                         <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="md:hidden border-t border-gray-200 dark:border-white/5 bg-white/80 dark:bg-black/40 backdrop-blur-3xl overflow-hidden shadow-2xl"
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="absolute top-24 left-4 right-4 md:hidden pointer-events-auto"
                         >
-                            <div className="px-4 py-4 space-y-2">
-                                {userRole === 'ADMIN' && (
-                                    <Link to="/users" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                                        Users
+                            <div className="bg-white/90 dark:bg-[#111]/90 backdrop-blur-3xl border border-gray-200 dark:border-white/10 rounded-3xl p-4 shadow-2xl flex flex-col gap-2">
+                                {getNavLinks().map((link) => (
+                                    <Link
+                                        key={link.path}
+                                        to={link.path}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className={`flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-bold transition-colors ${
+                                            location.pathname === link.path
+                                                ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-500/20'
+                                                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'
+                                        }`}
+                                    >
+                                        <link.icon size={20} />
+                                        {link.label}
                                     </Link>
-                                )}
-                                <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                                    Profile
-                                </Link>
-                                <Link to="/monitor" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                                    Monitor
-                                </Link>
+                                ))}
+                                <div className="h-[1px] bg-gray-200 dark:bg-white/10 my-2 w-full"></div>
                                 <button
                                     onClick={handleLogout}
-                                    className="w-full text-left flex items-center px-4 py-3 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors"
+                                    className="flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors text-left"
                                 >
-                                    <LogOut size={18} className="mr-3" />
-                                    Logout
+                                    <LogOut size={20} />
+                                    Sign Out
                                 </button>
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
-            </header>
+            </div>
 
-            {/* Main Content */}
-            <main className="flex-1 w-full relative z-10 px-4 sm:px-6 py-8 overflow-y-auto">
+            {/* Main Content Area */}
+            <main className="flex-1 w-full relative z-10 pt-28 pb-12 px-4 sm:px-6">
                 <motion.div
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="max-w-7xl mx-auto"
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="max-w-7xl mx-auto h-full"
                 >
                     {children}
                 </motion.div>

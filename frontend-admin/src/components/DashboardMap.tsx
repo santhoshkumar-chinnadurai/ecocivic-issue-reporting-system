@@ -33,17 +33,14 @@ const DashboardMap = () => {
         fetchMapData();
     }, []);
 
-    // Placeholder data if API returns empty (for demo)
-    const displayData = reports.length > 0 ? reports : [
-        { latitude: 12.9716, longitude: 77.5946, category: 'Pothole', status: 'OPEN', report_id: '1' },
-        { latitude: 12.9800, longitude: 77.6000, category: 'Garbage', status: 'IN_PROGRESS', report_id: '2' },
-        { latitude: 12.9600, longitude: 77.5800, category: 'Street Light', status: 'RESOLVED', report_id: '3' },
-    ];
+    // Use actual fetched data
+    const displayData = reports;
 
     return (
-        <div className="bg-white/40 dark:bg-black/40 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-6 shadow-lg mb-8 h-[400px] relative z-0">
-            <h3 className="text-xl font-bold dark:text-white text-gray-900 mb-4">Live Incident Map</h3>
-            <div className="h-[320px] rounded-xl overflow-hidden shadow-inner border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-white/[0.02] backdrop-blur-3xl border border-gray-200 dark:border-white/10 rounded-[2rem] p-8 shadow-xl mb-8 relative z-0 overflow-hidden group">
+            <div className="absolute top-0 left-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-cyan-500/10 transition-colors"></div>
+            <h3 className="text-xl font-bold dark:text-white text-gray-900 mb-6 relative z-10">Live Incident Map</h3>
+            <div className="h-[320px] rounded-xl overflow-hidden shadow-inner border border-gray-200 dark:border-white/5 relative z-10">
                 <MapContainer center={[12.9716, 77.5946]} zoom={12} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

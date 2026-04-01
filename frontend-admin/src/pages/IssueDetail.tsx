@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, CheckCircle2, Activity, Share2, Download, Shield, User, Phone, Trash2, FileText, XCircle, Clock, AlertTriangle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -105,7 +105,7 @@ const IssueDetail = () => {
                 setIssue(mockIssue);
                 setLoading(false);
             });
-    }, [id]);
+    }, [id, userRole]);
 
     const handleShare = async () => {
         if (!issue) return;
@@ -133,7 +133,7 @@ const IssueDetail = () => {
                 scale: 2,
                 useCORS: true,
                 logging: false,
-                backgroundColor: '#0A0A0A'
+                backgroundColor: document.documentElement.classList.contains('dark') ? '#050505' : '#ffffff'
             });
 
             const imgData = canvas.toDataURL('image/png');
@@ -203,12 +203,12 @@ const IssueDetail = () => {
 
     const StatusBadge = ({ status }: { status: string }) => {
         const styles = {
-            PENDING: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-            OPEN: "bg-red-500/20 text-red-400 border-red-500/30",
-            IN_PROGRESS: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-            APPROVED: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
-            RESOLVED: "bg-green-500/20 text-green-400 border-green-500/30",
-            REJECTED: "bg-gray-500/20 text-gray-400 border-gray-500/30"
+            PENDING: "bg-yellow-50 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/30",
+            OPEN: "bg-red-50 dark:bg-red-500/20 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/30",
+            IN_PROGRESS: "bg-blue-50 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/30",
+            APPROVED: "bg-cyan-50 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-200 dark:border-cyan-500/30",
+            RESOLVED: "bg-green-50 dark:bg-green-500/20 text-green-600 dark:text-green-400 border-green-200 dark:border-green-500/30",
+            REJECTED: "bg-gray-100 dark:bg-gray-500/20 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-500/30"
         };
         const icons = {
             PENDING: <Clock size={16} className="mr-2" />,
@@ -220,8 +220,8 @@ const IssueDetail = () => {
         };
 
         return (
-            <span className={`px-4 py-1.5 rounded-full text-sm font-bold shadow-lg backdrop-blur-md border flex items-center
-                ${styles[status as keyof typeof styles] || "bg-gray-500/20 text-gray-400 border-gray-500/30"}`
+            <span className={`px-4 py-1.5 rounded-full text-sm font-bold shadow-md dark:shadow-lg backdrop-blur-md border flex items-center
+                ${styles[status as keyof typeof styles] || "bg-gray-100 dark:bg-gray-500/20 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-500/30"}`
             }>
                 {icons[status as keyof typeof styles]}
                 {status === 'APPROVED' ? 'ACCEPTED' : status.replace('_', ' ')}
@@ -246,7 +246,7 @@ const IssueDetail = () => {
     if (!issue) {
         return (
             <Layout userRole={userRole}>
-                <div className="min-h-[80vh] flex items-center justify-center text-gray-400 text-xl font-medium">
+                <div className="min-h-[80vh] flex items-center justify-center text-gray-500 dark:text-gray-400 text-xl font-medium">
                     Issue not found
                 </div>
             </Layout>
@@ -255,15 +255,15 @@ const IssueDetail = () => {
 
     return (
         <Layout userRole={userRole}>
-            <div className="space-y-8 pb-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div className="space-y-8 pb-24 max-w-6xl mx-auto mt-4 transition-colors duration-500">
 
                 {/* Header Actions */}
                 <div className="flex items-center justify-between relative z-10 w-full">
-                    <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Report Details</h1>
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Report Details</h1>
                     <div className="flex space-x-3">
                         <button
                             onClick={handleShare}
-                            className="p-3 bg-white/[0.03] border border-white/10 text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all shadow-lg"
+                            className="p-3 bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/[0.08] rounded-xl transition-all shadow-sm dark:shadow-lg"
                             title="Share Report"
                         >
                             <Share2 className="h-5 w-5" />
@@ -271,16 +271,16 @@ const IssueDetail = () => {
                         <button
                             onClick={handleDownloadPdf}
                             disabled={downloading}
-                            className={`p-3 bg-white/[0.03] border border-white/10 text-gray-300 hover:text-white hover:bg-white/[0.08] rounded-xl transition-all shadow-lg flex items-center gap-2 ${downloading ? 'opacity-50 cursor-wait' : ''}`}
+                            className={`p-3 bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/[0.08] rounded-xl transition-all shadow-sm dark:shadow-lg flex items-center gap-2 ${downloading ? 'opacity-50 cursor-wait' : ''}`}
                             title="Download PDF"
                         >
-                            {downloading ? <div className="animate-spin h-5 w-5 border-2 border-white rounded-full border-t-transparent"></div> : <Download className="h-5 w-5" />}
+                            {downloading ? <div className="animate-spin h-5 w-5 border-2 border-indigo-500 dark:border-white rounded-full border-t-transparent"></div> : <Download className="h-5 w-5" />}
                         </button>
                     </div>
                 </div>
 
                 {/* Content Container for PDF Capture */}
-                <div ref={reportRef} className="grid grid-cols-1 lg:grid-cols-3 gap-8 bg-[#0A0A0A] p-2 rounded-3xl" style={{ backgroundColor: '#0A0A0A' }}>
+                <div ref={reportRef} className="grid grid-cols-1 lg:grid-cols-3 gap-8 bg-transparent p-2 rounded-3xl pb-4">
                     {/* Left Column: Image & Status */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -288,7 +288,7 @@ const IssueDetail = () => {
                         className="lg:col-span-2 space-y-6"
                     >
                         {/* Image Card */}
-                        <div className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl relative group h-96">
+                        <div className="bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-3xl overflow-hidden shadow-xl dark:shadow-2xl relative group h-96">
                             <div className="absolute top-5 right-5 z-20">
                                 <StatusBadge status={issue.status} />
                             </div>
@@ -296,7 +296,7 @@ const IssueDetail = () => {
                             <img
                                 src={issue.imageUrl}
                                 alt="Issue Evidence"
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-100 dark:opacity-90 group-hover:opacity-100"
                                 crossOrigin="anonymous"
                                 onError={(e) => {
                                     (e.target as HTMLImageElement).style.display = 'none';
@@ -304,51 +304,51 @@ const IssueDetail = () => {
                                 }}
                             />
                             {/* Fallback */}
-                            <div className={`absolute inset-0 bg-gradient-to-br from-indigo-900/10 to-transparent flex items-center justify-center hidden`}>
-                                <FileText className="text-white/10" size={64} />
+                            <div className={`absolute inset-0 bg-gradient-to-br from-indigo-100 to-transparent dark:from-indigo-900/10 flex items-center justify-center hidden`}>
+                                <FileText className="text-gray-300 dark:text-white/10" size={64} />
                             </div>
 
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-black/40 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 dark:from-[#0A0A0A] via-black/40 to-transparent"></div>
                             <div className="absolute bottom-0 left-0 p-8 w-full">
                                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 shadow-sm">{issue.category}</h2>
-                                <div className="flex items-center text-gray-300 text-sm md:text-base font-medium">
-                                    <MapPin className="h-5 w-5 mr-2 text-indigo-400" />
+                                <div className="flex items-center text-gray-200 dark:text-gray-300 text-sm md:text-base font-medium">
+                                    <MapPin className="h-5 w-5 mr-2 text-indigo-300 dark:text-indigo-400" />
                                     {issue.location}
                                 </div>
                             </div>
                         </div>
 
                         {/* Description Card */}
-                        <div className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 rounded-3xl p-6 md:p-8 shadow-xl">
-                            <h2 className="text-xl font-bold text-white mb-6 flex items-center">
-                                <div className="bg-indigo-500/20 p-2.5 rounded-xl mr-4 border border-indigo-500/20">
-                                    <FileText className="h-5 w-5 text-indigo-400" />
+                        <div className="bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-lg dark:shadow-xl">
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                                <div className="bg-indigo-50 dark:bg-indigo-500/20 p-2.5 rounded-xl mr-4 border border-indigo-100 dark:border-indigo-500/20">
+                                    <FileText className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                                 </div>
                                 Issue Details
                             </h2>
-                            <p className="text-gray-300 leading-relaxed text-lg">
+                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
                                 {issue.description}
                             </p>
 
                             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="bg-white/[0.03] rounded-2xl p-5 border border-white/5">
+                                <div className="bg-gray-50 dark:bg-white/[0.03] rounded-2xl p-5 border border-gray-100 dark:border-white/5">
                                     <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Priority Level</div>
-                                    <div className="text-lg font-bold text-red-400 flex items-center bg-red-500/10 w-fit px-3 py-1 rounded-lg border border-red-500/20">
+                                    <div className="text-lg font-bold text-red-600 dark:text-red-400 flex items-center bg-red-50 dark:bg-red-500/10 w-fit px-3 py-1 rounded-lg border border-red-200 dark:border-red-500/20">
                                         <div className="h-2 w-2 rounded-full bg-red-500 mr-2 animate-pulse"></div>
                                         {issue.priority}
                                     </div>
                                 </div>
-                                <div className="bg-white/[0.03] rounded-2xl p-5 border border-white/5">
+                                <div className="bg-gray-50 dark:bg-white/[0.03] rounded-2xl p-5 border border-gray-100 dark:border-white/5">
                                     <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Reported Date</div>
-                                    <div className="text-lg font-bold text-white flex items-center">
-                                        <Calendar className="h-5 w-5 mr-2 text-cyan-400" />
+                                    <div className="text-lg font-bold text-gray-900 dark:text-white flex items-center">
+                                        <Calendar className="h-5 w-5 mr-2 text-cyan-600 dark:text-cyan-400" />
                                         {issue.date}
                                     </div>
                                 </div>
-                                <div className="bg-white/[0.03] rounded-2xl p-5 border border-white/5 sm:col-span-2">
+                                <div className="bg-gray-50 dark:bg-white/[0.03] rounded-2xl p-5 border border-gray-100 dark:border-white/5 sm:col-span-2">
                                     <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Assigned Department</div>
-                                    <div className="text-lg font-bold text-white flex items-center">
-                                        <Shield className="h-5 w-5 mr-3 text-indigo-400" />
+                                    <div className="text-lg font-bold text-gray-900 dark:text-white flex items-center">
+                                        <Shield className="h-5 w-5 mr-3 text-indigo-600 dark:text-indigo-400" />
                                         {issue.assigned_department || <span className="text-gray-500 italic">Unassigned</span>}
                                     </div>
                                 </div>
@@ -364,29 +364,29 @@ const IssueDetail = () => {
                         className="space-y-6"
                     >
                         {/* Reporter Info */}
-                        <div className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-xl">
-                            <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
-                                <User className="h-4 w-4 mr-2 text-cyan-400" /> Reporter Information
+                        <div className="bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-3xl p-6 shadow-lg dark:shadow-xl">
+                            <h3 className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-6 flex items-center">
+                                <User className="h-4 w-4 mr-2 text-cyan-600 dark:text-cyan-400" /> Reporter Information
                             </h3>
                             <div className="flex items-center">
-                                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-bold text-xl shadow-lg border border-white/10">
+                                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-bold text-xl shadow-md dark:shadow-lg border border-white/20 dark:border-white/10">
                                     {issue.reporter?.charAt(0).toUpperCase()}
                                 </div>
                                 <div className="ml-4">
-                                    <p className="text-white font-bold text-lg">{issue.reporter}</p>
-                                    <p className="text-gray-400 text-sm flex items-center mt-1">
-                                        <Phone size={14} className="mr-1.5 text-gray-500" /> {issue.reporterPhone}
+                                    <p className="text-gray-900 dark:text-white font-bold text-lg">{issue.reporter}</p>
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm flex items-center mt-1">
+                                        <Phone size={14} className="mr-1.5 text-gray-400 dark:text-gray-500" /> {issue.reporterPhone}
                                     </p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Actions Sidebar */}
-                        <div className="bg-white/[0.02] backdrop-blur-2xl border border-indigo-500/20 rounded-3xl p-6 shadow-xl relative overflow-hidden" data-html2canvas-ignore>
+                        <div className="bg-white dark:bg-white/[0.02] backdrop-blur-2xl border border-indigo-200 dark:border-indigo-500/20 rounded-3xl p-6 shadow-lg dark:shadow-xl relative overflow-hidden" data-html2canvas-ignore>
                             {/* Decorative background glow */}
-                            <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-[50px] pointer-events-none"></div>
+                            <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[50px] pointer-events-none"></div>
 
-                            <h3 className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-6 flex items-center">
+                            <h3 className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-6 flex items-center">
                                 <Shield className="h-4 w-4 mr-2" />
                                 {userRole === 'ADMIN' ? 'Administrative Control' : userRole === 'OFFICIAL' ? 'Official Control' : 'Report Actions'}
                             </h3>
@@ -395,7 +395,7 @@ const IssueDetail = () => {
                                 {userRole === 'OFFICIAL' && issue.status !== 'RESOLVED' && (
                                     <button
                                         onClick={() => handleUpdateStatus('RESOLVED')}
-                                        className="w-full py-3.5 px-4 rounded-xl bg-green-500/10 hover:bg-green-500 text-green-400 hover:text-white font-bold border border-green-500/20 transition-all flex items-center justify-center gap-2 group"
+                                        className="w-full py-3.5 px-4 rounded-xl bg-green-50 dark:bg-green-500/10 hover:bg-green-600 dark:hover:bg-green-500 text-green-700 dark:text-green-400 hover:text-white font-bold border border-green-200 dark:border-green-500/20 transition-all flex items-center justify-center gap-2 group"
                                     >
                                         <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" /> Complete Action
                                     </button>
@@ -407,40 +407,40 @@ const IssueDetail = () => {
                                             <div className="grid grid-cols-2 gap-3 mb-4">
                                                 <button
                                                     onClick={() => handleUpdateStatus('APPROVED')}
-                                                    className="py-3 px-4 rounded-xl bg-green-500/10 hover:bg-green-500 text-green-400 hover:text-white font-bold border border-green-500/20 transition-all flex items-center justify-center gap-2 group"
+                                                    className="py-3 px-4 rounded-xl bg-green-50 dark:bg-green-500/10 hover:bg-green-600 dark:hover:bg-green-500 text-green-700 dark:text-green-400 hover:text-white font-bold border border-green-200 dark:border-green-500/20 transition-all flex items-center justify-center gap-2 group"
                                                 >
                                                     <CheckCircle2 size={16} className="group-hover:scale-110 transition-transform" /> Accept
                                                 </button>
                                                 <button
                                                     onClick={() => handleUpdateStatus('REJECTED')}
-                                                    className="py-3 px-4 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white font-bold border border-red-500/20 transition-all flex items-center justify-center gap-2 group"
+                                                    className="py-3 px-4 rounded-xl bg-red-50 dark:bg-red-500/10 hover:bg-red-600 dark:hover:bg-red-500 text-red-700 dark:text-red-400 hover:text-white font-bold border border-red-200 dark:border-red-500/20 transition-all flex items-center justify-center gap-2 group"
                                                 >
                                                     <XCircle size={16} className="group-hover:scale-110 transition-transform" /> Reject
                                                 </button>
                                             </div>
                                         )}
 
-                                        <div className="space-y-2.5 bg-white/[0.02] p-4 rounded-2xl border border-white/5">
-                                            <label className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Assign Department</label>
+                                        <div className="space-y-2.5 bg-gray-50 dark:bg-white/[0.02] p-4 rounded-2xl border border-gray-100 dark:border-white/5">
+                                            <label className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-widest font-bold">Assign Department</label>
                                             <div className="relative group/select">
                                                 <select
                                                     value={issue.assigned_department || ""}
                                                     onChange={(e) => handleAssignDepartment(e.target.value)}
-                                                    className="w-full bg-white/[0.05] hover:bg-white/[0.08] border border-transparent focus:border-white/10 rounded-xl py-3 pl-4 pr-10 text-sm font-medium focus:outline-none transition-all appearance-none cursor-pointer text-white"
+                                                    className="w-full bg-white dark:bg-white/[0.05] hover:bg-gray-50 dark:hover:bg-white/[0.08] border border-gray-200 dark:border-transparent focus:border-indigo-300 dark:focus:border-white/10 rounded-xl py-3 pl-4 pr-10 text-sm font-medium focus:outline-none transition-all appearance-none cursor-pointer text-gray-900 dark:text-white shadow-sm dark:shadow-none"
                                                 >
-                                                    <option value="" disabled className="bg-[#0f0f0f]">Select Department</option>
+                                                    <option value="" disabled className="bg-white dark:bg-[#0f0f0f]">Select Department</option>
                                                     {DEPARTMENTS.map(dept => (
-                                                        <option key={dept} value={dept} className="bg-[#0f0f0f] text-white">{dept}</option>
+                                                        <option key={dept} value={dept} className="bg-white dark:bg-[#0f0f0f] text-gray-900 dark:text-white">{dept}</option>
                                                     ))}
                                                 </select>
-                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 group-focus-within/select:text-indigo-400 transition-colors">
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500 group-focus-within/select:text-indigo-500 dark:group-focus-within/select:text-indigo-400 transition-colors">
                                                     <Activity className="h-4 w-4" />
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="space-y-2.5 bg-white/[0.02] p-4 rounded-2xl border border-white/5">
-                                            <label className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Assign Worker</label>
+                                        <div className="space-y-2.5 bg-gray-50 dark:bg-white/[0.02] p-4 rounded-2xl border border-gray-100 dark:border-white/5">
+                                            <label className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-widest font-bold">Assign Worker</label>
                                             <div className="relative group/select">
                                                 <select
                                                     value={issue.assigned_worker_id || ""}
@@ -456,14 +456,14 @@ const IssueDetail = () => {
                                                             alert('Failed to assign worker');
                                                         }
                                                     }}
-                                                    className="w-full bg-white/[0.05] hover:bg-white/[0.08] border border-transparent focus:border-white/10 rounded-xl py-3 pl-4 pr-10 text-sm font-medium focus:outline-none transition-all appearance-none cursor-pointer text-white"
+                                                    className="w-full bg-white dark:bg-white/[0.05] hover:bg-gray-50 dark:hover:bg-white/[0.08] border border-gray-200 dark:border-transparent focus:border-indigo-300 dark:focus:border-white/10 rounded-xl py-3 pl-4 pr-10 text-sm font-medium focus:outline-none transition-all appearance-none cursor-pointer text-gray-900 dark:text-white shadow-sm dark:shadow-none"
                                                 >
-                                                    <option value="" disabled className="bg-[#0f0f0f]">Select Worker</option>
+                                                    <option value="" disabled className="bg-white dark:bg-[#0f0f0f]">Select Worker</option>
                                                     {workers.map(w => (
-                                                        <option key={w.user_id} value={w.user_id} className="bg-[#0f0f0f] text-white">{w.email}</option>
+                                                        <option key={w.user_id} value={w.user_id} className="bg-white dark:bg-[#0f0f0f] text-gray-900 dark:text-white">{w.email}</option>
                                                     ))}
                                                 </select>
-                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 group-focus-within/select:text-indigo-400 transition-colors">
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 dark:text-gray-500 group-focus-within/select:text-indigo-500 dark:group-focus-within/select:text-indigo-400 transition-colors">
                                                     <User className="h-4 w-4" />
                                                 </div>
                                             </div>
@@ -520,7 +520,7 @@ const IssueDetail = () => {
                                 {(userRole === 'ADMIN' || issue.user_id === user.user_id) && (
                                     <button
                                         onClick={handleDeleteIssue}
-                                        className="w-full py-3.5 px-4 mt-8 rounded-xl bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white font-bold border border-red-500/20 transition-colors flex items-center justify-center gap-2 group"
+                                        className="w-full py-3.5 px-4 mt-8 rounded-xl bg-red-50 dark:bg-red-500/10 hover:bg-red-600 dark:hover:bg-red-500 text-red-700 dark:text-red-500 hover:text-white font-bold border border-red-200 dark:border-red-500/20 transition-colors flex items-center justify-center gap-2 group"
                                     >
                                         <Trash2 className="h-4 w-4 group-hover:scale-110 transition-transform" />
                                         Delete Report
@@ -528,7 +528,7 @@ const IssueDetail = () => {
                                 )}
                             </div>
 
-                            <p className="text-[10px] text-gray-500/80 mt-6 text-center font-medium tracking-wide">
+                            <p className="text-[10px] text-gray-500 dark:text-gray-500/80 mt-6 text-center font-bold tracking-wide">
                                 LAST UPDATED: {new Date(issue.updated_at || issue.created_at).toLocaleString()}
                             </p>
                         </div>
