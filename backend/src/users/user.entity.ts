@@ -37,6 +37,12 @@ export class User {
     @Column({ default: 0 })
     points: number;
 
+    @Column({ nullable: true })
+    last_ip: string;
+
+    @Column({ nullable: true })
+    last_location: string;
+
     @CreateDateColumn()
     created_at: Date;
 }

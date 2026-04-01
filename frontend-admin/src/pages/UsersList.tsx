@@ -108,6 +108,7 @@ const UsersList = () => {
                                     <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">User Details</th>
                                     <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">System Role</th>
                                     <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Contact Info</th>
+                                    <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Location Data</th>
                                     <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Date Joined</th>
                                     <th className="px-6 py-5 text-right text-[10px] font-bold text-gray-500 uppercase tracking-widest">Actions</th>
                                 </tr>
@@ -166,6 +167,16 @@ const UsersList = () => {
                                                 <div className="flex flex-col space-y-1">
                                                     <span className="flex items-center group-hover:text-gray-900 dark:group-hover:text-gray-300 transition-colors"><Mail size={12} className="mr-2 opacity-50" /> {user.email}</span>
                                                     <span className="flex items-center group-hover:text-gray-900 dark:group-hover:text-gray-300 transition-colors"><Phone size={12} className="mr-2 opacity-50" /> {user.phone_number || '-'}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                                <div className="flex flex-col space-y-1">
+                                                    <span className="flex items-center font-mono text-xs text-indigo-500 dark:text-indigo-400">
+                                                        {user.last_ip || 'No IP Logged'}
+                                                    </span>
+                                                    <span className="flex items-center text-xs truncate max-w-[150px]">
+                                                        {user.last_location || '-'}
+                                                    </span>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">

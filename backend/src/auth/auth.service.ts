@@ -105,7 +105,35 @@ export class AuthService implements OnModuleInit {
         return null;
     }
 
-    async login(user: any) {
+    async login(user: any, ipAddress?: string) {
+        // Track IP and Location
+        if (ipAddress && user.user_id && !user.user_id.startsWith('static_')) {
+            try {
+                // If it's a localhost IP from IPv6 mapped to IPv4
+                const isLocal = ipAddress === '::1' || ipAddress === '127.0.0.1' || ipAddress.includes('::ffff:127.0.0.1');
+                const targetIp = isLocal ? '' : ipAddress; // Empty string auto-detects caller IP for ip-api
+
+                const response = await fetch(`http://ip-api.com/json/${targetIp}`);
+                const locationData = await response.json();
+
+                // Fetch real user to save
+                const realUser = await this.usersRepository.findOneBy({ user_id: user.user_id });
+                if (realUser) {
+                    realUser.last_ip = ipAddress;
+                    if (locationData && locationData.status === 'success') {
+                        realUser.last_location = `${locationData.city}, ${locationData.regionName}, ${locationData.country}`;
+                    } else if (isLocal) {
+                         realUser.last_location = 'Localhost (Dev Environment)';
+                    } else {
+                         realUser.last_location = 'Unknown';
+                    }
+                    await this.usersRepository.save(realUser);
+                }
+            } catch (error) {
+                console.error("Failed to resolve IP location", error);
+            }
+        }
+
         const payload = { email: user.email, sub: user.user_id, role: user.role };
         return {
             access_token: this.jwtService.sign(payload),
