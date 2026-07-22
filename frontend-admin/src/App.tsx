@@ -1,32 +1,43 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import Login from './pages/Login';
-import AdminLogin from './pages/AdminLogin';
-import Signup from './pages/Signup';
+import Login from './pages/auth/Login';
+import AdminLogin from './pages/auth/AdminLogin';
+import GovernmentLogin from './pages/auth/GovernmentLogin';
+import Signup from './pages/auth/Signup';
+import ForgotPassword from './pages/auth/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
-import IssueDetail from './pages/IssueDetail';
-import UsersList from './pages/UsersList';
-import UserProfile from './pages/UserProfile';
-import CreateReport from './pages/CreateReport';
-import About from './pages/About';
-import Reports from './pages/Reports';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import FaqPage from './pages/FaqPage';
+import IssueDetail from './pages/citizen/IssueDetail';
+import UsersList from './pages/admin/UsersList';
+import UserProfile from './pages/citizen/UserProfile';
+import CreateReport from './pages/citizen/CreateReport';
+import Reports from './pages/official/Reports';
+import Monitor from './pages/official/Monitor';
 
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/common/ProtectedRoute';
 import Debug from './pages/Debug';
-import Monitor from './pages/Monitor';
-import Footer from './components/Footer';
-import { ThemeProvider } from './context/ThemeContext';
+import AIAgentWidget from './components/common/AIAgentWidget';
+import { ThemeProvider } from './contexts/ThemeContext';
+import ChatPage from './pages/ChatPage';
+import LeaderboardPage from './pages/LeaderboardPage';
 
 function App() {
-  const location = useLocation();
-
   return (
     <ThemeProvider>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/faq" element={<FaqPage />} />
+
         <Route path="/login" element={<Login />} />
+        <Route path="/government/login" element={<GovernmentLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        
         <Route
           path="/dashboard"
           element={
@@ -83,9 +94,23 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/leaderboard"
+          element={
+            <ProtectedRoute>
+              <LeaderboardPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/debug" element={<Debug />} />
-        <Route path="/about" element={<About />} />
         <Route
           path="/monitor"
           element={
@@ -95,7 +120,7 @@ function App() {
           }
         />
       </Routes>
-      {location.pathname !== '/' && <Footer />}
+      <AIAgentWidget />
     </ThemeProvider>
   );
 }

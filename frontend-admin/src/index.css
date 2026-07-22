@@ -1,52 +1,223 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-  }
+@variant dark (&:where(.dark, .dark *));
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-  }
-
-  body {
-    @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-@layer utilities {
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-
-  .animation-delay-4000 {
-    animation-delay: 4s;
-  }
+html.dark body,
+.dark body {
+  background-color: #030712;
+  color: #f1f5f9;
 }
 
-@keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
+/* Hide scrollbars but keep functionality */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.animate-blob {
-  animation: blob 10s infinite;
+/* Translucent high-gloss glass card */
+.panel-neon-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  color: #0f172a;
+}
+html.dark .panel-neon-glass,
+.dark .panel-neon-glass {
+  background: rgba(9, 13, 22, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: none;
+  color: #f1f5f9;
+}
+
+/* Text glows */
+.text-neon-blue {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+.text-neon-emerald {
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+/* Leaflet Dark Matter Canvas adjustment filter */
+.dark-map-leaflet .leaflet-tile-container {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+.dark-map-leaflet .leaflet-container {
+  background-color: #060814 !important;
+}
+
+/* Dock items hover scale effects */
+.dock-item-bounce {
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s;
+}
+.dock-item-bounce:hover {
+  transform: translateY(-8px) scale(1.18);
+}
+
+/* Reusable buttons mapped to standard CSS declarations */
+.btn-cyber-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.75rem;
+  color: #ffffff;
+  background-color: #2563eb;
+  transition: all 0.2s;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+  user-select: none;
+}
+.btn-cyber-primary:hover {
+  background-color: #3b82f6;
+}
+.btn-cyber-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-cyber-secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.75rem;
+  color: #334155;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  transition: all 0.2s;
+  user-select: none;
+}
+.btn-cyber-secondary:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+html.dark .btn-cyber-secondary,
+.dark .btn-cyber-secondary {
+  color: #cbd5e1;
+  background-color: rgba(15, 23, 42, 0.6);
+  border: 1px solid #1e293b;
+}
+html.dark .btn-cyber-secondary:hover,
+.dark .btn-cyber-secondary:hover {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+.btn-cyber-danger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.75rem;
+  color: #ffffff;
+  background-color: #e11d48;
+  transition: all 0.2s;
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.25);
+  user-select: none;
+}
+.btn-cyber-danger:hover {
+  background-color: #f43f5e;
+}
+
+.card-cyber-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  transition: all 0.2s;
+  color: #0f172a;
+}
+.card-cyber-glass:hover {
+  border-color: #cbd5e1;
+}
+html.dark .card-cyber-glass,
+.dark .card-cyber-glass {
+  background: rgba(9, 13, 22, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: #f1f5f9;
+}
+html.dark .card-cyber-glass:hover,
+.dark .card-cyber-glass:hover {
+  border-color: rgba(100, 116, 139, 0.8);
+}
+
+.panel-cyber-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  color: #0f172a;
+}
+html.dark .panel-cyber-glass,
+.dark .panel-cyber-glass {
+  background: rgba(9, 13, 22, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: #f1f5f9;
+}
+
+.input-cyber-glass {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  color: #0f172a;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+  outline: none;
+}
+.input-cyber-glass::placeholder {
+  color: #94a3b8;
+}
+.input-cyber-glass:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+}
+html.dark .input-cyber-glass,
+.dark .input-cyber-glass {
+  background-color: rgba(2, 6, 23, 0.6);
+  border: 1px solid #1e293b;
+  color: #ffffff;
+}
+html.dark .input-cyber-glass::placeholder,
+.dark .input-cyber-glass::placeholder {
+  color: #64748b;
+}
+
+.select-cyber-glass {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  color: #0f172a;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+html.dark .select-cyber-glass,
+.dark .select-cyber-glass {
+  background-color: rgba(2, 6, 23, 0.6);
+  border: 1px solid #1e293b;
+  color: #ffffff;
 }

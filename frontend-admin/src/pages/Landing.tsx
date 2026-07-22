@@ -1,211 +1,219 @@
-import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Shield, ArrowRight, Activity, Users, Settings, BarChart3, Play, MapPin, CheckCircle2 } from 'lucide-react';
-import ThemeToggle from '../components/ThemeToggle';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Shield, ArrowRight, ShieldCheck, Activity, CheckCircle, Wrench, Sparkles, MapPin } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import MapComponent from '../components/map/MapComponent';
+import Button from '../components/ui/Button';
+import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 
+const DYNAMIC_HERO_TAGS = [
+    { label: "⚡ Live AI Auto-Routing Matrix Active", border: "border-blue-500/30", text: "text-blue-600 dark:text-blue-400", bg: "bg-blue-500/10" },
+    { label: "🛡️ PostGIS Spatial GPS Telemetry Synced", border: "border-emerald-500/30", text: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-500/10" },
+    { label: "🏆 1,480+ Municipal Defect Reports Triaged", border: "border-amber-500/30", text: "text-amber-600 dark:text-amber-400", bg: "bg-amber-500/10" },
+    { label: "🚀 Average Field Dispatch Time: < 2.4 Hours", border: "border-indigo-500/30", text: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-500/10" }
+];
 
+const Landing: React.FC = () => {
+    const navigate = useNavigate();
+    const [liveCounter, setLiveCounter] = useState(148);
+    const [activeTagIndex, setActiveTagIndex] = useState(0);
 
-const Landing = () => {
-    const { scrollYProgress } = useScroll();
-    const mapY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setLiveCounter(prev => prev + Math.floor(Math.random() * 2));
+        }, 8000);
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        const tagTimer = setInterval(() => {
+            setActiveTagIndex(prev => (prev + 1) % DYNAMIC_HERO_TAGS.length);
+        }, 3500);
+        return () => clearInterval(tagTimer);
+    }, []);
+
+    const currentTag = DYNAMIC_HERO_TAGS[activeTagIndex];
 
     const features = [
-        { title: "AI Categorization", desc: "Automagic routing to correct departments.", icon: Settings, color: "text-indigo-500", glow: "from-indigo-500/20" },
-        { title: "Live Tracking", desc: "Real-time updates on your reported cases.", icon: Activity, color: "text-cyan-500", glow: "from-cyan-500/20" },
-        { title: "Open Analytics", desc: "Monitor city-wide issue resolutions.", icon: BarChart3, color: "text-emerald-500", glow: "from-emerald-500/20" },
-        { title: "Worker Network", desc: "Directly dispatching ground crews.", icon: Users, color: "text-fuchsia-500", glow: "from-fuchsia-500/20" },
+        { title: 'AI Incident Routing', desc: 'NLP-based categorization dispatches tickets to matching division queues.', icon: ShieldCheck },
+        { title: 'Field Crew Telemetries', desc: 'Real-time GPS coordinates locate active repairs instantly.', icon: Wrench },
+        { title: 'Audit Transparency', desc: 'Cryptographic ledger logs verify status transitions safely.', icon: Activity },
+        { title: 'Gamified Reputations', desc: 'Earn points and unlock active neighbor badges for community reporting.', icon: CheckCircle }
     ];
 
-    const workflowSteps = [
-        { role: "Citizen", action: "Capture & report with GPS.", icon: MapPin },
-        { role: "AI System", action: "Diagnose & assign priority.", icon: Settings },
-        { role: "Civil Official", action: "Approve & dispatch crew.", icon: Activity },
-        { role: "Ground Worker", action: "Resolve & upload proof.", icon: CheckCircle2 },
+    const portals = [
+        {
+            title: 'Citizen Core',
+            desc: 'Log street defects, attach photo evidence, and inspect resolution timelines.',
+            link: '/login',
+            btnLabel: 'Citizen Sign In'
+        },
+        {
+            title: 'Dispatch Portal',
+            desc: 'Triage dispatches, assign crew teams, and monitor department performance.',
+            link: '/government/login',
+            btnLabel: 'Government Gate'
+        },
+        {
+            title: 'Root Matrix',
+            desc: 'Manage credentials, switch role parameters, and review system audit keys.',
+            link: '/admin/login',
+            btnLabel: 'Admin Console'
+        }
     ];
 
     return (
-        <div className="min-h-screen relative overflow-x-hidden bg-white dark:bg-[#050505] text-gray-900 dark:text-white font-sans selection:bg-indigo-500/30 transition-colors duration-500">
-            {/* Ambient Background Elements */}
-            <div className="fixed inset-0 z-0 pointer-events-none">
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] dark:opacity-[0.04] mix-blend-overlay"></div>
-                
-                <motion.div
-                    animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[-20%] right-[-10%] w-[60%] h-[70vw] bg-indigo-500/10 dark:bg-indigo-600/20 rounded-full blur-[120px] dark:mix-blend-screen"
-                />
-                <motion.div
-                    animate={{ scale: [1, 1.3, 1], rotate: [0, -90, 0] }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute bottom-[-10%] left-[-20%] w-[50%] h-[60vw] bg-cyan-500/10 dark:bg-cyan-600/15 rounded-full blur-[140px] dark:mix-blend-screen"
-                />
+        <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-500/20 overflow-x-hidden relative transition-colors duration-300">
+            
+            {/* Holographic City Grid Mesh Background */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-25">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-blue-500/10 to-indigo-500/10 rounded-full blur-[140px]"></div>
+                {/* Glowing Nodes */}
+                <span className="absolute top-1/3 left-1/4 h-2.5 w-2.5 rounded-full bg-blue-500 animate-ping"></span>
+                <span className="absolute top-1/2 left-3/4 h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping [animation-delay:1.5s]"></span>
             </div>
 
-            {/* Navigation */}
-            <nav className="fixed top-0 w-full z-50 border-b border-gray-200/50 dark:border-white/5 bg-white/70 dark:bg-black/40 backdrop-blur-2xl transition-all duration-300">
-                <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-                    <Link to="/" className="flex items-center space-x-3 group">
-                        <div className="h-10 w-10 relative flex items-center justify-center">
-                            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-cyan-400 rounded-xl blur-md opacity-40 dark:opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative h-full w-full bg-white dark:bg-black/50 backdrop-blur-md rounded-xl border border-gray-200 dark:border-white/20 flex items-center justify-center shadow-sm">
-                                <Shield className="h-5 w-5 text-indigo-500 dark:text-white" />
+            {/* Header navbar */}
+            <Navbar />
+
+            {/* Main Area */}
+            <main className="relative z-10">
+                {/* Hero Section */}
+                <section className="max-w-7xl mx-auto px-6 pt-16 pb-20 flex flex-col lg:flex-row items-center justify-between gap-12 text-left">
+                    <div className="w-full lg:w-1/2 space-y-6">
+                        
+                        {/* Dynamic Hero Tag Animation */}
+                        <div className="h-8 flex items-center">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={activeTagIndex}
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 10 }}
+                                    transition={{ duration: 0.3 }}
+                                    className={`inline-flex items-center gap-2 px-3.5 py-1.5 border ${currentTag.border} ${currentTag.bg} ${currentTag.text} rounded-full text-[11px] font-extrabold uppercase tracking-wider shadow-sm`}
+                                >
+                                    <Sparkles size={12} className="animate-spin" />
+                                    <span>{currentTag.label}</span>
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-slate-900 dark:text-white">
+                            Better Cities.<br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-500 dark:from-blue-400 dark:to-indigo-400 text-neon-blue">Collaboratively Built.</span>
+                        </h1>
+                        <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                            Report neighborhood utility defects, verify resolution timelines, and dispatch public works assets instantly on Coimbatore's digital command dashboard.
+                        </p>
+                        <div className="flex flex-wrap items-center gap-4 pt-2">
+                            <Button size="lg" className="flex items-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.25)]" onClick={() => navigate('/login')}>
+                                File Report <ArrowRight size={16} />
+                            </Button>
+                            <a href="#map-preview">
+                                <Button size="lg" variant="outline" className="flex items-center gap-1.5 font-bold">
+                                    <MapPin size={16} /> Live Queue Map
+                                </Button>
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* HUD metrics card */}
+                    <div className="w-full lg:w-5/12 flex justify-center">
+                        <div className="w-full max-w-sm panel-cyber-glass p-6 text-left shadow-2xl">
+                            <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-900 mb-6">
+                                <div className="flex items-center gap-2">
+                                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Live Telemetries</span>
+                                </div>
+                                <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">COIMBATORE_V1</span>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold">Logged Incidents</span>
+                                    <span className="block text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1 text-neon-blue">{liveCounter}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-slate-900 text-xs font-bold">
+                                    <div>
+                                        <span className="text-[9px] text-slate-500 dark:text-slate-400 uppercase tracking-widest block font-bold">Resolution Index</span>
+                                        <span className="block text-lg text-emerald-600 dark:text-emerald-400 font-extrabold mt-1 text-neon-emerald">94%</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-[9px] text-slate-500 dark:text-slate-400 uppercase tracking-widest block font-bold">Avg Dispatch</span>
+                                        <span className="block text-lg text-slate-900 dark:text-white font-extrabold mt-1">2.4 Days</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <span className="text-xl font-bold tracking-tight">CivicConnect</span>
-                    </Link>
-
-                    <div className="hidden md:flex items-center space-x-8 text-sm font-semibold text-gray-600 dark:text-gray-300">
-                        <a href="#features" className="hover:text-black dark:hover:text-white transition-colors">Platform</a>
-                        <a href="#workflow" className="hover:text-black dark:hover:text-white transition-colors">Workflow</a>
-                        <Link to="/about" className="hover:text-black dark:hover:text-white transition-colors">About</Link>
-                    </div>
-
-                    <div className="flex items-center space-x-4">
-                        <ThemeToggle />
-                        <Link to="/login" className="hidden sm:block text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Sign in</Link>
-                        <Link to="/signup" className="group relative px-5 py-2 overflow-hidden rounded-full font-bold text-sm bg-black dark:bg-white text-white dark:text-black shadow-lg hover:shadow-xl hover:scale-105 transition-all">
-                            Get Started
-                        </Link>
-                    </div>
-                </div>
-            </nav>
-
-            <main className="relative z-10 pt-32">
-                {/* Hero Section */}
-                <section className="min-h-[90vh] flex flex-col items-center justify-center px-6 relative pb-20">
-                    <div className="max-w-6xl mx-auto text-center">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="inline-flex items-center gap-2 px-4 py-1.5 mx-auto rounded-full border border-indigo-500/20 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-xs font-bold tracking-widest uppercase mb-10 shadow-sm"
-                        >
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                            </span>
-                            Next-gen Infrastructure
-                        </motion.div>
-
-                        <motion.h1
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                            className="text-6xl md:text-8xl lg:text-[7rem] font-black tracking-tighter mb-8 leading-[0.95]"
-                        >
-                            Smart Cities.<br />
-                            <span className="relative inline-block mt-2">
-                                <span className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 blur-2xl opacity-20 dark:opacity-40 animate-pulse mix-blend-multiply dark:mix-blend-screen"></span>
-                                <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-500 to-cyan-500 dark:from-indigo-300 dark:via-purple-300 dark:to-cyan-300">Powered by You.</span>
-                            </span>
-                        </motion.h1>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                            className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-3xl mx-auto font-medium leading-relaxed"
-                        >
-                            Report issues instantly, track municipal resolutions in real-time, and help build a stronger, more connected community.
-                        </motion.p>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                            className="flex flex-col sm:flex-row justify-center gap-6"
-                        >
-                            <Link to="/signup" className="group relative flex items-center justify-center gap-3 px-10 py-5 bg-black dark:bg-white text-white dark:text-black rounded-full font-bold text-lg shadow-[0_10px_30px_rgba(0,0,0,0.1)] dark:shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:scale-105 transition-transform overflow-hidden">
-                                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-black via-gray-800 to-black dark:from-white dark:via-gray-200 dark:to-white group-hover:bg-[length:200%_auto] bg-[length:100%_auto] transition-all duration-500" />
-                                <span className="relative z-10 flex items-center gap-2">Report an Issue <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /></span>
-                            </Link>
-
-                            <a href="#workflow" className="flex items-center justify-center gap-3 px-10 py-5 bg-white shadow-sm dark:shadow-none dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full font-bold text-lg hover:bg-gray-50 dark:hover:bg-white/10 transition-colors hover:scale-[1.02]">
-                                <Play fill="currentColor" size={16} className="text-indigo-600 dark:text-indigo-400" />
-                                See How It Works
-                            </a>
-                        </motion.div>
                     </div>
                 </section>
 
-
-
-                {/* Features Bento Grid */}
-                <section id="features" className="py-32 px-6">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="mb-20">
-                            <h2 className="text-5xl md:text-6xl font-black tracking-tight mb-4">The Platform.</h2>
-                            <p className="text-gray-500 dark:text-gray-400 text-xl max-w-2xl font-medium">A unified, intelligent ecosystem connecting citizens directly to the mechanisms of their city administration.</p>
+                {/* Portal access gateways */}
+                <section className="bg-slate-100/60 dark:bg-slate-955/40 border-y border-slate-200 dark:border-slate-900 py-16 text-left">
+                    <div className="max-w-7xl mx-auto px-6 space-y-12">
+                        <div className="text-center max-w-xl mx-auto space-y-2">
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Access Portals</h2>
+                            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">Verify credentials and mount database gates.</p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {features.map((feature, i) => (
-                                <motion.div
-                                    key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}
-                                    className="relative group p-8 rounded-[2rem] bg-gray-50 dark:bg-white/[0.02] border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all overflow-hidden block md:hover:-translate-y-2 shadow-sm"
-                                >
-                                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${feature.glow} to-transparent rounded-bl-full opacity-50 block transition-transform group-hover:scale-110`}></div>
-                                    <div className="relative z-10">
-                                        <div className="w-16 h-16 rounded-2xl bg-white dark:bg-black/50 border border-gray-200 dark:border-white/10 flex items-center justify-center mb-6 shadow-sm">
-                                            <feature.icon className={feature.color} size={30} />
-                                        </div>
-                                        <h3 className="text-2xl font-bold mb-3 tracking-tight">{feature.title}</h3>
-                                        <p className="text-gray-500 dark:text-gray-400 font-medium leading-relaxed">{feature.desc}</p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6" id="portals">
+                            {portals.map((p, i) => (
+                                <div key={i} className="panel-cyber-glass p-6 flex flex-col justify-between hover:border-blue-500/40 transition-all duration-200 h-64 shadow-lg bg-white/60 dark:bg-slate-950/20 group">
+                                    <div className="space-y-3">
+                                        <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{p.title}</h3>
+                                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{p.desc}</p>
                                     </div>
-                                </motion.div>
+                                    <Button className="w-full text-xs font-bold shadow-[0_0_10px_rgba(59,130,246,0.1)]" onClick={() => navigate(p.link)}>
+                                        {p.btnLabel}
+                                    </Button>
+                                </div>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* Vertical Workflow Section */}
-                <section id="workflow" className="py-32 px-6 relative border-t border-gray-200/50 dark:border-white/5 bg-gray-50 dark:bg-transparent">
-                    <div className="max-w-4xl mx-auto">
-                        <div className="text-center mb-20">
-                            <h2 className="text-5xl md:text-6xl font-black tracking-tight mb-6">How it Flows.</h2>
-                            <p className="text-gray-500 text-xl font-medium">From observation to completion, every step is fully transparent.</p>
-                        </div>
+                {/* Features Section */}
+                <section className="max-w-7xl mx-auto px-6 py-20 text-left space-y-12" id="features">
+                    <div className="max-w-xl mx-auto text-center space-y-2">
+                        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">High Integrity Matrix</h2>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">Equipped with NLP classifiers, location telemetry, and ledgers.</p>
+                    </div>
 
-                        <div className="relative">
-                            {/* Line connecting steps */}
-                            <div className="absolute left-8 md:left-1/2 top-4 bottom-4 w-1 bg-gray-200 dark:bg-white/10 -translate-x-1/2 rounded-full hidden sm:block">
-                                <motion.div style={{ scaleY: mapY, originY: 0 }} className="w-full h-full bg-gradient-to-b from-indigo-500 via-purple-500 to-cyan-400 rounded-full"></motion.div>
-                            </div>
-
-                            <div className="space-y-16 relative">
-                                {workflowSteps.map((step, i) => (
-                                    <motion.div
-                                        key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }}
-                                        className={`relative flex flex-col md:flex-row items-center gap-10 group ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
-                                    >
-                                        <div className="hidden sm:flex absolute left-8 md:relative md:left-auto items-center justify-center w-16 h-16 rounded-3xl bg-white dark:bg-[#111] border-2 border-gray-200 dark:border-white/10 shrink-0 z-10 shadow-sm transition-colors group-hover:border-indigo-500 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-500/10">
-                                            <step.icon size={24} className="text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
-                                        </div>
-
-                                        <div className={`w-full md:w-1/2 p-8 rounded-[2rem] bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 shadow-sm transition-all hover:shadow-lg dark:hover:bg-white/10 ${i % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                                            <div className="text-sm font-black text-indigo-500 tracking-widest uppercase mb-3 text-left md:text-inherit">Step 0{i+1}</div>
-                                            <h4 className="font-black text-3xl mb-3">{step.role}</h4>
-                                            <p className="text-xl text-gray-500 dark:text-gray-400 font-medium">{step.action}</p>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {features.map((feat, i) => {
+                            const Icon = feat.icon;
+                            return (
+                                <div key={i} className="space-y-3 p-5 border border-slate-200 dark:border-slate-800 rounded-2xl hover:bg-slate-100/60 dark:hover:bg-slate-950/60 transition-all duration-200 panel-cyber-glass">
+                                    <div className="h-10 w-10 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-500 flex items-center justify-center">
+                                        <Icon size={20} />
+                                    </div>
+                                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">{feat.title}</h3>
+                                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-normal font-medium">{feat.desc}</p>
+                                </div>
+                            );
+                        })}
                     </div>
                 </section>
-            </main>
 
-            {/* Footer */}
-            <footer className="bg-white dark:bg-black border-t border-gray-200 dark:border-white/10 pt-24 pb-12 px-6 relative z-10 transition-colors duration-300">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-                    <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 bg-black dark:bg-white rounded-xl flex items-center justify-center">
-                            <Shield className="text-white dark:text-black" size={20} />
+                {/* Live map preview section */}
+                <section className="max-w-7xl mx-auto px-6 pb-24 text-left space-y-6" id="map-preview">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+                        <div>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Active Queue Map</h2>
+                            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium font-sans">Geolocations of active complaints logged in Coimbatore municipal region.</p>
                         </div>
-                        <span className="font-black text-2xl tracking-tight text-gray-900 dark:text-white">CivicConnect</span>
+                        <Button size="sm" onClick={() => navigate('/login')} className="font-bold flex items-center gap-1 shadow-[0_0_10px_rgba(59,130,246,0.15)]">
+                            Report Incident <ArrowRight size={14} />
+                        </Button>
                     </div>
-                    <div className="flex gap-8 text-sm font-bold tracking-widest uppercase text-gray-500">
-                        <Link to="/about" className="hover:text-black dark:hover:text-white transition-colors">About</Link>
-                        <a href="#" className="hover:text-black dark:hover:text-white transition-colors">Privacy</a>
-                        <Link to="/admin/login" className="hover:text-black dark:hover:text-white transition-colors">Admin Portal</Link>
-                    </div>
-                    <div className="text-sm font-semibold text-gray-400">
-                        &copy; {new Date().getFullYear()} Civic Connect. All rights reserved.
-                    </div>
-                </div>
-            </footer>
+                    <MapComponent />
+                </section>
+            </main>
+            
+            {/* Municipal footer */}
+            <Footer />
         </div>
     );
 };
