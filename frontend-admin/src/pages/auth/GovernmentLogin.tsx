@@ -50,17 +50,10 @@ const GovernmentLogin: React.FC = () => {
         <AuthLayout>
             <div className="space-y-6 text-left">
                 {/* Header */}
-                <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                        <Building2 size={18} className="text-blue-600 dark:text-blue-400" />
-                        <span className="text-xs font-bold uppercase tracking-wider">Municipal Operations</span>
-                    </div>
-                    <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                        Official Portal Sign In
+                <div>
+                    <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                        Official Sign In
                     </h1>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                        Access operational tools for reviewing citizen reports, allocating field personnel, and tracking department response metrics.
-                    </p>
                 </div>
 
                 {/* Inline Error Alert */}
@@ -85,7 +78,7 @@ const GovernmentLogin: React.FC = () => {
                             <input
                                 type="email"
                                 required
-                                placeholder="official@civic.com"
+                                placeholder=""
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full pl-10 pr-4 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
@@ -102,7 +95,7 @@ const GovernmentLogin: React.FC = () => {
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 required
-                                placeholder="Enter official password"
+                                placeholder=""
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full pl-10 pr-10 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"

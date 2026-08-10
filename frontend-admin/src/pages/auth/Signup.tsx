@@ -96,18 +96,10 @@ const Signup: React.FC = () => {
     return (
         <AuthLayout>
             <div className="space-y-6 text-left">
-                {/* Header */}
-                <div className="space-y-1.5">
-                    <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-                        <UserPlus size={20} />
-                        <span className="text-xs font-black uppercase tracking-wider">Citizen Registration</span>
-                    </div>
+                <div>
                     <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
                         Create Your Account
                     </h1>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                        Join the civic reporting platform and help improve your community.
-                    </p>
                 </div>
 
                 {/* Inline Error Alert */}
@@ -132,7 +124,7 @@ const Signup: React.FC = () => {
                             <input
                                 type="text"
                                 required
-                                placeholder="John Doe"
+                                placeholder=""
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
@@ -150,7 +142,7 @@ const Signup: React.FC = () => {
                                 <input
                                     type="email"
                                     required
-                                    placeholder="name@domain.com"
+                                    placeholder=""
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
@@ -160,17 +152,24 @@ const Signup: React.FC = () => {
 
                         <div className="space-y-1">
                             <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                Phone Number
+                                Phone Number (India)
                             </label>
-                            <div className="relative">
-                                <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <div className="relative flex items-center">
+                                <div className="absolute left-3 flex items-center gap-1.5 pointer-events-none text-slate-500 font-extrabold text-xs">
+                                    <Phone size={14} className="text-slate-400 shrink-0" />
+                                    <span className="text-slate-900 dark:text-white font-mono font-bold">+91</span>
+                                </div>
                                 <input
                                     type="tel"
                                     required
-                                    placeholder="+1 (555) 000-0000"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                                    maxLength={10}
+                                    placeholder=""
+                                    value={phone.startsWith('+91 ') ? phone.replace('+91 ', '') : phone}
+                                    onChange={(e) => {
+                                        const raw = e.target.value.replace(/\D/g, '').slice(0, 10);
+                                        setPhone(raw ? `+91 ${raw}` : '');
+                                    }}
+                                    className="w-full pl-16 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors font-mono tracking-wider"
                                 />
                             </div>
                         </div>
@@ -185,7 +184,7 @@ const Signup: React.FC = () => {
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 required
-                                placeholder="Create a strong password"
+                                placeholder=""
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full pl-10 pr-10 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
@@ -222,7 +221,7 @@ const Signup: React.FC = () => {
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 required
-                                placeholder="Re-enter password"
+                                placeholder=""
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
