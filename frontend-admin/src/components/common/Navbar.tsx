@@ -55,12 +55,12 @@ const Navbar: React.FC = () => {
                 {/* Brand Logo */}
                 <div className="flex items-center gap-4">
                     <Link to="/" className="flex items-center space-x-2.5 group">
-                        <div className="h-9 w-9 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-blue-500/20 border border-blue-400/30 group-hover:scale-105 transition-transform">
+                        <div className="h-9 w-9 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-emerald-500/20 border border-emerald-400/30 group-hover:scale-105 transition-transform">
                             <Building2 className="h-5 w-5" />
                         </div>
                         <div className="flex flex-col">
                             <span className="text-base font-extrabold tracking-tight text-slate-900 dark:text-white uppercase leading-none">{platformConfig.appName}</span>
-                            <span className="text-[9px] font-mono font-bold text-blue-600 dark:text-blue-400 tracking-wider uppercase">MUNICIPAL CIVIC PLATFORM</span>
+                            <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase">SMART CIVIC PLATFORM</span>
                         </div>
                     </Link>
                 </div>

@@ -39,7 +39,7 @@ const AIAgentWidget = () => {
         {
             id: 'msg-0',
             sender: 'agent',
-            text: 'Greetings! I am CivicAI v3.0, your smart city report assistant. Describe any pothole, water leak, or waste heap, and I will help file your municipal report instantly!',
+            text: `Greetings! I am ${platformConfig.appName} AI Assistant, your smart municipal helper. Describe any pothole, water leak, waste heap, or streetlight issue, and I will help file your report instantly!`,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             action: { label: 'Open Report Form', path: '/create-report' }
         }
@@ -82,7 +82,7 @@ const AIAgentWidget = () => {
             setMessages(prev => [...prev, {
                 id: `success-${Date.now()}`,
                 sender: 'agent',
-                text: `Report Filed Successfully! Your ${draft.category} report for "${draft.location}" has been logged into the municipal queue. Field crews have been alerted.`,
+                text: `Report Filed Successfully! Your ${draft.category} report for "${draft.location}" has been logged into the queue. Field crews have been notified.`,
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                 categoryTag: 'SUCCESS LOGGED',
                 action: { label: 'View Dashboard', path: '/dashboard' }
@@ -152,7 +152,6 @@ const AIAgentWidget = () => {
                 sla = 'SLA: 4h (Emergency)';
             }
 
-            // Extract location hint or fallback
             let location = `${platformConfig.city} Central District`;
             if (query.includes('on ')) {
                 location = text.substring(query.indexOf('on ') + 3).trim();
@@ -180,16 +179,16 @@ const AIAgentWidget = () => {
 
                 responseText = `Live Telemetry: Currently ${liveReports.length} total municipal incidents logged (${openCount} pending, ${solvedCount} resolved). All PostGIS spatial vectors are active.`;
                 action = { label: 'View Leaderboard', path: '/leaderboard' };
-                categoryTag = 'LIVE MATRIX';
+                categoryTag = 'LIVE METRICS';
             } catch {
-                responseText = 'CivicConnect AI engine is online. All 5 municipal ward queues (Roads, Sanitation, Electrical, Water, Traffic) are operational.';
+                responseText = `${platformConfig.appName} AI engine is online. All municipal ward queues (Roads, Sanitation, Electrical, Water, Traffic) are operational.`;
             }
         } else if (query.includes('xp') || query.includes('point') || query.includes('badge') || query.includes('rank')) {
             responseText = 'You earn 10-50 XP points for filing verified reports or confirming repairs. Reaching higher XP levels unlocks badges like "Civic Hero" and "Neighborhood Watch".';
             action = { label: 'View Leaderboard', path: '/leaderboard' };
-            categoryTag = 'GAMIFICATION';
+            categoryTag = 'REWARDS';
         } else {
-            responseText = 'CivicAI NLP classifier analyzed your input. Would you like me to help file an official municipal defect report for your ward?';
+            responseText = `${platformConfig.appName} AI classifier analyzed your input. Would you like me to help file an official report for your ward?`;
             action = { label: 'Open Report Form', path: '/create-report' };
             categoryTag = 'AI DISPATCH';
         }
@@ -205,7 +204,7 @@ const AIAgentWidget = () => {
                 reportDraft
             }]);
             setIsTyping(false);
-        }, 600);
+        }, 500);
     };
 
     return (
@@ -214,7 +213,7 @@ const AIAgentWidget = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.92 }}
-                className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-emerald-500 hover:from-blue-500 hover:to-indigo-500 text-white flex items-center justify-center shadow-[0_8px_30px_rgba(59,130,246,0.45)] border border-blue-400/30 cursor-pointer relative group"
+                className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 text-white flex items-center justify-center shadow-[0_8px_30px_rgba(16,185,129,0.45)] border border-emerald-400/30 cursor-pointer relative group"
             >
                 {isOpen ? <X size={22} /> : <Bot size={26} />}
                 {!isOpen && (
@@ -233,17 +232,17 @@ const AIAgentWidget = () => {
                     >
                         <div className="p-4 bg-slate-100/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center shrink-0">
                             <div className="flex items-center gap-3">
-                                <div className="h-9 w-9 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-md border border-blue-400/30">
+                                <div className="h-9 w-9 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-md border border-emerald-400/30">
                                     <Bot size={20} />
                                 </div>
                                 <div className="flex flex-col">
                                     <div className="flex items-center gap-1.5">
-                                        <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider leading-none">CivicAI Report Assistant</span>
-                                        <span className="px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[9px] font-mono font-bold text-blue-600 dark:text-blue-400">v3.0</span>
+                                        <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider leading-none">EcoCivic AI Assistant</span>
+                                        <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400">v3.0</span>
                                     </div>
                                     <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 mt-0.5">
                                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                        Report Assistant Ready
+                                        AI Assistant Ready
                                     </span>
                                 </div>
                             </div>
@@ -269,11 +268,11 @@ const AIAgentWidget = () => {
                                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[88%] p-3.5 rounded-2xl text-xs shadow-sm space-y-2 leading-relaxed ${
                                         msg.sender === 'user'
-                                            ? 'bg-blue-600 text-white rounded-tr-none font-medium'
+                                            ? 'bg-emerald-600 text-white rounded-tr-none font-medium'
                                             : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none'
                                     }`}>
                                         {msg.categoryTag && (
-                                            <span className="inline-block px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[9px] font-extrabold uppercase tracking-wider border border-blue-500/20">
+                                            <span className="inline-block px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-extrabold uppercase tracking-wider border border-emerald-500/20">
                                                 {msg.categoryTag}
                                             </span>
                                         )}
@@ -283,7 +282,7 @@ const AIAgentWidget = () => {
                                             <div className="mt-3 p-3 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl space-y-2 text-left">
                                                 <div className="flex justify-between items-center">
                                                     <span className="text-xs font-black text-slate-900 dark:text-white flex items-center gap-1">
-                                                        <FilePlus size={14} className="text-blue-500" /> {msg.reportDraft.category}
+                                                        <FilePlus size={14} className="text-emerald-600" /> {msg.reportDraft.category}
                                                     </span>
                                                     <span className="text-[9px] font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
                                                         {msg.reportDraft.sla}
@@ -305,7 +304,7 @@ const AIAgentWidget = () => {
                                                             setIsOpen(false);
                                                             navigate('/create-report', { state: msg.reportDraft });
                                                         }}
-                                                        className="w-full py-2 px-3 bg-blue-600/10 hover:bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 rounded-xl text-[11px] font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                                                        className="w-full py-2 px-3 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-xl text-[11px] font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                                                     >
                                                         <FilePlus size={14} /> Pre-fill Full Form
                                                     </button>
@@ -323,7 +322,7 @@ const AIAgentWidget = () => {
                                                         navigate(msg.action.path);
                                                     }
                                                 }}
-                                                className="w-full mt-2 py-2 px-3 bg-blue-600/10 hover:bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 rounded-xl text-[11px] font-extrabold transition-all flex items-center justify-between cursor-pointer"
+                                                className="w-full mt-2 py-2 px-3 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-xl text-[11px] font-extrabold transition-all flex items-center justify-between cursor-pointer"
                                             >
                                                 <span>{msg.action.label}</span>
                                             </button>
@@ -338,9 +337,9 @@ const AIAgentWidget = () => {
                             {isTyping && (
                                 <div className="flex justify-start">
                                     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3 rounded-2xl rounded-tl-none flex items-center gap-1.5 shadow-sm">
-                                        <span className="h-1.5 w-1.5 bg-blue-500 rounded-full animate-bounce"></span>
-                                        <span className="h-1.5 w-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                                        <span className="h-1.5 w-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                                        <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-bounce"></span>
+                                        <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                                        <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
                                     </div>
                                 </div>
                             )}
@@ -353,7 +352,7 @@ const AIAgentWidget = () => {
                                 <button
                                     key={idx}
                                     onClick={() => handleSendMessage(prompt.query)}
-                                    className="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-blue-500/10 border border-slate-200 dark:border-slate-800 hover:border-blue-500/30 rounded-lg text-[10px] font-bold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 whitespace-nowrap transition-colors cursor-pointer shrink-0 shadow-2xs"
+                                    className="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-emerald-500/10 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/30 rounded-lg text-[10px] font-bold text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 whitespace-nowrap transition-colors cursor-pointer shrink-0 shadow-2xs"
                                 >
                                     {prompt.label}
                                 </button>
@@ -373,11 +372,11 @@ const AIAgentWidget = () => {
                                 placeholder="Tell AI: 'Pothole on Main Road' or 'Water leak'..."
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
-                                className="flex-1 px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 shadow-inner"
+                                className="flex-1 px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 shadow-inner"
                             />
                             <button
                                 type="submit"
-                                className="p-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl shadow-sm cursor-pointer transition-all"
+                                className="p-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl shadow-sm cursor-pointer transition-all"
                             >
                                 <Send size={15} />
                             </button>

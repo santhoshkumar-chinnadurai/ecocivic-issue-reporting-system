@@ -42,7 +42,7 @@ html.dark .panel-neon-glass,
 
 /* Text glows */
 .text-neon-blue {
-  text-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 }
 .text-neon-emerald {
   text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
@@ -74,13 +74,13 @@ html.dark .panel-neon-glass,
   padding: 0.625rem 1.5rem;
   border-radius: 0.75rem;
   color: #ffffff;
-  background-color: #2563eb;
+  background-color: #059669;
   transition: all 0.2s;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
   user-select: none;
 }
 .btn-cyber-primary:hover {
-  background-color: #3b82f6;
+  background-color: #10b981;
 }
 .btn-cyber-primary:active {
   transform: scale(0.97);

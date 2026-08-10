@@ -15,15 +15,15 @@ export interface PlatformConfig {
 }
 
 export const platformConfig: PlatformConfig = {
-    appName: 'CivicConnect',
-    tagline: 'Report. Resolve. Improve Your Community.',
-    orgName: 'Municipal Public Works & Administration',
-    city: 'Metropolitan City',
-    region: 'Central Municipal District',
-    country: 'Municipal Region',
-    supportEmail: 'support@civic-connect.org',
-    supportPhone: '+1 (800) 555-CIVIC',
-    officeAddress: 'Municipal Administration Building, Civic Center Square',
+    appName: 'EcoCivic',
+    tagline: 'Smart, Sustainable & Greener Community Governance',
+    orgName: 'EcoCivic Municipal & Environmental Services',
+    city: 'Eco-Metropolis City',
+    region: 'Green Municipal District',
+    country: 'India',
+    supportEmail: 'support@ecocivic.org',
+    supportPhone: '+91 (800) 555-ECO',
+    officeAddress: 'EcoCivic Central Hub, Green Square Avenue',
     defaultCoordinates: {
         latitude: 11.0168,
         longitude: 76.9558

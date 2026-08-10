@@ -24,12 +24,12 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
             {/* Top Navigation Bar */}
             <header className="absolute top-0 left-0 right-0 h-20 max-w-7xl mx-auto px-6 flex justify-between items-center z-20">
                 <Link to="/" className="flex items-center gap-3 group text-left">
-                    <div className="h-10 w-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-md border border-blue-400/30 group-hover:scale-105 transition-transform">
+                    <div className="h-10 w-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-md border border-emerald-400/30 group-hover:scale-105 transition-transform">
                         <Building2 className="h-5 w-5" />
                     </div>
                     <div className="flex flex-col">
                         <span className="text-base font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none">{platformConfig.appName}</span>
-                        <span className="text-[9px] font-mono font-bold text-blue-600 dark:text-blue-400 tracking-wider uppercase mt-0.5">Municipal Civic Platform</span>
+                        <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase mt-0.5">Municipal Civic Platform</span>
                     </div>
                 </Link>
 
@@ -56,7 +56,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
                                     to={p.path}
                                     className={`py-2 px-1 rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 whitespace-nowrap ${
                                         isActive
-                                            ? 'bg-blue-600 text-white shadow-sm font-black'
+                                            ? 'bg-emerald-600 text-white shadow-sm font-black'
                                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50'
                                     }`}
                                 >

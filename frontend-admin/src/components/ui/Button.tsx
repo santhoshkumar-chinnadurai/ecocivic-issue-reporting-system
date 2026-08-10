@@ -20,7 +20,7 @@ const Button: React.FC<ButtonProps> = ({
     const baseStyle = "inline-flex items-center justify-center font-bold rounded-xl transition-all duration-200 focus:outline-none select-none active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none";
     
     const variants = {
-        primary: "bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.25)] border border-transparent",
+        primary: "bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.25)] border border-transparent",
         secondary: "bg-slate-900/60 border border-slate-800 text-slate-300 hover:bg-slate-850 hover:text-white",
         outline: "bg-transparent border border-slate-800 text-slate-400 hover:border-slate-700 hover:text-white",
         ghost: "bg-transparent hover:bg-slate-900 text-slate-400 hover:text-white",
