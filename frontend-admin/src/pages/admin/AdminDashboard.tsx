@@ -64,9 +64,8 @@ const AdminDashboard: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                        <Terminal size={26} className="text-blue-600 dark:text-blue-400" /> Root Terminal
+                        <Terminal size={26} className="text-blue-600 dark:text-blue-400" /> Admin Dashboard
                     </h1>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium font-mono">CLEARANCE_LEVEL: ADMIN_CONTROL_MATRIX</p>
                 </div>
                 <div className="flex gap-2">
                     <Button variant="outline" size="sm" className="flex items-center gap-1.5 font-extrabold rounded-xl" onClick={() => navigate('/users')}>

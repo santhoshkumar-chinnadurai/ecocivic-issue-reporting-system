@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, Building2, AlertCircle, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, Building2 } from 'lucide-react';
 import AuthLayout from '../../layouts/AuthLayout';
 import Button from '../../components/ui/Button';
 import api from '../../api/axios';
@@ -13,6 +13,18 @@ const GovernmentLogin: React.FC = () => {
     const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [tapCount, setTapCount] = useState(0);
+
+    const handleTap = () => {
+        const next = tapCount + 1;
+        setTapCount(next);
+        if (next >= 3) {
+            setEmail('official@civic.com');
+            setPassword('official123');
+            setErrorMsg(null);
+            setTapCount(0);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,10 +62,21 @@ const GovernmentLogin: React.FC = () => {
         <AuthLayout>
             <div className="space-y-6 text-left">
                 {/* Header */}
-                <div>
-                    <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                <div className="flex items-center justify-between">
+                    <h1 
+                        onClick={handleTap}
+                        className="text-2xl font-black tracking-tight text-slate-900 dark:text-white cursor-pointer select-none"
+                    >
                         Official Sign In
                     </h1>
+                    <button
+                        type="button"
+                        onClick={handleTap}
+                        className="p-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 rounded-xl transition-all cursor-pointer flex items-center justify-center active:scale-95 shrink-0"
+                        title="Tap 3 times for secret auto-fill"
+                    >
+                        <Building2 size={18} />
+                    </button>
                 </div>
 
                 {/* Inline Error Alert */}
@@ -133,7 +156,7 @@ const GovernmentLogin: React.FC = () => {
                         loading={loading}
                         className="w-full h-11 text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-sm flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white transition-all cursor-pointer mt-2"
                     >
-                        {loading ? 'Authenticating...' : 'Sign In to Official Portal'} <ArrowRight size={14} />
+                        {loading ? 'Authenticating...' : 'Sign In'} <ArrowRight size={14} />
                     </Button>
                 </form>
 

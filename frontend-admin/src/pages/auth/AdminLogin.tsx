@@ -84,19 +84,18 @@ const AdminLogin: React.FC = () => {
                     <h1 
                         onClick={handleSecretShieldClick}
                         className="text-2xl font-black tracking-tight text-slate-900 dark:text-white cursor-pointer select-none"
-                        title="Secret Trick: Click 3x to auto-unlock admin master key"
                     >
                         Administrator Sign In
                     </h1>
 
-                    {/* Secret Trick One-Click Fast Login Pill */}
+                    {/* Secret Trick Icon Button */}
                     <button
                         type="button"
-                        onClick={handleQuickBypass}
-                        className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 rounded-full transition-all cursor-pointer flex items-center gap-1 active:scale-95 shrink-0"
-                        title="Click for instant 1-click Secret Admin Access"
+                        onClick={handleSecretShieldClick}
+                        className="p-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 rounded-xl transition-all cursor-pointer flex items-center justify-center active:scale-95 shrink-0"
+                        title="Tap 3 times for secret admin auto-fill"
                     >
-                        <Zap size={12} /> Secret Fast Login
+                        <ShieldCheck size={18} />
                     </button>
                 </div>
 
@@ -105,7 +104,7 @@ const AdminLogin: React.FC = () => {
                     <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-emerald-700 dark:text-emerald-400 text-xs font-bold flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <CheckCircle2 size={16} className="text-emerald-500" />
-                            <span>Secret Master Key Auto-Filled (PIN: 9900)</span>
+                            <span>Secret Master Key Auto-Filled</span>
                         </div>
                         <span className="text-[10px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded">UNLOCKED</span>
                     </div>
@@ -167,12 +166,9 @@ const AdminLogin: React.FC = () => {
 
                     {/* Secret Security Access PIN Field */}
                     <div className="space-y-1.5">
-                        <div className="flex justify-between items-center">
-                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                Security Passcode PIN (Optional / Master Token)
-                            </label>
-                            <span className="text-[10px] font-mono font-bold text-slate-400">PIN: 9900</span>
-                        </div>
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Security Passcode PIN
+                        </label>
                         <div className="relative">
                             <Key size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
@@ -208,7 +204,7 @@ const AdminLogin: React.FC = () => {
                         loading={loading}
                         className="w-full h-11 text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-sm flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white transition-all cursor-pointer mt-2"
                     >
-                        {loading ? 'Authenticating...' : 'Sign In to Admin Console'} <ArrowRight size={14} />
+                        {loading ? 'Authenticating...' : 'Sign In'} <ArrowRight size={14} />
                     </Button>
                 </form>
 

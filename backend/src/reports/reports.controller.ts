@@ -47,7 +47,7 @@ export class ReportsController {
 
     @Patch(':id/assign-department')
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(UserRole.ADMIN)
+    @Roles(UserRole.ADMIN, UserRole.OFFICIAL)
     assignDepartment(@Param('id') id: string, @Body('department') department: string) {
         return this.reportsService.assignDepartment(id, department);
     }

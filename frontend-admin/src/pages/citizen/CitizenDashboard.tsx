@@ -57,7 +57,6 @@ const CitizenDashboard: React.FC = () => {
                     <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
                         Welcome Back, <span className="text-blue-600 dark:text-blue-400">{user.email?.split('@')[0]}</span>
                     </h1>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium font-mono">Citizen Reporter Matrix // Node #{user.user_id?.slice(0, 8) || 'ENTITY-01'}</p>
                 </div>
                 <Link to="/create-report">
                     <Button className="flex items-center gap-2 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl py-3 px-5">

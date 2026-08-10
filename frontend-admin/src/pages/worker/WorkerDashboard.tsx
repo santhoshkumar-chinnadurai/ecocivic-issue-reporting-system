@@ -89,9 +89,8 @@ const WorkerDashboard: React.FC = () => {
             {/* Header */}
             <div className="pb-6 border-b border-slate-200 dark:border-slate-800">
                 <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-                    <Wrench className="text-blue-600 dark:text-blue-400" /> Dispatch HUD
+                    <Wrench className="text-blue-600 dark:text-blue-400" /> Worker Workspace
                 </h1>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium font-mono">Crew ID: {user.email?.split('@')[0]} // Active Status: Field Available</p>
             </div>
 
             {/* Performance Stats */}

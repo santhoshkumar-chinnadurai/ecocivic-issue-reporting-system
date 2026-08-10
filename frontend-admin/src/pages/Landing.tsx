@@ -397,62 +397,6 @@ const Landing: React.FC = () => {
                     </div>
                 </section>
 
-                {/* 7. Community Impact (Qualitative + Real Backend Data) */}
-                <section className="bg-slate-100/60 dark:bg-slate-950/40 border-y border-slate-200 dark:border-slate-800 py-16 text-left">
-                    <div className="max-w-7xl mx-auto px-6 space-y-8">
-                        <div className="text-center max-w-xl mx-auto space-y-3">
-                            <h2 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-                                Real Civic Transparency
-                            </h2>
-                            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
-                                Built to help communities communicate civic problems clearly and track them through resolution.
-                            </p>
-                        </div>
-
-                        <div className="max-w-md mx-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 text-center space-y-3 shadow-sm">
-                            <span className="text-xs font-black uppercase tracking-widest text-slate-500">Live Incident Log</span>
-                            <div className="text-4xl font-black text-blue-600 dark:text-blue-400 font-mono tracking-tight">
-                                {liveCounter}
-                            </div>
-                            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                                Active civic defect reports processed by municipal triage.
-                            </p>
-                        </div>
-                    </div>
-                </section>
-
-                {/* 8. Call to Action */}
-                <section className="max-w-5xl mx-auto px-6 text-center space-y-6">
-                    <div className="bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-3xl p-10 md:p-14 space-y-6 shadow-xl relative overflow-hidden">
-                        <div className="space-y-3 max-w-xl mx-auto relative z-10">
-                            <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight">
-                                See an issue in your community?
-                            </h2>
-                            <p className="text-sm text-blue-100 font-medium leading-relaxed">
-                                Report it and help the right team take action.
-                            </p>
-                        </div>
-
-                        <div className="flex flex-wrap items-center justify-center gap-4 pt-2 relative z-10">
-                            <Button
-                                size="lg"
-                                className="bg-white text-blue-600 hover:bg-slate-100 font-extrabold rounded-2xl px-8 py-3.5 shadow-md border-0"
-                                onClick={() => navigate('/login')}
-                            >
-                                Report an Issue <ArrowRight size={16} className="ml-1" />
-                            </Button>
-                            <Button
-                                size="lg"
-                                variant="outline"
-                                className="border-white/30 text-white hover:bg-white/10 font-extrabold rounded-2xl px-8 py-3.5"
-                                onClick={() => navigate('/login')}
-                            >
-                                Sign In
-                            </Button>
-                        </div>
-                    </div>
-                </section>
-
             </main>
 
             <Footer />

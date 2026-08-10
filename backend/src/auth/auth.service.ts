@@ -48,21 +48,28 @@ export class AuthService implements OnModuleInit {
             console.log(`Default Official Created: ${officialEmail} / official123`);
         }
 
-        // Create Default Worker
-        const workerEmail = 'worker@civic.com';
-        const existingWorker = await this.usersRepository.findOneBy({ email: workerEmail });
+        // Create Worker Accounts
+        const workerEmails = [
+            'worker@civic.com',
+            'worker2@civic.com',
+            'worker3@civic.com',
+            'worker4@civic.com'
+        ];
 
-        if (!existingWorker) {
-            console.log('Creating Default Worker User...');
-            const hashedPassword = await bcrypt.hash('worker123', 10);
-            const worker = this.usersRepository.create({
-                email: workerEmail,
-                password: hashedPassword,
-                role: UserRole.WORKER,
-                provider: 'LOCAL',
-            });
-            await this.usersRepository.save(worker);
-            console.log(`Default Worker Created: ${workerEmail} / worker123`);
+        for (const wEmail of workerEmails) {
+            const existingWorker = await this.usersRepository.findOneBy({ email: wEmail });
+            if (!existingWorker) {
+                console.log(`Creating Worker User (${wEmail})...`);
+                const hashedPassword = await bcrypt.hash('worker123', 10);
+                const worker = this.usersRepository.create({
+                    email: wEmail,
+                    password: hashedPassword,
+                    role: UserRole.WORKER,
+                    provider: 'LOCAL',
+                });
+                await this.usersRepository.save(worker);
+                console.log(`Worker Created: ${wEmail} / worker123`);
+            }
         }
     }
 

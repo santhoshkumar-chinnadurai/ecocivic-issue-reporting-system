@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Logger, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger, ForbiddenException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Report, ReportStatus, ReportPriority } from './report.entity';
@@ -7,9 +7,10 @@ import { AiService } from '../ai/ai.service';
 import { RoutingService } from '../routing/routing.service';
 import { NotificationService } from '../notifications/notification.service';
 import { UsersService } from '../users/users.service';
+import { User } from '../users/user.entity';
 
 @Injectable()
-export class ReportsService {
+export class ReportsService implements OnModuleInit {
     private readonly logger = new Logger(ReportsService.name);
 
     constructor(
@@ -20,6 +21,99 @@ export class ReportsService {
         private notificationService: NotificationService,
         private usersService: UsersService,
     ) { }
+
+    async onModuleInit() {
+        try {
+            const count = await this.reportsRepository.count();
+            if (count === 0) {
+                this.logger.log('Seeding sample civic reports...');
+                
+                const defaultUser = await this.reportsRepository.manager.findOne(User, { where: { email: 'admin@civic.com' } });
+                const defaultWorker = await this.reportsRepository.manager.findOne(User, { where: { email: 'worker@civic.com' } });
+                const userId = defaultUser ? defaultUser.user_id : '00000000-0000-0000-0000-000000000000';
+                const workerId = defaultWorker ? defaultWorker.user_id : null;
+
+                const sampleReports = [
+                    {
+                        user_id: userId,
+                        category: 'Roads & Potholes',
+                        description: 'Deep hazardous pothole causing vehicle damage and traffic slowdown on main road.',
+                        priority: ReportPriority.HIGH,
+                        location: 'Main Commercial Axis, Sector 4',
+                        image_url: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=600&auto=format&fit=crop&q=80',
+                        latitude: 11.0168,
+                        longitude: 76.9558,
+                        ward_id: 4,
+                        status: ReportStatus.OPEN,
+                        assigned_department: 'Public Works Department'
+                    },
+                    {
+                        user_id: userId,
+                        category: 'Street Lighting',
+                        description: 'Main street lights flickering and dark during night hours causing safety concerns.',
+                        priority: ReportPriority.MEDIUM,
+                        location: 'Civic Park Road, Ward 12',
+                        image_url: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=600&auto=format&fit=crop&q=80',
+                        latitude: 11.0200,
+                        longitude: 76.9600,
+                        ward_id: 12,
+                        status: ReportStatus.IN_PROGRESS,
+                        assigned_department: 'Electrical Services',
+                        assigned_worker_id: workerId
+                    },
+                    {
+                        user_id: userId,
+                        category: 'Water Supply',
+                        description: 'Underground pipeline burst resulting in water leakage on public sidewalk.',
+                        priority: ReportPriority.CRITICAL,
+                        location: 'Market Square Junction, Ward 2',
+                        image_url: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?w=600&auto=format&fit=crop&q=80',
+                        latitude: 11.0120,
+                        longitude: 76.9500,
+                        ward_id: 2,
+                        status: ReportStatus.OPEN,
+                        assigned_department: 'Water Board'
+                    },
+                    {
+                        user_id: userId,
+                        category: 'Waste Management',
+                        description: 'Accumulation of uncollected organic waste creating sanitation issues near residential complex.',
+                        priority: ReportPriority.HIGH,
+                        location: 'Residential Block B, Avenue 7',
+                        image_url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&auto=format&fit=crop&q=80',
+                        latitude: 11.0250,
+                        longitude: 76.9700,
+                        ward_id: 7,
+                        status: ReportStatus.RESOLVED,
+                        assigned_department: 'Sanitation Crew',
+                        assigned_worker_id: workerId,
+                        proof_image_url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&auto=format&fit=crop&q=80'
+                    },
+                    {
+                        user_id: userId,
+                        category: 'Traffic Signals',
+                        description: 'Traffic signal light failure at busy intersection causing gridlock.',
+                        priority: ReportPriority.HIGH,
+                        location: 'Crossroads Boulevard, Ward 5',
+                        image_url: 'https://images.unsplash.com/photo-1465447142348-e9952c393450?w=600&auto=format&fit=crop&q=80',
+                        latitude: 11.0180,
+                        longitude: 76.9580,
+                        ward_id: 5,
+                        status: ReportStatus.OPEN,
+                        assigned_department: 'Traffic Operations'
+                    }
+                ];
+
+                for (const repData of sampleReports) {
+                    const rep = this.reportsRepository.create(repData as any);
+                    await this.reportsRepository.save(rep);
+                }
+                this.logger.log('Sample civic reports seeded successfully.');
+            }
+        } catch (err) {
+            this.logger.error('Failed to seed reports', err);
+        }
+    }
 
     async create(createReportDto: CreateReportDto): Promise<Report> {
         try {

@@ -73,7 +73,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                             <span className="text-sm font-black tracking-tight text-slate-900 dark:text-white uppercase">CivicConnect</span>
                         </Link>
                         <Badge variant={user.role === 'ADMIN' ? 'danger' : user.role === 'WORKER' ? 'warning' : 'primary'}>
-                            {user.role} Nodes
+                            {user.role === 'ADMIN' ? 'Admin' : user.role === 'OFFICIAL' ? 'Official' : user.role === 'WORKER' ? 'Worker' : 'Citizen'}
                         </Badge>
                     </div>
 

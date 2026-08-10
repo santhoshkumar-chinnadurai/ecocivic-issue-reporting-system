@@ -53,9 +53,8 @@ const OfficialDashboard: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                        <LayoutDashboard className="text-blue-600 dark:text-blue-400" /> Command Matrix
+                        <LayoutDashboard className="text-blue-600 dark:text-blue-400" /> Official Operations
                     </h1>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium font-mono">OPERATIONAL_NODE // WARD_4_CENTRAL</p>
                 </div>
             </div>
 

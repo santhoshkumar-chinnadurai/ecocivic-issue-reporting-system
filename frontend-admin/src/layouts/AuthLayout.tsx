@@ -46,7 +46,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
                 
                 {/* Role Clearance Switcher */}
                 <div>
-                    <div className="grid grid-cols-4 gap-1 p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs font-bold">
+                    <div className="grid grid-cols-4 gap-1 p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-[11px] font-extrabold">
                         {portals.map(p => {
                             const isActive = location.pathname === p.path || (p.path === '/login' && location.pathname === '/signup');
                             const TabIcon = p.icon;
@@ -54,14 +54,14 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
                                 <Link
                                     key={p.path}
                                     to={p.path}
-                                    className={`py-2 px-1.5 rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 truncate ${
+                                    className={`py-2 px-1 rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 whitespace-nowrap ${
                                         isActive
-                                            ? 'bg-blue-600 text-white shadow-sm font-extrabold'
+                                            ? 'bg-blue-600 text-white shadow-sm font-black'
                                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50'
                                     }`}
                                 >
-                                    <TabIcon size={14} />
-                                    <span className="truncate hidden sm:inline">{p.label}</span>
+                                    <TabIcon size={13} className="shrink-0" />
+                                    <span>{p.label}</span>
                                 </Link>
                             );
                         })}
@@ -71,15 +71,6 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
                 {/* Form Component Slot */}
                 <div>
                     {children}
-                </div>
-
-                {/* Security Footer */}
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center text-[10px] font-mono text-slate-500 dark:text-slate-400">
-                    <span className="flex items-center gap-1.5 font-bold">
-                        <Lock size={12} className="text-emerald-500" />
-                        256-Bit Encrypted Session
-                    </span>
-                    <span>Municipal Portal v3.0</span>
                 </div>
             </div>
         </div>

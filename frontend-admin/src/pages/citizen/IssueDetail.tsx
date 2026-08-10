@@ -56,11 +56,14 @@ const IssueDetail: React.FC = () => {
             const res = await api.get(`/reports/${id}`);
             setIssue(res.data);
             setSelectedDept(res.data.assigned_department || DEPARTMENTS[0]);
-            setSelectedWorkerId(res.data.assigned_worker_id || '');
 
             if (userRole === 'ADMIN' || userRole === 'OFFICIAL') {
                 const usersRes = await api.get('/users');
-                setWorkers(usersRes.data.filter((u: any) => u.role === 'WORKER'));
+                const workerList = usersRes.data.filter((u: any) => u.role === 'WORKER');
+                setWorkers(workerList);
+
+                const currentWorkerId = res.data.assigned_worker_id || (workerList[0] ? (workerList[0].user_id || workerList[0].id) : '');
+                setSelectedWorkerId(currentWorkerId);
             }
         } catch (error) {
             console.error('Failed to load issue details', error);
@@ -72,19 +75,41 @@ const IssueDetail: React.FC = () => {
 
     const handleAssignWorker = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!id || !selectedWorkerId) return;
+        if (!id) return;
+
+        const workerToAssign = selectedWorkerId || (workers[0] ? (workers[0].user_id || workers[0].id) : null);
+        if (!workerToAssign) {
+            alert('Please select a ground worker crew member to dispatch.');
+            return;
+        }
 
         setAssigning(true);
         try {
             if (selectedDept) {
                 await api.patch(`/reports/${id}/assign-department`, { department: selectedDept });
             }
-            await api.patch(`/reports/${id}/assign-worker`, { workerId: selectedWorkerId });
-            alert('Worker dispatched successfully!');
+            await api.patch(`/reports/${id}/assign-worker`, { workerId: workerToAssign });
+            alert('Worker crew dispatched successfully!');
             fetchIssueDetails();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to assign worker', error);
-            alert('Assignment failed.');
+            alert(error.response?.data?.message || 'Assignment failed. Please check permissions.');
+        } finally {
+            setAssigning(false);
+        }
+    };
+
+    const handleUndoDispatch = async () => {
+        if (!id) return;
+        setAssigning(true);
+        try {
+            await api.patch(`/reports/${id}/status`, { status: 'OPEN' });
+            await api.patch(`/reports/${id}/assign-worker`, { workerId: null });
+            alert('Dispatch allocation undone! Status reset to OPEN.');
+            fetchIssueDetails();
+        } catch (error: any) {
+            console.error('Failed to undo dispatch', error);
+            alert('Failed to reset dispatch allocation.');
         } finally {
             setAssigning(false);
         }
@@ -105,25 +130,80 @@ const IssueDetail: React.FC = () => {
     };
 
     const handleDownloadPdf = async () => {
-        if (!reportRef.current || !issue) return;
+        if (!issue) return;
         setDownloading(true);
         try {
-            const canvas = await html2canvas(reportRef.current, {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: '#ffffff'
-            });
-
-            const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF('p', 'mm', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save(`Civic_Incident_Report_${issue.report_id.slice(0, 8)}.pdf`);
+            // Header Banner
+            pdf.setFillColor(37, 99, 235);
+            pdf.rect(0, 0, 210, 24, 'F');
+
+            pdf.setTextColor(255, 255, 255);
+            pdf.setFontSize(14);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('CIVICCONNECT INCIDENT REPORT', 14, 16);
+
+            // Metadata Section
+            pdf.setTextColor(15, 23, 42);
+            pdf.setFontSize(10);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`REPORT REFERENCE:`, 14, 36);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`#${issue.report_id}`, 60, 36);
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`DATE FILED:`, 14, 44);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`${new Date(issue.created_at).toLocaleString()}`, 60, 44);
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`CATEGORY:`, 14, 52);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`${issue.category || 'General'}`, 60, 52);
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`CURRENT STATUS:`, 14, 60);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`${issue.status}`, 60, 60);
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`PRIORITY LEVEL:`, 14, 68);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`${issue.priority || 'MEDIUM'}`, 60, 68);
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`LOCATION:`, 14, 76);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`${issue.location || 'Municipal Area'}`, 60, 76);
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`ASSIGNED DEPT:`, 14, 84);
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(`${issue.assigned_department || 'Unassigned'}`, 60, 84);
+
+            // Divider Line
+            pdf.setDrawColor(226, 232, 240);
+            pdf.line(14, 94, 196, 94);
+
+            // Description Section
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('INCIDENT DESCRIPTION:', 14, 104);
+            pdf.setFont('helvetica', 'normal');
+            const splitDesc = pdf.splitTextToSize(issue.description || 'No description provided.', 180);
+            pdf.text(splitDesc, 14, 112);
+
+            // Official Footer
+            pdf.setDrawColor(226, 232, 240);
+            pdf.line(14, 275, 196, 275);
+            pdf.setFontSize(8);
+            pdf.setTextColor(148, 163, 184);
+            pdf.text('Official Municipal Civic Platform Document — Verified Governance Record', 14, 282);
+
+            pdf.save(`Civic_Report_${issue.report_id.slice(0, 8)}.pdf`);
         } catch (error) {
             console.error('PDF generation failed', error);
-            alert('Failed to download report PDF.');
+            alert('Failed to generate PDF. Please try again.');
         } finally {
             setDownloading(false);
         }
@@ -288,9 +368,23 @@ const IssueDetail: React.FC = () => {
                                         onChange={(e) => setSelectedWorkerId(e.target.value)}
                                         options={workers.map(w => ({ value: w.user_id || w.id, label: w.email }))}
                                     />
-                                    <Button type="submit" className="w-full font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl py-3" loading={assigning}>
-                                        Dispatch Allocation
-                                    </Button>
+                                    <div className="flex gap-2 pt-1">
+                                        <Button type="submit" className="flex-1 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl py-3" loading={assigning}>
+                                            Dispatch Allocation
+                                        </Button>
+                                        {issue?.assigned_worker_id && (
+                                            <Button 
+                                                type="button" 
+                                                variant="outline" 
+                                                onClick={handleUndoDispatch} 
+                                                className="font-extrabold rounded-2xl py-3 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800 hover:bg-rose-50 dark:hover:bg-rose-950/40" 
+                                                loading={assigning}
+                                                title="Undo current dispatch allocation"
+                                            >
+                                                Undo
+                                            </Button>
+                                        )}
+                                    </div>
                                 </form>
                             </div>
                         )}
