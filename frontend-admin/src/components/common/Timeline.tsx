@@ -39,7 +39,7 @@ const Timeline: React.FC<TimelineProps> = ({ status, createdAt, updatedAt, assig
                             isPassed 
                                 ? 'bg-emerald-650 border-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]' 
                                 : isCurrent 
-                                ? 'bg-blue-600 border-blue-500 text-white animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.3)]' 
+                                ? 'bg-emerald-600 border-emerald-500 text-white animate-pulse shadow-[0_0_10px_rgba(16, 185, 129,0.3)]' 
                                 : 'bg-slate-950 border-slate-900 text-slate-500'
                         }`}>
                             {isPassed ? <Check size={11} strokeWidth={3} /> : <StageIcon size={11} />}
@@ -49,12 +49,12 @@ const Timeline: React.FC<TimelineProps> = ({ status, createdAt, updatedAt, assig
                         <div className="space-y-1">
                             <div className="flex items-center gap-2">
                                 <span className={`text-xs font-bold ${
-                                    isCurrent ? 'text-blue-400' : 'text-slate-350'
+                                    isCurrent ? 'text-emerald-400' : 'text-slate-350'
                                 }`}>
                                     {stage.label}
                                 </span>
                                 {isCurrent && (
-                                    <span className="text-[8px] font-black bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded border border-blue-500/10">
+                                    <span className="text-[8px] font-black bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/10">
                                         Current
                                     </span>
                                 )}

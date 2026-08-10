@@ -60,7 +60,7 @@ const Monitor: React.FC = () => {
                 {/* Header */}
                 <div>
                     <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                        <MonitorIcon className="text-blue-500" /> Operations Center
+                        <MonitorIcon className="text-emerald-500" /> Operations Center
                     </h1>
                     <p className="text-xs text-slate-400 mt-1.5 font-medium">Real-time incident dispatches and telemetries across {platformConfig.city} divisions.</p>
                 </div>
@@ -70,7 +70,7 @@ const Monitor: React.FC = () => {
                     <StatsCard 
                         title="Server CPU" 
                         value={`${metrics.cpu}%`} 
-                        icon={<Cpu size={18} className="text-blue-500" />} 
+                        icon={<Cpu size={18} className="text-emerald-500" />} 
                         subtitle="Node compute load" 
                     />
                     <StatsCard 

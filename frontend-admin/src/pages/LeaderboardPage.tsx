@@ -87,7 +87,7 @@ const LeaderboardPage: React.FC = () => {
                     onClick={() => setTab('citizen')}
                     className={`flex-1 py-2.5 px-4 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 ${
                         tab === 'citizen'
-                            ? 'bg-blue-600 text-white shadow-md font-black'
+                            ? 'bg-emerald-600 text-white shadow-md font-black'
                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                 >
@@ -97,7 +97,7 @@ const LeaderboardPage: React.FC = () => {
                     onClick={() => setTab('worker')}
                     className={`flex-1 py-2.5 px-4 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 ${
                         tab === 'worker'
-                            ? 'bg-blue-600 text-white shadow-md font-black'
+                            ? 'bg-emerald-600 text-white shadow-md font-black'
                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                 >
@@ -141,7 +141,7 @@ const LeaderboardPage: React.FC = () => {
                                         <tr key={item.rank} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                                             <td className="p-4 text-center">{getRankBadge(item.rank)}</td>
                                             <td className="p-4 font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                                                <div className="h-8 w-8 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-black flex items-center justify-center uppercase text-xs">
+                                                <div className="h-8 w-8 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-black flex items-center justify-center uppercase text-xs">
                                                     {item.name.slice(0, 2)}
                                                 </div>
                                                 <span>{item.name}</span>
@@ -152,7 +152,7 @@ const LeaderboardPage: React.FC = () => {
                                                     <Badge key={i} variant={i === 0 ? 'primary' : 'gray'}>{b}</Badge>
                                                 ))}
                                             </td>
-                                            <td className="p-4 text-right font-black text-blue-600 dark:text-blue-400 text-sm">{item.points} XP</td>
+                                            <td className="p-4 text-right font-black text-emerald-600 dark:text-emerald-400 text-sm">{item.points} XP</td>
                                         </tr>
                                     ))
                                 )}
@@ -188,7 +188,7 @@ const LeaderboardPage: React.FC = () => {
                                             </td>
                                             <td className="p-4 text-center text-amber-500 font-black">{item.rating}</td>
                                             <td className="p-4 text-center font-mono font-black text-slate-700 dark:text-slate-300">{item.completed}</td>
-                                            <td className="p-4 text-right font-black text-blue-600 dark:text-blue-400 text-sm">{item.points} XP</td>
+                                            <td className="p-4 text-right font-black text-emerald-600 dark:text-emerald-400 text-sm">{item.points} XP</td>
                                         </tr>
                                     ))
                                 )}

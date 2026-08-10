@@ -55,11 +55,11 @@ const CitizenDashboard: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-                        Welcome Back, <span className="text-blue-600 dark:text-blue-400">{user.email?.split('@')[0]}</span>
+                        Welcome Back, <span className="text-emerald-600 dark:text-emerald-400">{user.email?.split('@')[0]}</span>
                     </h1>
                 </div>
                 <Link to="/create-report">
-                    <Button className="flex items-center gap-2 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl py-3 px-5">
+                    <Button className="flex items-center gap-2 font-extrabold shadow-[0_0_20px_rgba(16, 185, 129,0.25)] rounded-2xl py-3 px-5">
                         <PlusCircle size={18} /> File New Complaint
                     </Button>
                 </Link>
@@ -73,7 +73,7 @@ const CitizenDashboard: React.FC = () => {
                     <div className="relative h-32 w-32 flex items-center justify-center">
                         <svg className="absolute inset-0 transform -rotate-90" viewBox="0 0 100 100">
                             <circle cx="50" cy="50" r="40" fill="transparent" stroke="currentColor" className="text-slate-200 dark:text-slate-800" strokeWidth="6" />
-                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#3b82f6" strokeWidth="6" 
+                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#10b981" strokeWidth="6" 
                                     strokeDasharray="251.2" strokeDashoffset={251.2 - (251.2 * progressPercent) / 100}
                                     strokeLinecap="round" className="transition-all duration-1000" />
                         </svg>
@@ -93,7 +93,7 @@ const CitizenDashboard: React.FC = () => {
                     <StatsCard 
                         title="Logged Reports" 
                         value={reports.length} 
-                        icon={<FileText size={18} className="text-blue-500" />} 
+                        icon={<FileText size={18} className="text-emerald-500" />} 
                         subtitle="Active tickets created by you" 
                     />
                     <StatsCard 
@@ -123,7 +123,7 @@ const CitizenDashboard: React.FC = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {reports.map((rep) => (
-                            <div key={rep.report_id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-blue-500 transition-all text-left">
+                            <div key={rep.report_id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:border-emerald-500 transition-all text-left">
                                 <div className="space-y-2">
                                     <div className="flex justify-between items-start">
                                         <span className="text-sm font-black text-slate-900 dark:text-white">{rep.category}</span>
@@ -135,7 +135,7 @@ const CitizenDashboard: React.FC = () => {
                                     <span className="text-slate-500 font-mono font-bold">#{rep.report_id?.slice(0, 6)}</span>
                                     <button 
                                         onClick={() => navigate(`/issues/${rep.report_id}`)}
-                                        className="text-blue-600 dark:text-blue-400 font-extrabold flex items-center gap-1 hover:underline cursor-pointer"
+                                        className="text-emerald-600 dark:text-emerald-400 font-extrabold flex items-center gap-1 hover:underline cursor-pointer"
                                     >
                                         Inspect Details →
                                     </button>

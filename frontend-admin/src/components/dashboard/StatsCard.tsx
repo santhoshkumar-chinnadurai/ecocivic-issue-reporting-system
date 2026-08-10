@@ -26,14 +26,14 @@ const StatsCard: React.FC<StatsCardProps> = ({
                         {value}
                     </span>
                 </div>
-                <div className="h-9 w-9 bg-blue-500/10 text-blue-500 border border-blue-500/20 rounded-xl flex items-center justify-center">
+                <div className="h-9 w-9 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-xl flex items-center justify-center">
                     {icon}
                 </div>
             </div>
             {(subtitle || trend) && (
                 <div className="pt-3 border-t border-slate-200 dark:border-slate-900 mt-4 flex justify-between items-center text-[9px] font-bold">
                     <span className="text-slate-500 dark:text-slate-400 uppercase tracking-wider">{subtitle}</span>
-                    {trend && <span className="text-blue-600 dark:text-blue-400 uppercase tracking-wider">{trend}</span>}
+                    {trend && <span className="text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">{trend}</span>}
                 </div>
             )}
         </div>

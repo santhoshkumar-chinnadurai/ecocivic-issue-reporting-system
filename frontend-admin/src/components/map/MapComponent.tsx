@@ -62,7 +62,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
         let color = '#f43f5e'; // Neon Rose for open/pending
         if (status === 'RESOLVED') color = '#10b981'; // Neon Emerald for solved
         else if (status === 'IN_PROGRESS') color = '#f59e0b'; // Amber for in-progress
-        else if (status === 'APPROVED' || status === 'ASSIGNED') color = '#3b82f6'; // Neon Blue for assigned
+        else if (status === 'APPROVED' || status === 'ASSIGNED') color = '#10b981'; // Neon Blue for assigned
 
         return L.divIcon({
             className: 'custom-marker',
@@ -104,7 +104,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
                         className="p-1 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors flex items-center gap-1 text-[10px] font-bold"
                         title="Toggle Map Style"
                     >
-                        {isDark ? <Sun size={12} className="text-amber-400" /> : <Moon size={12} className="text-indigo-600" />}
+                        {isDark ? <Sun size={12} className="text-amber-400" /> : <Moon size={12} className="text-teal-600" />}
                         <span>{isDark ? 'Light Map' : 'Dark Map'}</span>
                     </button>
                 </div>
@@ -118,7 +118,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
                                 onClick={() => setSelectedCategory(cat)}
                                 className={`px-2.5 py-1.5 text-left rounded-lg text-xs font-bold transition-all w-max md:w-full ${
                                     selectedCategory === cat
-                                        ? 'bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-sm font-extrabold'
+                                        ? 'bg-emerald-600/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-sm font-extrabold'
                                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900/50'
                                 }`}
                             >
@@ -187,7 +187,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
                                         </div>
                                         <p className="text-[10px] text-slate-300 mt-1">Status: <span className="font-bold">{report.status}</span></p>
                                         <div className="h-[1px] bg-slate-800 my-1.5"></div>
-                                        <a href={`/issues/${report.report_id}`} className="text-[10px] text-blue-400 hover:underline font-bold block">
+                                        <a href={`/issues/${report.report_id}`} className="text-[10px] text-emerald-400 hover:underline font-bold block">
                                             Inspect Incident Details
                                         </a>
                                     </div>

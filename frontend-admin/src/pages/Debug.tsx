@@ -7,7 +7,7 @@ const Debug: React.FC = () => {
         { name: 'API Server', status: 'Online', latency: '45ms', icon: Server, color: 'text-emerald-600 dark:text-emerald-400' },
         { name: 'Database', status: 'Connected', latency: '12ms', icon: Database, color: 'text-teal-600 dark:text-teal-400' },
         { name: 'WebSocket', status: 'Active', latency: '5ms', icon: Wifi, color: 'text-amber-600 dark:text-amber-400' },
-        { name: 'Auth Node', status: 'Secure', latency: '28ms', icon: ShieldCheck, color: 'text-blue-600 dark:text-blue-400' },
+        { name: 'Auth Node', status: 'Secure', latency: '28ms', icon: ShieldCheck, color: 'text-emerald-600 dark:text-emerald-400' },
     ]);
 
     const [refreshTimer, setRefreshTimer] = useState(30);
@@ -30,7 +30,7 @@ const Debug: React.FC = () => {
         const timer = setInterval(() => {
             setRefreshTimer((prev) => {
                 if (prev <= 1) {
-                    const log = { type: 'net', msg: `[SYNC] Telemetries synced at ${new Date().toLocaleTimeString()}.`, color: 'text-blue-600 dark:text-blue-400' };
+                    const log = { type: 'net', msg: `[SYNC] Telemetries synced at ${new Date().toLocaleTimeString()}.`, color: 'text-emerald-600 dark:text-emerald-400' };
                     setLogs(l => [...l.slice(-10), log]);
                     return 30;
                 }

@@ -298,7 +298,7 @@ const IssueDetail: React.FC = () => {
                         {/* Crew Comments Board */}
                         <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                             <h3 className="text-base font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
-                                <MessageSquare size={18} className="text-blue-600 dark:text-blue-400" /> Dispatch & Official Notes
+                                <MessageSquare size={18} className="text-emerald-600 dark:text-emerald-400" /> Dispatch & Official Notes
                             </h3>
 
                             <div className="space-y-3">
@@ -322,7 +322,7 @@ const IssueDetail: React.FC = () => {
                                     placeholder="Type dispatch update or citizen inquiry..."
                                     value={commentText}
                                     onChange={(e) => setCommentText(e.target.value)}
-                                    className="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 font-medium"
+                                    className="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 font-medium"
                                 />
                                 <Button type="submit" size="sm" className="font-extrabold px-5 rounded-2xl">
                                     <Send size={14} /> Send
@@ -350,7 +350,7 @@ const IssueDetail: React.FC = () => {
                         {(userRole === 'ADMIN' || userRole === 'OFFICIAL') && issue.status !== 'RESOLVED' && (
                             <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                                 <h3 className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
-                                    <Wrench size={16} className="text-blue-600 dark:text-blue-400" /> Allocate Crew Dispatch
+                                    <Wrench size={16} className="text-emerald-600 dark:text-emerald-400" /> Allocate Crew Dispatch
                                 </h3>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-normal font-medium">
                                     Reallocate department or dispatch a field worker team.
@@ -369,7 +369,7 @@ const IssueDetail: React.FC = () => {
                                         options={workers.map(w => ({ value: w.user_id || w.id, label: w.email }))}
                                     />
                                     <div className="flex gap-2 pt-1">
-                                        <Button type="submit" className="flex-1 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl py-3" loading={assigning}>
+                                        <Button type="submit" className="flex-1 font-extrabold shadow-[0_0_20px_rgba(16, 185, 129,0.25)] rounded-2xl py-3" loading={assigning}>
                                             Dispatch Allocation
                                         </Button>
                                         {issue?.assigned_worker_id && (

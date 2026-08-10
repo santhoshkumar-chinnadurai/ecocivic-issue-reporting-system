@@ -92,7 +92,7 @@ const AdminLogin: React.FC = () => {
                     <button
                         type="button"
                         onClick={handleSecretShieldClick}
-                        className="p-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 rounded-xl transition-all cursor-pointer flex items-center justify-center active:scale-95 shrink-0"
+                        className="p-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-xl transition-all cursor-pointer flex items-center justify-center active:scale-95 shrink-0"
                         title="Tap 3 times for secret admin auto-fill"
                     >
                         <ShieldCheck size={18} />
@@ -135,7 +135,7 @@ const AdminLogin: React.FC = () => {
                                 placeholder=""
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-10 pr-4 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
+                                className="w-full pl-10 pr-4 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
                             />
                         </div>
                     </div>
@@ -152,7 +152,7 @@ const AdminLogin: React.FC = () => {
                                 placeholder=""
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-10 pr-10 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
+                                className="w-full pl-10 pr-10 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
                             />
                             <button
                                 type="button"
@@ -176,7 +176,7 @@ const AdminLogin: React.FC = () => {
                                 placeholder=""
                                 value={securityPin}
                                 onChange={(e) => setSecurityPin(e.target.value)}
-                                className="w-full pl-10 pr-4 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
+                                className="w-full pl-10 pr-4 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
                             />
                         </div>
                     </div>
@@ -188,12 +188,12 @@ const AdminLogin: React.FC = () => {
                                 type="checkbox"
                                 checked={rememberMe}
                                 onChange={(e) => setRememberMe(e.target.checked)}
-                                className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer"
+                                className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 h-4 w-4 cursor-pointer"
                             />
                             <span>Remember credentials</span>
                         </label>
 
-                        <Link to="/forgot-password" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+                        <Link to="/forgot-password" className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
                             Forgot Password?
                         </Link>
                     </div>
@@ -202,7 +202,7 @@ const AdminLogin: React.FC = () => {
                     <Button
                         type="submit"
                         loading={loading}
-                        className="w-full h-11 text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-sm flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white transition-all cursor-pointer mt-2"
+                        className="w-full h-11 text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-sm flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white transition-all cursor-pointer mt-2"
                     >
                         {loading ? 'Authenticating...' : 'Sign In'} <ArrowRight size={14} />
                     </Button>
@@ -211,7 +211,7 @@ const AdminLogin: React.FC = () => {
                 {/* Footer Link */}
                 <div className="pt-2 text-center text-xs font-medium text-slate-600 dark:text-slate-400">
                     Not a system administrator?{' '}
-                    <Link to="/login" className="text-blue-600 dark:text-blue-400 font-extrabold hover:underline">
+                    <Link to="/login" className="text-emerald-600 dark:text-emerald-400 font-extrabold hover:underline">
                         Citizen Portal Sign In
                     </Link>
                 </div>

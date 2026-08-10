@@ -188,8 +188,8 @@ html.dark .panel-cyber-glass,
   color: #94a3b8;
 }
 .input-cyber-glass:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+  border-color: #10b981;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.3);
 }
 html.dark .input-cyber-glass,
 .dark .input-cyber-glass {

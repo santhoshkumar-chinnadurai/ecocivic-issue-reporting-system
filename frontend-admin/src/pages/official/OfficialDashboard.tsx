@@ -33,7 +33,7 @@ const OfficialDashboard: React.FC = () => {
     // Columns config
     const COLUMNS = [
         { title: 'Open Backlog', key: 'OPEN', color: 'border-rose-500/30' },
-        { title: 'Approved / Assigned', key: 'APPROVED', color: 'border-blue-500/30' },
+        { title: 'Approved / Assigned', key: 'APPROVED', color: 'border-emerald-500/30' },
         { title: 'In Progress', key: 'IN_PROGRESS', color: 'border-amber-500/30' },
         { title: 'Solved', key: 'RESOLVED', color: 'border-emerald-500/30' }
     ];
@@ -53,7 +53,7 @@ const OfficialDashboard: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                        <LayoutDashboard className="text-blue-600 dark:text-blue-400" /> Official Operations
+                        <LayoutDashboard className="text-emerald-600 dark:text-emerald-400" /> Official Operations
                     </h1>
                 </div>
             </div>
@@ -81,7 +81,7 @@ const OfficialDashboard: React.FC = () => {
                 <StatsCard 
                     title="AI Routing Rate" 
                     value="98.5%" 
-                    icon={<Cpu size={18} className="text-blue-500" />} 
+                    icon={<Cpu size={18} className="text-emerald-500" />} 
                     subtitle="NLP dispatch precision index" 
                 />
             </div>
@@ -114,7 +114,7 @@ const OfficialDashboard: React.FC = () => {
                                             <div 
                                                 key={t.report_id}
                                                 onClick={() => navigate(`/issues/${t.report_id}`)}
-                                                className="p-3.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-2xl hover:border-blue-500 active:scale-[0.98] transition-all cursor-pointer text-left space-y-1.5 shadow-sm"
+                                                className="p-3.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-2xl hover:border-emerald-500 active:scale-[0.98] transition-all cursor-pointer text-left space-y-1.5 shadow-sm"
                                             >
                                                 <div className="flex justify-between items-start gap-2">
                                                     <span className="text-xs font-black text-slate-900 dark:text-white truncate">{t.category}</span>

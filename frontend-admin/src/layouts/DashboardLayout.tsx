@@ -61,13 +61,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     const dockItems = getDockItems();
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 font-sans selection:bg-blue-500/20 overflow-x-hidden flex flex-col relative transition-colors duration-300">
+        <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 font-sans selection:bg-emerald-500/20 overflow-x-hidden flex flex-col relative transition-colors duration-300">
             {/* Top Telemetries Telemetry Bar */}
             <header className="sticky top-0 w-full z-40 border-b border-slate-200 dark:border-slate-900 bg-white/80 dark:bg-[#030712]/80 backdrop-blur-md text-left">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <Link to="/" className="flex items-center space-x-2.5">
-                            <div className="h-9 w-9 bg-blue-600 rounded-xl flex items-center justify-center text-white border border-blue-500/25">
+                            <div className="h-9 w-9 bg-emerald-600 rounded-xl flex items-center justify-center text-white border border-emerald-500/25">
                                 <Building2 className="h-4.5 w-4.5" />
                             </div>
                             <span className="text-sm font-black tracking-tight text-slate-900 dark:text-white uppercase">CivicConnect</span>
@@ -85,7 +85,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                             title="Notifications"
                         >
                             <Bell size={16} />
-                            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-blue-500 animate-ping"></span>
+                            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
                         </button>
                         <button 
                             onClick={handleLogout}
@@ -118,14 +118,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                                 onClick={() => navigate(item.path)}
                                 className={`h-11 w-11 rounded-2xl flex items-center justify-center relative cursor-pointer dock-item-bounce ${
                                     isActive 
-                                        ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)]' 
+                                        ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(16, 185, 129,0.3)]' 
                                         : 'bg-slate-100 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700'
                                 }`}
                                 title={item.label}
                             >
                                 <Icon size={18} />
                                 {isActive && (
-                                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 bg-blue-400 rounded-full"></span>
+                                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 bg-emerald-400 rounded-full"></span>
                                 )}
                             </button>
                         );

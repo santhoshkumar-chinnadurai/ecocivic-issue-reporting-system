@@ -134,7 +134,7 @@ const UserProfile: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Left Avatar & Stats Card */}
                     <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 flex flex-col items-center text-center">
-                        <div className="h-24 w-24 rounded-3xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-3xl font-black uppercase shadow-lg shadow-blue-500/20 border-2 border-white dark:border-slate-800">
+                        <div className="h-24 w-24 rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center text-3xl font-black uppercase shadow-lg shadow-emerald-500/20 border-2 border-white dark:border-slate-800">
                             {userData.email ? userData.email.slice(0, 2) : 'US'}
                         </div>
 
@@ -155,7 +155,7 @@ const UserProfile: React.FC = () => {
                         <div className="w-full pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
                             <div className="grid grid-cols-2 gap-3 text-center">
                                 <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
-                                    <span className="block text-2xl font-black text-blue-600 dark:text-blue-400">{currentPoints}</span>
+                                    <span className="block text-2xl font-black text-emerald-600 dark:text-emerald-400">{currentPoints}</span>
                                     <span className="text-[9px] text-slate-500 dark:text-slate-400 font-extrabold uppercase tracking-widest">XP Points</span>
                                 </div>
                                 <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
@@ -171,7 +171,7 @@ const UserProfile: React.FC = () => {
                                     <span>{progressPercent}%</span>
                                 </div>
                                 <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
+                                    <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-500 transition-all duration-500" style={{ width: `${progressPercent}%` }}></div>
                                 </div>
                             </div>
                         </div>
@@ -204,7 +204,7 @@ const UserProfile: React.FC = () => {
                     <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                         <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
                             <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-wider">Profile Settings</h3>
-                            <span className="text-xs text-blue-600 dark:text-blue-400 font-extrabold flex items-center gap-1">
+                            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-extrabold flex items-center gap-1">
                                 <CheckCircle2 size={14} /> Profile Verified
                             </span>
                         </div>
@@ -238,7 +238,7 @@ const UserProfile: React.FC = () => {
                             )}
 
                             <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-end">
-                                <Button type="submit" loading={saving} className="flex items-center gap-2 py-3 px-6 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl">
+                                <Button type="submit" loading={saving} className="flex items-center gap-2 py-3 px-6 font-extrabold shadow-[0_0_20px_rgba(16, 185, 129,0.25)] rounded-2xl">
                                     <Save size={16} /> Save Profile Changes
                                 </Button>
                             </div>

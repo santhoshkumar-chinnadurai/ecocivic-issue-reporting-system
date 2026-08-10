@@ -89,7 +89,7 @@ const WorkerDashboard: React.FC = () => {
             {/* Header */}
             <div className="pb-6 border-b border-slate-200 dark:border-slate-800">
                 <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-                    <Wrench className="text-blue-600 dark:text-blue-400" /> Worker Workspace
+                    <Wrench className="text-emerald-600 dark:text-emerald-400" /> Worker Workspace
                 </h1>
             </div>
 
@@ -110,7 +110,7 @@ const WorkerDashboard: React.FC = () => {
                 <StatsCard 
                     title="Dispatched Points" 
                     value={user.points || 0} 
-                    icon={<ShieldCheck size={18} className="text-blue-500" />} 
+                    icon={<ShieldCheck size={18} className="text-emerald-500" />} 
                     subtitle="XP Points awarded from resolutions" 
                 />
             </div>
@@ -156,7 +156,7 @@ const WorkerDashboard: React.FC = () => {
                                             <Button 
                                                 onClick={() => handleAcceptJob(task.report_id)}
                                                 disabled={actionLoading}
-                                                className="w-full md:w-auto font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl py-3"
+                                                className="w-full md:w-auto font-extrabold shadow-[0_0_20px_rgba(16, 185, 129,0.25)] rounded-2xl py-3"
                                             >
                                                 Start Dispatch
                                             </Button>

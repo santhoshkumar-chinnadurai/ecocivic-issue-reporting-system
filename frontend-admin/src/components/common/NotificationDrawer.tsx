@@ -63,7 +63,7 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ isOpen, onClose
                 return <AlertTriangle className="h-4 w-4 text-rose-500 shrink-0" />;
             case 'info':
             default:
-                return <Info className="h-4 w-4 text-blue-500 shrink-0" />;
+                return <Info className="h-4 w-4 text-emerald-500 shrink-0" />;
         }
     };
 
@@ -83,10 +83,10 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ isOpen, onClose
                     <div className="p-6 border-b border-slate-200 dark:border-slate-900 bg-slate-50/50 dark:bg-slate-950/40">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2.5">
-                                <div className="h-9 w-9 bg-blue-600/10 border border-blue-500/20 rounded-xl text-blue-600 dark:text-blue-400 flex items-center justify-center relative">
+                                <div className="h-9 w-9 bg-emerald-600/10 border border-emerald-500/20 rounded-xl text-emerald-600 dark:text-emerald-400 flex items-center justify-center relative">
                                     <Bell size={18} />
                                     {unreadCount > 0 && (
-                                        <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 border-2 border-white dark:border-slate-900" />
+                                        <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900" />
                                     )}
                                 </div>
                                 <div>
@@ -109,7 +109,7 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ isOpen, onClose
                                     onClick={() => setFilter('all')}
                                     className={`px-3 py-1 rounded-lg transition-all ${
                                         filter === 'all'
-                                            ? 'bg-blue-600 text-white shadow-sm'
+                                            ? 'bg-emerald-600 text-white shadow-sm'
                                             : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                                 >
@@ -119,7 +119,7 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ isOpen, onClose
                                     onClick={() => setFilter('unread')}
                                     className={`px-3 py-1 rounded-lg transition-all ${
                                         filter === 'unread'
-                                            ? 'bg-blue-600 text-white shadow-sm'
+                                            ? 'bg-emerald-600 text-white shadow-sm'
                                             : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                                 >
@@ -131,7 +131,7 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ isOpen, onClose
                                 <div className="flex items-center gap-2 text-[10px]">
                                     <button
                                         onClick={markAllAsRead}
-                                        className="text-blue-500 hover:underline flex items-center gap-1"
+                                        className="text-emerald-500 hover:underline flex items-center gap-1"
                                     >
                                         <CheckCheck size={12} /> Mark Read
                                     </button>
@@ -161,7 +161,7 @@ const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ isOpen, onClose
                                     onClick={() => markAsRead(notif.id)}
                                     className={`pt-3 first:pt-0 cursor-pointer group transition-colors p-3 rounded-2xl ${
                                         !notif.read
-                                            ? 'bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/20'
+                                            ? 'bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20'
                                             : 'hover:bg-slate-100/60 dark:hover:bg-slate-900/30'
                                     }`}
                                 >

@@ -66,7 +66,7 @@ const ComplaintCard: React.FC<ComplaintCardProps> = ({ report, onActionClick }) 
                     )}
                     <button 
                         onClick={() => navigate(`/issues/${report.report_id}`)}
-                        className="text-blue-400 font-bold flex items-center gap-1 hover:underline"
+                        className="text-emerald-400 font-bold flex items-center gap-1 hover:underline"
                     >
                         Details <ArrowRight size={10} />
                     </button>

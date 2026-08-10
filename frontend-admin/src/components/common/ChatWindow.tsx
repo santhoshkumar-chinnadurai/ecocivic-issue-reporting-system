@@ -118,7 +118,7 @@ const ChatWindow: React.FC = () => {
             <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 flex flex-col">
                 <div className="p-4 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
                     <h3 className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                        <MessageSquare size={15} className="text-blue-600 dark:text-blue-400" /> Contacts Directory
+                        <MessageSquare size={15} className="text-emerald-600 dark:text-emerald-400" /> Contacts Directory
                     </h3>
                 </div>
                 <div className="flex-1 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800/80">
@@ -128,11 +128,11 @@ const ChatWindow: React.FC = () => {
                             onClick={() => setSelectedContact(contact)}
                             className={`p-3.5 flex items-center gap-3 cursor-pointer transition-colors ${
                                 selectedContact?.id === contact.id
-                                    ? 'bg-blue-500/10 dark:bg-slate-800/80 border-l-4 border-blue-600'
+                                    ? 'bg-emerald-500/10 dark:bg-slate-800/80 border-l-4 border-emerald-600'
                                     : 'hover:bg-slate-50 dark:hover:bg-slate-800/40'
                             }`}
                         >
-                            <div className="h-9 w-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center font-black text-xs uppercase relative shrink-0">
+                            <div className="h-9 w-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-black text-xs uppercase relative shrink-0">
                                 {contact.avatar}
                                 {contact.online && (
                                     <span className="absolute -bottom-0.5 -right-0.5 block h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900" />
@@ -153,7 +153,7 @@ const ChatWindow: React.FC = () => {
                     {/* Header */}
                     <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 flex justify-between items-center">
                         <div className="flex items-center gap-3">
-                            <div className="h-9 w-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center font-black text-xs uppercase">
+                            <div className="h-9 w-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-black text-xs uppercase">
                                 {selectedContact.avatar}
                             </div>
                             <div>
@@ -175,11 +175,11 @@ const ChatWindow: React.FC = () => {
                             >
                                 <div className={`max-w-[70%] p-4 rounded-2xl shadow-sm text-xs leading-relaxed ${
                                     msg.isSelf
-                                        ? 'bg-blue-600 text-white rounded-tr-none font-medium'
+                                        ? 'bg-emerald-600 text-white rounded-tr-none font-medium'
                                         : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-tl-none border border-slate-200 dark:border-slate-700 font-medium'
                                 }`}>
                                     <p>{msg.text}</p>
-                                    <span className={`block text-[9px] mt-1.5 text-right font-mono ${msg.isSelf ? 'text-blue-100' : 'text-slate-400 dark:text-slate-400'}`}>
+                                    <span className={`block text-[9px] mt-1.5 text-right font-mono ${msg.isSelf ? 'text-emerald-100' : 'text-slate-400 dark:text-slate-400'}`}>
                                         {msg.time}
                                     </span>
                                 </div>
@@ -189,9 +189,9 @@ const ChatWindow: React.FC = () => {
                         {isTyping && (
                             <div className="flex justify-start">
                                 <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3.5 rounded-2xl rounded-tl-none flex items-center gap-1 shadow-sm">
-                                    <span className="h-1.5 w-1.5 bg-blue-500 rounded-full animate-bounce"></span>
-                                    <span className="h-1.5 w-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                                    <span className="h-1.5 w-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                                    <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-bounce"></span>
+                                    <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                                    <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
                                 </div>
                             </div>
                         )}
@@ -217,7 +217,7 @@ const ChatWindow: React.FC = () => {
                                 </div>
                             }
                         />
-                        <Button type="submit" className="px-5 py-3 shrink-0 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl">
+                        <Button type="submit" className="px-5 py-3 shrink-0 font-extrabold shadow-[0_0_20px_rgba(16, 185, 129,0.25)] rounded-2xl">
                             <Send size={15} />
                         </Button>
                     </form>

@@ -64,7 +64,7 @@ const AdminDashboard: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                        <Terminal size={26} className="text-blue-600 dark:text-blue-400" /> Admin Dashboard
+                        <Terminal size={26} className="text-emerald-600 dark:text-emerald-400" /> Admin Dashboard
                     </h1>
                 </div>
                 <div className="flex gap-2">
@@ -82,13 +82,13 @@ const AdminDashboard: React.FC = () => {
                 <StatsCard 
                     title="System Accounts" 
                     value={stats.totalUsers || 0} 
-                    icon={<Users size={18} className="text-blue-500" />} 
+                    icon={<Users size={18} className="text-emerald-500" />} 
                     subtitle="Registered user entities" 
                 />
                 <StatsCard 
                     title="Total Complaints" 
                     value={stats.total || 0} 
-                    icon={<Activity size={18} className="text-indigo-500" />} 
+                    icon={<Activity size={18} className="text-teal-500" />} 
                     subtitle="Reported civic incidents" 
                 />
                 <StatsCard 
@@ -111,7 +111,7 @@ const AdminDashboard: React.FC = () => {
                     onClick={() => setActiveTab('monitor')}
                     className={`flex-1 py-2.5 px-4 rounded-xl transition-all cursor-pointer ${
                         activeTab === 'monitor' 
-                            ? 'bg-blue-600 text-white shadow-sm font-black' 
+                            ? 'bg-emerald-600 text-white shadow-sm font-black' 
                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                 >
@@ -121,7 +121,7 @@ const AdminDashboard: React.FC = () => {
                     onClick={() => setActiveTab('audit')}
                     className={`flex-1 py-2.5 px-4 rounded-xl transition-all cursor-pointer ${
                         activeTab === 'audit' 
-                            ? 'bg-blue-600 text-white shadow-sm font-black' 
+                            ? 'bg-emerald-600 text-white shadow-sm font-black' 
                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                 >
@@ -131,7 +131,7 @@ const AdminDashboard: React.FC = () => {
                     onClick={() => setActiveTab('settings')}
                     className={`flex-1 py-2.5 px-4 rounded-xl transition-all cursor-pointer ${
                         activeTab === 'settings' 
-                            ? 'bg-blue-600 text-white shadow-sm font-black' 
+                            ? 'bg-emerald-600 text-white shadow-sm font-black' 
                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                 >
@@ -152,7 +152,7 @@ const AdminDashboard: React.FC = () => {
                                     <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
                                     <Tooltip contentStyle={{ borderRadius: '12px', fontSize: '12px', backgroundColor: '#0f172a', color: '#fff', border: 'none' }} />
                                     <Area type="monotone" dataKey="cpu" name="CPU Load" stroke="#f43f5e" fill="rgba(244, 63, 94, 0.1)" strokeWidth={2} />
-                                    <Area type="monotone" dataKey="mem" name="Memory" stroke="#3b82f6" fill="rgba(59, 130, 246, 0.1)" strokeWidth={2} />
+                                    <Area type="monotone" dataKey="mem" name="Memory" stroke="#10b981" fill="rgba(16, 185, 129, 0.1)" strokeWidth={2} />
                                 </AreaChart>
                             </ResponsiveContainer>
                         </AnalyticsCard>
@@ -193,7 +193,7 @@ const AdminDashboard: React.FC = () => {
                                 <tbody className="divide-y divide-slate-200 dark:divide-slate-800/80 font-medium">
                                     {auditLogs.map((log, index) => (
                                         <tr key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                                            <td className="p-4 font-mono text-xs text-blue-600 dark:text-blue-400 font-black">{log.tx}</td>
+                                            <td className="p-4 font-mono text-xs text-emerald-600 dark:text-emerald-400 font-black">{log.tx}</td>
                                             <td className="p-4 font-extrabold text-slate-900 dark:text-white">{log.action}</td>
                                             <td className="p-4 text-slate-600 dark:text-slate-300">{log.info}</td>
                                             <td className="p-4 text-slate-500 dark:text-slate-400 font-medium">{log.date}</td>
@@ -211,7 +211,7 @@ const AdminDashboard: React.FC = () => {
                 {activeTab === 'settings' && (
                     <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 max-w-xl space-y-6 shadow-sm">
                         <h3 className="text-base font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
-                            <Shield size={18} className="text-blue-600 dark:text-blue-400" /> System Security Policies
+                            <Shield size={18} className="text-emerald-600 dark:text-emerald-400" /> System Security Policies
                         </h3>
                         
                         <div className="space-y-5">
@@ -230,7 +230,7 @@ const AdminDashboard: React.FC = () => {
                                         onChange={() => setAiRouting(!aiRouting)}
                                         className="sr-only peer" 
                                     />
-                                    <div className="w-11 h-6 bg-slate-200 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    <div className="w-11 h-6 bg-slate-200 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                                 </label>
                             </div>
 
@@ -249,7 +249,7 @@ const AdminDashboard: React.FC = () => {
                                         onChange={() => setBlockchainLedger(!blockchainLedger)}
                                         className="sr-only peer" 
                                     />
-                                    <div className="w-11 h-6 bg-slate-200 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    <div className="w-11 h-6 bg-slate-200 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                                 </label>
                             </div>
 
@@ -268,7 +268,7 @@ const AdminDashboard: React.FC = () => {
                                         onChange={() => setSmsAlerts(!smsAlerts)}
                                         className="sr-only peer" 
                                     />
-                                    <div className="w-11 h-6 bg-slate-200 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    <div className="w-11 h-6 bg-slate-200 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                                 </label>
                             </div>
                         </div>

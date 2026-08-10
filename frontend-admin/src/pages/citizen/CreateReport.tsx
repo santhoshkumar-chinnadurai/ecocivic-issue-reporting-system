@@ -39,7 +39,7 @@ const LocationPickerMarker = ({ position, setPosition, setFormData }: any) => {
 
     const markerIcon = L.divIcon({
         className: 'custom-pin',
-        html: `<div style="background-color: #3b82f6; width: 18px; height: 18px; border-radius: 50%; border: 3px solid #ffffff; box-shadow: 0 0 15px #3b82f6;"></div>`,
+        html: `<div style="background-color: #10b981; width: 18px; height: 18px; border-radius: 50%; border: 3px solid #ffffff; box-shadow: 0 0 15px #10b981;"></div>`,
         iconSize: [18, 18],
         iconAnchor: [9, 9]
     });
@@ -216,14 +216,14 @@ const CreateReport: React.FC = () => {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => navigate(-1)}
-                        className="p-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-white transition-all active:scale-95 shadow-sm"
+                        className="p-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-white transition-all active:scale-95 shadow-sm"
                     >
                         <ArrowLeft size={18} />
                     </button>
                     <div>
                         <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
                             Report Issue
-                            <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400">
+                            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400">
                                 Spatial AI Form
                             </span>
                         </h1>
@@ -267,7 +267,7 @@ const CreateReport: React.FC = () => {
                                 <span className="block text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                                     1. Select Issue Category
                                 </span>
-                                <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                                     <Sparkles size={11} /> AI Auto-Classifier Active
                                 </span>
                             </div>
@@ -283,12 +283,12 @@ const CreateReport: React.FC = () => {
                                             onClick={() => handleCategorySelect(opt.value)}
                                             className={`p-4 rounded-2xl border text-left flex flex-col justify-between gap-3 transition-all cursor-pointer active:scale-95 relative overflow-hidden ${
                                                 isSelected 
-                                                    ? 'border-blue-500 bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.2)] font-extrabold'
+                                                    ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-[0_0_20px_rgba(16, 185, 129,0.2)] font-extrabold'
                                                     : 'border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30 text-slate-700 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
                                             }`}
                                         >
                                             <div className="flex justify-between items-start w-full">
-                                                <div className={`p-2 rounded-xl ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
+                                                <div className={`p-2 rounded-xl ${isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
                                                     <Icon className="h-5 w-5" />
                                                 </div>
                                                 <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-200/50 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
@@ -341,7 +341,7 @@ const CreateReport: React.FC = () => {
                                                 location: prev.location || `${corp} Central Ward`
                                             }));
                                         }}
-                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 shadow-inner cursor-pointer"
+                                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 shadow-inner cursor-pointer"
                                     >
                                         <option value="Central Municipal District">Central Municipal District (Primary Hub)</option>
                                         <option value="Northern Regional Corporation">Northern Regional Corporation</option>
@@ -364,7 +364,7 @@ const CreateReport: React.FC = () => {
                                             type="button"
                                             onClick={handleLocationDetect}
                                             disabled={locationLoading}
-                                            className="text-blue-600 dark:text-blue-400 hover:underline font-bold text-xs flex items-center gap-1"
+                                            className="text-emerald-600 dark:text-emerald-400 hover:underline font-bold text-xs flex items-center gap-1"
                                         >
                                             <Navigation size={12} /> {locationLoading ? 'Locating...' : 'Auto GPS'}
                                         </button>
@@ -436,7 +436,7 @@ const CreateReport: React.FC = () => {
                             <div className="flex flex-wrap justify-between items-center gap-2">
                                 <label className="block text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                                     4. Detailed Description
-                                    <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[10px] font-mono font-bold border border-blue-500/20">
+                                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-mono font-bold border border-emerald-500/20">
                                         AI Writer Active
                                     </span>
                                 </label>
@@ -462,7 +462,7 @@ const CreateReport: React.FC = () => {
                                             }
                                             setFormData(prev => ({ ...prev, description: aiText }));
                                         }}
-                                        className="py-1 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-[11px] font-extrabold transition-all flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer"
+                                        className="py-1 px-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-[11px] font-extrabold transition-all flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer"
                                     >
                                         <Sparkles size={13} /> Auto-Draft Description with AI
                                     </button>
@@ -478,7 +478,7 @@ const CreateReport: React.FC = () => {
                                 value={formData.description}
                                 onChange={(e) => handleDescriptionChange(e.target.value)}
                                 required
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all duration-200 shadow-inner text-xs leading-relaxed font-medium"
+                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition-all duration-200 shadow-inner text-xs leading-relaxed font-medium"
                             />
 
                             {/* Quick AI Template Chips */}
@@ -500,7 +500,7 @@ const CreateReport: React.FC = () => {
                                                 ...prev,
                                                 description: prev.description ? `${prev.description} ${tmpl.text}` : tmpl.text
                                             }))}
-                                            className="py-1 px-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500/40 rounded-xl text-[10px] font-bold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all cursor-pointer shadow-2xs active:scale-95"
+                                            className="py-1 px-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/40 rounded-xl text-[10px] font-bold text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all cursor-pointer shadow-2xs active:scale-95"
                                         >
                                             {tmpl.label}
                                         </button>
@@ -514,7 +514,7 @@ const CreateReport: React.FC = () => {
                             <Button
                                 type="submit"
                                 loading={loading}
-                                className="w-full md:w-max px-10 py-3 text-sm font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.3)] rounded-2xl"
+                                className="w-full md:w-max px-10 py-3 text-sm font-extrabold shadow-[0_0_20px_rgba(16, 185, 129,0.3)] rounded-2xl"
                             >
                                 Dispatch Incident Report
                             </Button>

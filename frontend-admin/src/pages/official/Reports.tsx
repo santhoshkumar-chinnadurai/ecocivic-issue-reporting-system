@@ -88,13 +88,13 @@ const Reports: React.FC = () => {
                     <div className="flex items-center gap-1.5 border border-slate-200 dark:border-slate-800 p-1.5 bg-white dark:bg-slate-900 rounded-2xl shadow-sm">
                         <button
                             onClick={() => setViewMode('grid')}
-                            className={`p-2 rounded-xl transition-all cursor-pointer ${viewMode === 'grid' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
+                            className={`p-2 rounded-xl transition-all cursor-pointer ${viewMode === 'grid' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
                         >
                             <LayoutGrid size={16} />
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={`p-2 rounded-xl transition-all cursor-pointer ${viewMode === 'list' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
+                            className={`p-2 rounded-xl transition-all cursor-pointer ${viewMode === 'list' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'}`}
                         >
                             <List size={16} />
                         </button>
@@ -126,8 +126,8 @@ const Reports: React.FC = () => {
 
                 {/* Results count banner */}
                 <div className="flex justify-between items-center text-xs font-bold text-slate-600 dark:text-slate-400">
-                    <span>Showing <span className="text-blue-600 dark:text-blue-400 font-black">{filteredReports.length}</span> complaints</span>
-                    <button onClick={fetchReports} className="text-blue-600 dark:text-blue-400 hover:underline uppercase tracking-widest font-black text-[10px] flex items-center gap-1 cursor-pointer">
+                    <span>Showing <span className="text-emerald-600 dark:text-emerald-400 font-black">{filteredReports.length}</span> complaints</span>
+                    <button onClick={fetchReports} className="text-emerald-600 dark:text-emerald-400 hover:underline uppercase tracking-widest font-black text-[10px] flex items-center gap-1 cursor-pointer">
                         <RefreshCw size={12} /> Refresh Queue
                     </button>
                 </div>
@@ -183,7 +183,7 @@ const Reports: React.FC = () => {
                                             </td>
                                             <td className="p-4 text-slate-500 dark:text-slate-400 font-medium">{new Date(report.created_at || Date.now()).toLocaleDateString()}</td>
                                             <td className="p-4 text-right">
-                                                <Button size="sm" variant="ghost" onClick={() => navigate(`/issues/${report.report_id}`)} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
+                                                <Button size="sm" variant="ghost" onClick={() => navigate(`/issues/${report.report_id}`)} className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
                                                     Details →
                                                 </Button>
                                             </td>

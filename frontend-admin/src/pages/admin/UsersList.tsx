@@ -103,7 +103,7 @@ const UsersList: React.FC = () => {
                         <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Accounts Directory</h1>
                         <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium">Verify system profiles, change role clearances, or manage offending user node bans.</p>
                     </div>
-                    <Button onClick={() => setShowModal(true)} className="flex items-center gap-2 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl">
+                    <Button onClick={() => setShowModal(true)} className="flex items-center gap-2 font-extrabold shadow-[0_0_20px_rgba(16, 185, 129,0.25)] rounded-2xl">
                         <UserPlus size={16} /> Enroll Admin
                     </Button>
                 </div>
@@ -131,7 +131,7 @@ const UsersList: React.FC = () => {
                         />
                     </div>
                     <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
-                        Showing <span className="text-blue-600 dark:text-blue-400 font-black">{filteredUsers.length}</span> / {users.length} accounts
+                        Showing <span className="text-emerald-600 dark:text-emerald-400 font-black">{filteredUsers.length}</span> / {users.length} accounts
                     </span>
                 </div>
 
@@ -176,7 +176,7 @@ const UsersList: React.FC = () => {
                                             <td className="p-4 text-right flex justify-end gap-2">
                                                 <button
                                                     onClick={() => navigate(`/users/${u.user_id}`)}
-                                                    className="px-3 py-1.5 text-xs font-extrabold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 rounded-xl transition-all flex items-center gap-1 cursor-pointer"
+                                                    className="px-3 py-1.5 text-xs font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-xl transition-all flex items-center gap-1 cursor-pointer"
                                                 >
                                                     <ExternalLink size={12} /> Inspect
                                                 </button>
@@ -214,7 +214,7 @@ const UsersList: React.FC = () => {
                             >
                                 <div className="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-800 mb-4">
                                     <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                                        <ShieldCheck size={18} className="text-blue-600 dark:text-blue-400" /> Enroll Administrator
+                                        <ShieldCheck size={18} className="text-emerald-600 dark:text-emerald-400" /> Enroll Administrator
                                     </h3>
                                     <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-white">
                                         <X size={20} />
@@ -254,7 +254,7 @@ const UsersList: React.FC = () => {
                                         <Button type="button" variant="outline" onClick={() => setShowModal(false)} disabled={creatingAdmin} className="font-bold">
                                             Cancel
                                         </Button>
-                                        <Button type="submit" loading={creatingAdmin} className="font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl">
+                                        <Button type="submit" loading={creatingAdmin} className="font-extrabold shadow-[0_0_20px_rgba(16, 185, 129,0.25)] rounded-2xl">
                                             Enroll Admin Node
                                         </Button>
                                     </div>

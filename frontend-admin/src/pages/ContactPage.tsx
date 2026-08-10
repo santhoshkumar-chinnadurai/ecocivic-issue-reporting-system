@@ -28,7 +28,7 @@ const ContactPage: React.FC = () => {
 
             <main className="max-w-6xl mx-auto px-6 py-16 text-left space-y-10 animate-in fade-in duration-300 flex-1">
                 <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-600 dark:text-blue-400 text-[10px] font-extrabold uppercase tracking-widest mb-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-600 dark:text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest mb-3">
                         24/7 Operations Support
                     </div>
                     <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Contact Operations Command</h1>
@@ -76,10 +76,10 @@ const ContactPage: React.FC = () => {
                                         value={message}
                                         onChange={(e) => setMessage(e.target.value)}
                                         required
-                                        className="w-full px-4 py-2.5 bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 text-xs shadow-inner"
+                                        className="w-full px-4 py-2.5 bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 text-xs shadow-inner"
                                     />
                                 </div>
-                                <Button type="submit" loading={submitting} className="w-full flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(59,130,246,0.2)] font-bold py-3">
+                                <Button type="submit" loading={submitting} className="w-full flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(16, 185, 129,0.2)] font-bold py-3">
                                     <Send size={15} /> Send Transmission
                                 </Button>
                             </form>
@@ -91,7 +91,7 @@ const ContactPage: React.FC = () => {
 
                         <div className="panel-cyber-glass p-6 rounded-2xl space-y-4">
                             <div className="flex items-start gap-4">
-                                <div className="h-10 w-10 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-500 flex items-center justify-center shrink-0">
+                                <div className="h-10 w-10 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-500 flex items-center justify-center shrink-0">
                                     <MapPin size={20} />
                                 </div>
                                 <div className="text-left space-y-1">

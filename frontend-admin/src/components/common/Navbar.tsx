@@ -75,7 +75,7 @@ const Navbar: React.FC = () => {
                                 onClick={() => handleAnchorClick(link.path)}
                                 className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
                                     isActive
-                                        ? 'bg-blue-600/10 text-blue-600 dark:text-blue-400 font-extrabold'
+                                        ? 'bg-emerald-600/10 text-emerald-600 dark:text-emerald-400 font-extrabold'
                                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50'
                                 }`}
                             >
@@ -97,7 +97,7 @@ const Navbar: React.FC = () => {
                                 title="Notifications"
                             >
                                 <Bell size={18} />
-                                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-blue-500"></span>
+                                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-emerald-500"></span>
                             </button>
                             <Badge variant={user.role === 'ADMIN' ? 'danger' : user.role === 'WORKER' ? 'warning' : 'primary'}>
                                 {user.role}
@@ -142,7 +142,7 @@ const Navbar: React.FC = () => {
                         <button
                             key={link.label}
                             onClick={() => handleAnchorClick(link.path)}
-                            className="block w-full text-left py-2 text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400"
+                            className="block w-full text-left py-2 text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400"
                         >
                             {link.label}
                         </button>

@@ -33,8 +33,8 @@ const Select: React.FC<SelectProps> = ({
                 <select
                     id={selectId}
                     className={`w-full px-4 py-2.5 bg-white dark:bg-slate-950/60 border ${
-                        error ? 'border-rose-500/50 focus:border-rose-500' : 'border-slate-300 dark:border-slate-800 focus:border-blue-500'
-                    } rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500/30 transition-all duration-200 shadow-inner appearance-none cursor-pointer text-xs ${className}`}
+                        error ? 'border-rose-500/50 focus:border-rose-500' : 'border-slate-300 dark:border-slate-800 focus:border-emerald-500'
+                    } rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500/30 transition-all duration-200 shadow-inner appearance-none cursor-pointer text-xs ${className}`}
                     {...props}
                 >
                     {options.map((opt) => (

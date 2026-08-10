@@ -117,7 +117,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onChange, onScanResult, l
             ) : (
                 <div 
                     onClick={() => fileInputRef.current?.click()}
-                    className="h-44 w-full border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-500/5 transition-all duration-200 bg-slate-50/50 dark:bg-slate-900/20"
+                    className="h-44 w-full border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:border-emerald-500 hover:bg-emerald-500/5 transition-all duration-200 bg-slate-50/50 dark:bg-slate-900/20"
                 >
                     <input
                         type="file"
@@ -126,7 +126,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onChange, onScanResult, l
                         className="hidden"
                         onChange={handleFileChange}
                     />
-                    <UploadCloud className="h-10 w-10 text-blue-500 mb-2" />
+                    <UploadCloud className="h-10 w-10 text-emerald-500 mb-2" />
                     <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
                         Drag & drop or click to upload photo evidence
                     </p>

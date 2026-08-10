@@ -34,7 +34,7 @@ const NotFoundPage: React.FC = () => {
                     </Button>
                     
                     <Link to="/dashboard" className="w-full sm:w-auto">
-                        <Button className="w-full sm:w-auto px-6 py-3 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl flex items-center gap-2">
+                        <Button className="w-full sm:w-auto px-6 py-3 font-extrabold shadow-[0_0_20px_rgba(16, 185, 129,0.25)] rounded-2xl flex items-center gap-2">
                             <Home size={16} /> Return to Dashboard
                         </Button>
                     </Link>
