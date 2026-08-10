@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Bot, X, Send, Sparkles, AlertCircle, ArrowRight, ShieldCheck, MapPin, Trophy, RefreshCw, Volume2, VolumeX, FilePlus, CheckCircle2, Zap } from 'lucide-react';
 import { motion as motionFramer, AnimatePresence as AnimatePresenceFramer } from 'framer-motion';
 import api from '../../api/axios';
+import platformConfig from '../../config/platformConfig';
 
 interface Message {
     id: string;
@@ -24,10 +25,10 @@ interface Message {
 }
 
 const QUICK_PROMPTS = [
-    { label: '📝 Help Me File Report', query: 'I want to file a new report for my neighborhood' },
-    { label: '🚨 Report Pothole', query: 'I want to report a deep road pothole on Avinashi Road' },
-    { label: '💧 Report Water Leak', query: 'There is a major water pipe leak near Ward 4 market' },
-    { label: '🗑️ Report Waste Heap', query: 'Garbage dump is uncollected near Town Hall signal' }
+    { label: 'Help Me File Report', query: 'I want to file a new report for my neighborhood' },
+    { label: 'Report Pothole', query: 'I want to report a deep road pothole on Avinashi Road' },
+    { label: 'Report Water Leak', query: 'There is a major water pipe leak near Ward 4 market' },
+    { label: 'Report Waste Heap', query: 'Garbage dump is uncollected near Town Hall signal' }
 ];
 
 const AIAgentWidget = () => {
@@ -40,7 +41,7 @@ const AIAgentWidget = () => {
             sender: 'agent',
             text: 'Greetings! I am CivicAI v3.0, your smart city report assistant. Describe any pothole, water leak, or waste heap, and I will help file your municipal report instantly!',
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            action: { label: '📝 Open Report Form ➔', path: '/create-report' }
+            action: { label: 'Open Report Form', path: '/create-report' }
         }
     ]);
     const [inputValue, setInputValue] = useState('');
@@ -81,10 +82,10 @@ const AIAgentWidget = () => {
             setMessages(prev => [...prev, {
                 id: `success-${Date.now()}`,
                 sender: 'agent',
-                text: `🎉 Report Filed Successfully! Your ${draft.category} report for "${draft.location}" has been logged into the municipal queue. Field crews have been alerted.`,
+                text: `Report Filed Successfully! Your ${draft.category} report for "${draft.location}" has been logged into the municipal queue. Field crews have been alerted.`,
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                 categoryTag: 'SUCCESS LOGGED',
-                action: { label: 'View Dashboard ➔', path: '/dashboard' }
+                action: { label: 'View Dashboard', path: '/dashboard' }
             }]);
         } catch (error) {
             console.error('AI Report submission failed', error);
@@ -93,7 +94,7 @@ const AIAgentWidget = () => {
                 sender: 'agent',
                 text: 'We encountered an error filing your report directly. Opening full report form...',
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                action: { label: 'Complete Report Form ➔', path: '/create-report' }
+                action: { label: 'Complete Report Form', path: '/create-report' }
             }]);
         } finally {
             setIsSubmittingReport(false);
@@ -152,7 +153,7 @@ const AIAgentWidget = () => {
             }
 
             // Extract location hint or fallback
-            let location = 'Coimbatore Central Ward 4';
+            let location = `${platformConfig.city} Central District`;
             if (query.includes('on ')) {
                 location = text.substring(query.indexOf('on ') + 3).trim();
             } else if (query.includes('at ')) {
@@ -178,18 +179,18 @@ const AIAgentWidget = () => {
                 const solvedCount = liveReports.filter((r: any) => r.status === 'RESOLVED').length;
 
                 responseText = `Live Telemetry: Currently ${liveReports.length} total municipal incidents logged (${openCount} pending, ${solvedCount} resolved). All PostGIS spatial vectors are active.`;
-                action = { label: 'View Leaderboard ➔', path: '/leaderboard' };
+                action = { label: 'View Leaderboard', path: '/leaderboard' };
                 categoryTag = 'LIVE MATRIX';
             } catch {
                 responseText = 'CivicConnect AI engine is online. All 5 municipal ward queues (Roads, Sanitation, Electrical, Water, Traffic) are operational.';
             }
         } else if (query.includes('xp') || query.includes('point') || query.includes('badge') || query.includes('rank')) {
             responseText = 'You earn 10-50 XP points for filing verified reports or confirming repairs. Reaching higher XP levels unlocks badges like "Civic Hero" and "Neighborhood Watch".';
-            action = { label: 'View Leaderboard ➔', path: '/leaderboard' };
+            action = { label: 'View Leaderboard', path: '/leaderboard' };
             categoryTag = 'GAMIFICATION';
         } else {
             responseText = 'CivicAI NLP classifier analyzed your input. Would you like me to help file an official municipal defect report for your ward?';
-            action = { label: '📝 Open Report Form ➔', path: '/create-report' };
+            action = { label: 'Open Report Form', path: '/create-report' };
             categoryTag = 'AI DISPATCH';
         }
 
@@ -209,20 +210,18 @@ const AIAgentWidget = () => {
 
     return (
         <div className="fixed bottom-24 right-6 z-50 font-sans pointer-events-auto">
-            {/* Bubble Launcher Button */}
             <motionFramer.button
                 onClick={() => setIsOpen(!isOpen)}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.92 }}
                 className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-emerald-500 hover:from-blue-500 hover:to-indigo-500 text-white flex items-center justify-center shadow-[0_8px_30px_rgba(59,130,246,0.45)] border border-blue-400/30 cursor-pointer relative group"
             >
-                {isOpen ? <X size={22} /> : <Bot size={26} className="animate-pulse" />}
+                {isOpen ? <X size={22} /> : <Bot size={26} />}
                 {!isOpen && (
-                    <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-emerald-400 border-2 border-slate-900 animate-ping" />
+                    <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-emerald-400 border-2 border-slate-900" />
                 )}
             </motionFramer.button>
 
-            {/* Next-Level AI Window */}
             <AnimatePresenceFramer>
                 {isOpen && (
                     <motionFramer.div
@@ -232,7 +231,6 @@ const AIAgentWidget = () => {
                         transition={{ type: "spring", stiffness: 220, damping: 22 }}
                         className="absolute bottom-18 right-0 w-88 md:w-96 h-[540px] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-slate-200 dark:border-slate-800 text-left bg-white/95 dark:bg-[#090d16]/95 backdrop-blur-xl"
                     >
-                        {/* Header */}
                         <div className="p-4 bg-slate-100/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center shrink-0">
                             <div className="flex items-center gap-3">
                                 <div className="h-9 w-9 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-md border border-blue-400/30">
@@ -244,7 +242,7 @@ const AIAgentWidget = () => {
                                         <span className="px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[9px] font-mono font-bold text-blue-600 dark:text-blue-400">v3.0</span>
                                     </div>
                                     <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 mt-0.5">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                                         Report Assistant Ready
                                     </span>
                                 </div>
@@ -266,7 +264,6 @@ const AIAgentWidget = () => {
                             </div>
                         </div>
 
-                        {/* Messages Board */}
                         <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50 dark:bg-slate-950/30">
                             {messages.map((msg) => (
                                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -282,7 +279,6 @@ const AIAgentWidget = () => {
                                         )}
                                         <p>{msg.text}</p>
 
-                                        {/* AI Report Interactive Card */}
                                         {msg.reportDraft && (
                                             <div className="mt-3 p-3 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl space-y-2 text-left">
                                                 <div className="flex justify-between items-center">
@@ -294,7 +290,7 @@ const AIAgentWidget = () => {
                                                     </span>
                                                 </div>
                                                 <div className="text-[10px] text-slate-600 dark:text-slate-300 font-medium">
-                                                    <p>📍 <span className="font-bold">Target Location:</span> {msg.reportDraft.location}</p>
+                                                    <p><span className="font-bold">Target Location:</span> {msg.reportDraft.location}</p>
                                                 </div>
                                                 <div className="pt-2 flex flex-col gap-2">
                                                     <button
@@ -302,7 +298,7 @@ const AIAgentWidget = () => {
                                                         onClick={() => handleInstantSubmitReport(msg.reportDraft!)}
                                                         className="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[11px] font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95 disabled:opacity-50"
                                                     >
-                                                        <Zap size={14} /> ⚡ 1-Click Instant Submit Report
+                                                        <Zap size={14} /> 1-Click Instant Submit Report
                                                     </button>
                                                     <button
                                                         onClick={() => {
@@ -311,7 +307,7 @@ const AIAgentWidget = () => {
                                                         }}
                                                         className="w-full py-2 px-3 bg-blue-600/10 hover:bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 rounded-xl text-[11px] font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                                                     >
-                                                        <FilePlus size={14} /> Pre-fill Full Form ➔
+                                                        <FilePlus size={14} /> Pre-fill Full Form
                                                     </button>
                                                 </div>
                                             </div>

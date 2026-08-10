@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, MessageSquare, CheckCircle2 } from 'lucide-react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
+import platformConfig from '../config/platformConfig';
 
 const ContactPage: React.FC = () => {
     const [name, setName] = useState('');
@@ -87,6 +88,7 @@ const ContactPage: React.FC = () => {
 
                     {/* Operational Details Cards */}
                     <div className="space-y-6 flex flex-col justify-between">
+
                         <div className="panel-cyber-glass p-6 rounded-2xl space-y-4">
                             <div className="flex items-start gap-4">
                                 <div className="h-10 w-10 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-500 flex items-center justify-center shrink-0">
@@ -94,7 +96,7 @@ const ContactPage: React.FC = () => {
                                 </div>
                                 <div className="text-left space-y-1">
                                     <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">Municipal Command Center</h4>
-                                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">Corporation Building, Town Hall, Coimbatore, Tamil Nadu 641001</p>
+                                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{platformConfig.officeAddress}</p>
                                 </div>
                             </div>
                         </div>
@@ -106,8 +108,7 @@ const ContactPage: React.FC = () => {
                                 </div>
                                 <div className="text-left space-y-1">
                                     <h4 className="font-extrabold text-sm text-slate-900 dark:text-white">Email Communications</h4>
-                                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">support@coimbatore-municipal.gov.in</p>
-                                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">grievance@coimbatore-smartcity.org</p>
+                                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">{platformConfig.supportEmail}</p>
                                 </div>
                             </div>
                         </div>

@@ -7,6 +7,7 @@ import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Badge from '../../components/ui/Badge';
 import Spinner from '../../components/ui/Spinner';
+import platformConfig from '../../config/platformConfig';
 
 const UserProfile: React.FC = () => {
     const { id } = useParams();
@@ -37,16 +38,12 @@ const UserProfile: React.FC = () => {
             const res = await api.get(`/users/${targetId}`);
             setUserData(res.data);
         } catch (error) {
-            console.warn('API error user profile, using fallback', error);
-            const targetId = id || loggedInUser.user_id || loggedInUser.id;
-            setUserData({
-                user_id: targetId,
-                email: loggedInUser.email || 'citizen@civic.com',
-                phone_number: loggedInUser.phone_number || '+91 98765 43210',
-                role: loggedInUser.role || 'CITIZEN',
-                points: loggedInUser.points || 140,
-                created_at: loggedInUser.created_at || new Date().toISOString()
-            });
+            console.error('API error user profile', error);
+            if (!id && loggedInUser.email) {
+                setUserData(loggedInUser);
+            } else {
+                setUserData(null);
+            }
         } finally {
             setLoading(false);
         }
@@ -62,7 +59,7 @@ const UserProfile: React.FC = () => {
                 phone_number: userData.phone_number,
                 points: userData.points
             });
-            alert('🎉 Profile updated successfully!');
+            alert('Profile updated successfully!');
             if (!id) {
                 localStorage.setItem('user', JSON.stringify({ ...loggedInUser, ...userData }));
             }
@@ -187,7 +184,7 @@ const UserProfile: React.FC = () => {
                             </div>
                             <div className="flex items-center gap-2">
                                 <MapPin size={15} className="text-slate-400 shrink-0" />
-                                <span>Ward Zone: Coimbatore Central</span>
+                                <span>Municipal District: {platformConfig.city}</span>
                             </div>
                         </div>
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { 
     LayoutDashboard, PlusCircle, MessageSquare, Trophy, User, 
-    Map, Users, LogOut, Shield, Bell, RefreshCw
+    Map, Users, LogOut, Building2, Bell, RefreshCw
 } from 'lucide-react';
 import ThemeToggle from '../components/ui/ThemeToggle';
 import Badge from '../components/ui/Badge';
@@ -68,7 +68,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                     <div className="flex items-center gap-3">
                         <Link to="/" className="flex items-center space-x-2.5">
                             <div className="h-9 w-9 bg-blue-600 rounded-xl flex items-center justify-center text-white border border-blue-500/25">
-                                <Shield className="h-4.5 w-4.5" />
+                                <Building2 className="h-4.5 w-4.5" />
                             </div>
                             <span className="text-sm font-black tracking-tight text-slate-900 dark:text-white uppercase">CivicConnect</span>
                         </Link>

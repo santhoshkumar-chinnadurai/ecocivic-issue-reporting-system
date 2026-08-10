@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, ArrowRight, Target, Award, Users, Compass, Cpu, Layers, ShieldCheck, HeartHandshake, Eye } from 'lucide-react';
+import platformConfig from '../config/platformConfig';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import Button from '../components/ui/Button';
@@ -33,8 +34,9 @@ const AboutPage: React.FC = () => {
                     <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
                         Pioneering Modern Civic Command Systems.
                     </h1>
+
                     <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                        CivicConnect is Coimbatore Municipal Corporation's next-generation civic triage portal. Built to bridge citizens, ward commissioners, and maintenance crews with real-time AI automation and spatial intelligence.
+                        {platformConfig.appName} is a next-generation civic triage portal. Built to bridge citizens, local ward officials, and maintenance crews with real-time AI automation and spatial intelligence.
                     </p>
                 </div>
 
@@ -46,7 +48,7 @@ const AboutPage: React.FC = () => {
                         </div>
                         <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Our Vision</h2>
                         <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                            To establish Coimbatore as a benchmark smart city where public infrastructure hazards—such as potholes, water leaks, streetlight failures, and sanitation bottlenecks—are identified, triaged, and resolved collaboratively with zero administrative friction.
+                            To establish every community as a benchmark smart city where public infrastructure hazards—such as potholes, water leaks, streetlight failures, and sanitation bottlenecks—are identified, triaged, and resolved collaboratively with zero administrative friction.
                         </p>
                     </div>
 

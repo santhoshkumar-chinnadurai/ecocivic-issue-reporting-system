@@ -64,15 +64,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onChange, onScanResult, l
         reader.readAsDataURL(file);
     };
 
-    // Quick Simulator for User Testing Fake vs Real Image
-    const handleSimulateFakeUpload = () => {
-        const fakeFile = new File(["fake image contents"], "fake_test_meme_sample.jpg", { type: "image/jpeg" });
-        const mockBase64 = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" style="background:%23fee2e2"><text x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%23dc2626" font-size="20" font-weight="bold">FAKED MEME IMAGE TEST</text></svg>';
-        setPreview(mockBase64);
-        onChange(mockBase64);
-        runAIVisionScan(fakeFile, mockBase64);
-    };
-
     const handleClear = () => {
         setPreview(null);
         setScanResult(null);
@@ -86,13 +77,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onChange, onScanResult, l
                 <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                     {label}
                 </label>
-                <button
-                    type="button"
-                    onClick={handleSimulateFakeUpload}
-                    className="text-[10px] font-bold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1 cursor-pointer"
-                >
-                    <AlertTriangle size={11} /> Simulate Fake Image Scan (Demo Test)
-                </button>
             </div>
 
             {preview ? (
@@ -147,7 +131,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onChange, onScanResult, l
                         Drag & drop or click to upload photo evidence
                     </p>
                     <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
-                        🔒 Scanned by Real-Time AI Fraud Filter (Fake images will trigger account ban)
+                        Scanned by Real-Time AI Fraud Filter (Fake images will trigger account ban)
                     </p>
                 </div>
             )}

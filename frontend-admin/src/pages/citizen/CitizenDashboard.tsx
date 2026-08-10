@@ -46,7 +46,7 @@ const CitizenDashboard: React.FC = () => {
     const pendingCount = reports.filter(r => r.status === 'OPEN').length;
 
     // Gamification level stats
-    const xpPoints = user.points || 140;
+    const xpPoints = user.points || 0;
     const progressPercent = Math.min((xpPoints / 300) * 100, 100);
 
     return (

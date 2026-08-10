@@ -16,40 +16,15 @@ interface NotificationDrawerProps {
     onClose: () => void;
 }
 
-const INITIAL_NOTIFICATIONS: NotificationItem[] = [
-    {
-        id: 'notif-1',
-        title: 'System Telemetry Synced',
-        message: 'Spatial routing matrix and PostGIS GPS vectors updated for Coimbatore Corporation.',
-        timestamp: '10m ago',
-        read: false,
-        type: 'info'
-    },
-    {
-        id: 'notif-2',
-        title: 'Department Queue Dispatch',
-        message: 'New defect reports assigned to Ward 4 Sanitation & Water Works divisions.',
-        timestamp: '45m ago',
-        read: false,
-        type: 'warning'
-    },
-    {
-        id: 'notif-3',
-        title: 'Repair Verification Complete',
-        message: 'Singanallur Junction road damage ticket marked RESOLVED by field crew lead.',
-        timestamp: '2h ago',
-        read: true,
-        type: 'success'
-    }
-];
+const INITIAL_NOTIFICATIONS: NotificationItem[] = [];
 
 const NotificationDrawer: React.FC<NotificationDrawerProps> = ({ isOpen, onClose }) => {
     const [notifications, setNotifications] = useState<NotificationItem[]>(() => {
         try {
             const stored = localStorage.getItem('civic_notifications');
-            return stored ? JSON.parse(stored) : INITIAL_NOTIFICATIONS;
+            return stored ? JSON.parse(stored) : [];
         } catch {
-            return INITIAL_NOTIFICATIONS;
+            return [];
         }
     });
 

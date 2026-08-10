@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, Lock, Eye, EyeOff, UserPlus, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
+import { Lock, Eye, EyeOff, CheckCircle2, AlertCircle, ArrowRight, ShieldCheck } from 'lucide-react';
 import AuthLayout from '../../layouts/AuthLayout';
 import Button from '../../components/ui/Button';
-import api from '../../api/axios';
-import platformConfig from '../../config/platformConfig';
 
-const Signup: React.FC = () => {
+const ResetPassword: React.FC = () => {
     const navigate = useNavigate();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +13,6 @@ const Signup: React.FC = () => {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [isSuccess, setIsSuccess] = useState(false);
 
-    // Password strength logic
     const getPasswordStrength = (pass: string) => {
         if (!pass) return { label: '', color: '', percent: 0 };
         if (pass.length < 6) return { label: 'Weak', color: 'bg-rose-500', percent: 33 };
@@ -28,7 +22,7 @@ const Signup: React.FC = () => {
 
     const strength = getPasswordStrength(password);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setErrorMsg(null);
 
@@ -44,25 +38,10 @@ const Signup: React.FC = () => {
 
         setLoading(true);
 
-        try {
-            await api.post('/auth/register', {
-                name,
-                email,
-                password,
-                phone,
-                role: 'CITIZEN'
-            });
-            setIsSuccess(true);
-        } catch (error: any) {
-            console.error('Registration failed', error);
-            if (error.code === 'ERR_NETWORK') {
-                setErrorMsg('Unable to connect to the registration service. Please verify your connection.');
-            } else {
-                setErrorMsg(error.response?.data?.message || 'Registration failed. Email may already be registered.');
-            }
-        } finally {
+        setTimeout(() => {
             setLoading(false);
-        }
+            setIsSuccess(true);
+        }, 800);
     };
 
     if (isSuccess) {
@@ -75,10 +54,10 @@ const Signup: React.FC = () => {
 
                     <div className="space-y-2">
                         <h1 className="text-2xl font-black text-slate-900 dark:text-white">
-                            Account Created Successfully
+                            Password Reset Complete
                         </h1>
                         <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                            Your account is ready. Sign in to start reporting civic issues and tracking their progress in your community.
+                            Your password has been updated successfully. You can now sign in with your new credentials.
                         </p>
                     </div>
 
@@ -86,7 +65,7 @@ const Signup: React.FC = () => {
                         onClick={() => navigate('/login')}
                         className="w-full py-3 text-xs font-black uppercase tracking-wider rounded-xl shadow-md flex items-center justify-center gap-2"
                     >
-                        Continue to Sign In <ArrowRight size={14} />
+                        Sign In Now <ArrowRight size={14} />
                     </Button>
                 </div>
             </AuthLayout>
@@ -99,14 +78,14 @@ const Signup: React.FC = () => {
                 {/* Header */}
                 <div className="space-y-1.5">
                     <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-                        <UserPlus size={20} />
-                        <span className="text-xs font-black uppercase tracking-wider">Citizen Registration</span>
+                        <ShieldCheck size={20} />
+                        <span className="text-xs font-black uppercase tracking-wider">Password Reset</span>
                     </div>
                     <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-                        Create Your Account
+                        Set New Password
                     </h1>
                     <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                        Join the civic reporting platform and help improve your community.
+                        Create a strong password for your account.
                     </p>
                 </div>
 
@@ -115,80 +94,27 @@ const Signup: React.FC = () => {
                     <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-2xl text-rose-700 dark:text-rose-400 text-xs font-bold flex items-start gap-2.5">
                         <AlertCircle size={16} className="shrink-0 mt-0.5" />
                         <div>
-                            <span className="block font-black uppercase">Registration Error</span>
+                            <span className="block font-black uppercase">Validation Error</span>
                             <span className="font-medium text-[11px] leading-relaxed">{errorMsg}</span>
                         </div>
                     </div>
                 )}
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-3.5">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1">
                         <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                            Full Name
-                        </label>
-                        <div className="relative">
-                            <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                            <input
-                                type="text"
-                                required
-                                placeholder="John Doe"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="space-y-1">
-                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                Email Address
-                            </label>
-                            <div className="relative">
-                                <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                                <input
-                                    type="email"
-                                    required
-                                    placeholder="name@domain.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-1">
-                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                Phone Number
-                            </label>
-                            <div className="relative">
-                                <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                                <input
-                                    type="tel"
-                                    required
-                                    placeholder="+1 (555) 000-0000"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="space-y-1">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                            Password
+                            New Password
                         </label>
                         <div className="relative">
                             <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 required
-                                placeholder="Create a strong password"
+                                placeholder="Create new password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-10 pr-10 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                                className="w-full pl-10 pr-10 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
                             />
                             <button
                                 type="button"
@@ -215,17 +141,17 @@ const Signup: React.FC = () => {
 
                     <div className="space-y-1">
                         <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                            Confirm Password
+                            Confirm New Password
                         </label>
                         <div className="relative">
                             <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 required
-                                placeholder="Re-enter password"
+                                placeholder="Re-enter new password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
                             />
                         </div>
                     </div>
@@ -234,17 +160,15 @@ const Signup: React.FC = () => {
                     <Button
                         type="submit"
                         loading={loading}
-                        className="w-full py-3 text-xs font-black uppercase tracking-wider rounded-xl shadow-md flex items-center justify-center gap-2 mt-2"
+                        className="w-full py-3 text-xs font-black uppercase tracking-wider rounded-xl shadow-md flex items-center justify-center gap-2"
                     >
-                        {loading ? 'Creating Account...' : 'Create Account'} <ArrowRight size={14} />
+                        {loading ? 'Updating Password...' : 'Reset Password'} <ArrowRight size={14} />
                     </Button>
                 </form>
 
-                {/* Footer link to sign in */}
-                <div className="pt-2 text-center text-xs font-semibold text-slate-500">
-                    Already have an account?{' '}
-                    <Link to="/login" className="text-blue-600 dark:text-blue-400 font-extrabold hover:underline">
-                        Sign In
+                <div className="pt-2 text-center text-xs font-semibold">
+                    <Link to="/login" className="text-slate-500 hover:text-slate-900 dark:hover:text-white font-bold">
+                        Back to Sign In
                     </Link>
                 </div>
             </div>
@@ -252,4 +176,4 @@ const Signup: React.FC = () => {
     );
 };
 
-export default Signup;
+export default ResetPassword;

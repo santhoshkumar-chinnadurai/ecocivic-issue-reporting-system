@@ -35,10 +35,10 @@ const AdminDashboard: React.FC = () => {
 
             const liveReports = Array.isArray(reportsRes.data) ? reportsRes.data : [];
             const derivedLogs = liveReports.map((r: any) => ({
-                tx: `0x${r.report_id ? r.report_id.slice(0, 6) : 'tx812a'}...`,
+                tx: `0x${r.report_id ? r.report_id.slice(0, 6) : 'TX0000'}`,
                 action: r.status === 'RESOLVED' ? 'Submit Resolution Proof' : r.assigned_worker_id ? 'Assign Field Crew' : 'AI Incident Category',
-                info: `Ticket #${r.report_id ? r.report_id.slice(0, 6) : 'REP'} (${r.category}) - ${r.location || 'Coimbatore'}`,
-                date: r.created_at ? new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recent',
+                info: `Ticket #${r.report_id ? r.report_id.slice(0, 6) : 'REP'} (${r.category || 'General'}) - ${r.location || 'Logged Coordinate'}`,
+                date: r.created_at ? new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Logged',
                 status: 'SUCCESS'
             }));
 
@@ -50,12 +50,12 @@ const AdminDashboard: React.FC = () => {
     };
 
     const perfData = [
-        { time: '10:00', cpu: 12, mem: 45, api: 210 },
-        { time: '10:10', cpu: 18, mem: 46, api: 350 },
-        { time: '10:20', cpu: 28, mem: 48, api: 480 },
-        { time: '10:30', cpu: 15, mem: 47, api: 280 },
-        { time: '10:40', cpu: 22, mem: 48, api: 410 },
-        { time: '10:50', cpu: 32, mem: 51, api: 590 }
+        { time: '10:00', cpu: 12, mem: 45, api: stats.total || 0 },
+        { time: '10:10', cpu: 18, mem: 46, api: (stats.total || 0) + 2 },
+        { time: '10:20', cpu: 28, mem: 48, api: (stats.total || 0) + 5 },
+        { time: '10:30', cpu: 15, mem: 47, api: (stats.total || 0) + 3 },
+        { time: '10:40', cpu: 22, mem: 48, api: (stats.total || 0) + 6 },
+        { time: '10:50', cpu: 32, mem: 51, api: (stats.total || 0) + 8 }
     ];
 
     return (
@@ -82,28 +82,27 @@ const AdminDashboard: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatsCard 
                     title="System Accounts" 
-                    value={stats.totalUsers || 24} 
+                    value={stats.totalUsers || 0} 
                     icon={<Users size={18} className="text-blue-500" />} 
                     subtitle="Registered user entities" 
                 />
                 <StatsCard 
-                    title="API Telemetry" 
-                    value="42 ms" 
+                    title="Total Complaints" 
+                    value={stats.total || 0} 
                     icon={<Activity size={18} className="text-indigo-500" />} 
-                    trend="Stable" 
-                    subtitle="API node load delay" 
+                    subtitle="Reported civic incidents" 
                 />
                 <StatsCard 
-                    title="Storage Block" 
-                    value="12.4 MB" 
+                    title="Open Tickets" 
+                    value={stats.open || 0} 
                     icon={<HardDrive size={18} className="text-amber-500" />} 
-                    subtitle="SQLite instance scale" 
+                    subtitle="Pending triage or crew" 
                 />
                 <StatsCard 
-                    title="Uptime Verification" 
-                    value="99.98%" 
+                    title="Resolved Tickets" 
+                    value={stats.resolved || 0} 
                     icon={<CheckCircle2 size={18} className="text-emerald-500" />} 
-                    subtitle="Server runtime index" 
+                    subtitle="Verified resolutions" 
                 />
             </div>
 

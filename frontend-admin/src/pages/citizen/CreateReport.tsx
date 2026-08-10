@@ -11,6 +11,7 @@ import Input from '../../components/ui/Input';
 import ImageUploader from '../../components/forms/ImageUploader';
 import Badge from '../../components/ui/Badge';
 import { useTheme } from '../../contexts/ThemeContext';
+import platformConfig from '../../config/platformConfig';
 
 const CATEGORY_OPTIONS = [
     { value: 'Road Damage', label: 'Road / Potholes', icon: AlertCircle, priority: 'HIGH PRIORITY', sla: 'SLA: 24h', color: 'rose' },
@@ -31,7 +32,7 @@ const LocationPickerMarker = ({ position, setPosition, setFormData }: any) => {
                 ...prev,
                 latitude: e.latlng.lat.toFixed(6),
                 longitude: e.latlng.lng.toFixed(6),
-                location: prev.location || `Coimbatore Ward Pin (${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)})`
+                location: prev.location || `Municipal Pin (${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)})`
             }));
         }
     });
@@ -98,9 +99,9 @@ const CreateReport: React.FC = () => {
                 localStorage.setItem(`banned_${userId}`, 'true');
                 user.is_banned = true;
                 localStorage.setItem('user', JSON.stringify(user));
-                alert(`⛔ ACCOUNT BANNED! You have accumulated 3 Strikes for uploading fake report images. Your account has been suspended by AI Fraud Enforcement.`);
+                alert(`ACCOUNT BANNED: You have accumulated 3 Strikes for uploading fake report images. Your account has been suspended by AI Fraud Enforcement.`);
             } else {
-                alert(`⚠️ AI Fraud Warning (Strike ${newStrikes}/3): Uploaded image detected as FAKE/INVALID. Do not submit fake evidence or your account will be BANNED.`);
+                alert(`AI Fraud Warning (Strike ${newStrikes}/3): Uploaded image detected as FAKE/INVALID. Do not submit fake evidence or your account will be BANNED.`);
             }
         } else {
             setFakeImageDetected(false);
@@ -124,18 +125,18 @@ const CreateReport: React.FC = () => {
                         ...prev,
                         latitude: lat.toFixed(6),
                         longitude: lng.toFixed(6),
-                        location: prev.location || `Coimbatore Ward (Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)})`
+                        location: prev.location || `${platformConfig.city} (Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)})`
                     }));
                     setLocationLoading(false);
                 },
                 (error) => {
                     console.error('Location error', error);
-                    setMapPosition([11.0168, 76.9558]);
+                    setMapPosition([platformConfig.defaultCoordinates.latitude, platformConfig.defaultCoordinates.longitude]);
                     setFormData(prev => ({
                         ...prev,
-                        latitude: '11.0168',
-                        longitude: '76.9558',
-                        location: prev.location || 'Coimbatore Municipal Ward 4 Central'
+                        latitude: platformConfig.defaultCoordinates.latitude.toString(),
+                        longitude: platformConfig.defaultCoordinates.longitude.toString(),
+                        location: prev.location || `${platformConfig.city} Central District`
                     }));
                     setLocationLoading(false);
                 },
@@ -166,20 +167,20 @@ const CreateReport: React.FC = () => {
         e.preventDefault();
 
         if (isBanned) {
-            alert('⛔ SUBMISSION REJECTED: Your account is BANNED due to multiple fake image submissions.');
+            alert('SUBMISSION REJECTED: Your account is BANNED due to multiple fake image submissions.');
             return;
         }
 
         if (fakeImageDetected) {
-            alert('⚠️ SUBMISSION BLOCKED: AI Vision Filter detected that the attached image is fake/invalid. Please attach genuine field evidence.');
+            alert('SUBMISSION BLOCKED: AI Vision Filter detected that the attached image is fake/invalid. Please attach genuine field evidence.');
             return;
         }
 
         setLoading(true);
 
-        const latVal = formData.latitude || '11.0168';
-        const lngVal = formData.longitude || '76.9558';
-        const locVal = formData.location || 'Coimbatore City Center';
+        const latVal = formData.latitude || platformConfig.defaultCoordinates.latitude.toString();
+        const lngVal = formData.longitude || platformConfig.defaultCoordinates.longitude.toString();
+        const locVal = formData.location || `${platformConfig.city} Center`;
 
         try {
             const payload = {
@@ -192,7 +193,7 @@ const CreateReport: React.FC = () => {
             };
 
             await api.post('/reports', payload);
-            alert('🚀 Municipal Incident Logged Successfully! AI Auto-Routing Synced.');
+            alert('Municipal Incident Logged Successfully! AI Auto-Routing Synced.');
             navigate('/dashboard');
         } catch (error: any) {
             console.error('Failed to submit report', error);
@@ -234,19 +235,11 @@ const CreateReport: React.FC = () => {
 
                 {/* Account Banned Warning Banner */}
                 {isBanned && (
-                    <div className="p-6 bg-rose-500/10 border-2 border-rose-500/40 rounded-3xl text-rose-700 dark:text-rose-400 space-y-2 text-left shadow-lg animate-bounce-short">
-                        <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 bg-rose-600 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-md">
-                                <ShieldAlert size={22} />
-                            </div>
-                            <div>
-                                <h3 className="text-base font-black uppercase tracking-wider text-rose-900 dark:text-rose-200">
-                                    ACCOUNT SUSPENDED — AI FRAUD ENFORCEMENT
-                                </h3>
-                                <p className="text-xs font-bold mt-0.5">
-                                    Your account has accumulated 3/3 Strikes for uploading fake/fraudulent report images. Report creation is disabled.
-                                </p>
-                            </div>
+                    <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl text-rose-700 dark:text-rose-400 text-xs font-bold flex items-center gap-3">
+                        <ShieldAlert size={20} className="shrink-0 text-rose-500" />
+                        <div>
+                            <span className="block font-black uppercase tracking-wider">Account Access Suspended</span>
+                            <span className="font-medium">Your account has been restricted from submitting new civic reports due to multiple invalid/fake photo submissions. Contact system administrator for clearance.</span>
                         </div>
                     </div>
                 )}
@@ -256,7 +249,7 @@ const CreateReport: React.FC = () => {
                     <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-amber-800 dark:text-amber-300 text-xs font-bold flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <ShieldAlert size={18} className="text-amber-600 dark:text-amber-400" />
-                            <span>⚠️ AI Vision Fraud Warning: {fakeStrikeCount}/3 Fraud Strikes Recorded on this account.</span>
+                            <span>AI Vision Fraud Warning: {fakeStrikeCount}/3 Fraud Strikes Recorded on this account.</span>
                         </div>
                         <span className="text-[10px] font-mono bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30 font-extrabold">
                             3 Strikes = Permanent Account Ban
@@ -350,17 +343,13 @@ const CreateReport: React.FC = () => {
                                         }}
                                         className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 shadow-inner cursor-pointer"
                                     >
-                                        <option value="Coimbatore Municipal Corporation">📍 Coimbatore Corporation (Primary Hub)</option>
-                                        <option value="Greater Chennai Corporation">📍 Greater Chennai Corporation</option>
-                                        <option value="Madurai Municipal Corporation">📍 Madurai Corporation</option>
-                                        <option value="Tiruchirappalli Corporation">📍 Tiruchirappalli (Trichy) Corporation</option>
-                                        <option value="Salem Municipal Corporation">📍 Salem Corporation</option>
-                                        <option value="Tiruppur Municipal Corporation">📍 Tiruppur Corporation</option>
-                                        <option value="Erode Municipal Corporation">📍 Erode Corporation</option>
-                                        <option value="Vellore Municipal Corporation">📍 Vellore Corporation</option>
-                                        <option value="Tirunelveli Corporation">📍 Tirunelveli Corporation</option>
-                                        <option value="Thanjavur Corporation">📍 Thanjavur Corporation</option>
-                                        <option value="Other Tamil Nadu District">📍 Other Tamil Nadu District</option>
+                                        <option value="Central Municipal District">Central Municipal District (Primary Hub)</option>
+                                        <option value="Northern Regional Corporation">Northern Regional Corporation</option>
+                                        <option value="Eastern Municipal Zone">Eastern Municipal Zone</option>
+                                        <option value="Western District Corporation">Western District Corporation</option>
+                                        <option value="Southern Regional Zone">Southern Regional Zone</option>
+                                        <option value="Metropolitan Core Area">Metropolitan Core Area</option>
+                                        <option value="Other Municipal Region">Other Municipal Region</option>
                                     </select>
                                 </div>
 
@@ -456,7 +445,7 @@ const CreateReport: React.FC = () => {
                                         type="button"
                                         onClick={() => {
                                             const cat = formData.category;
-                                            const loc = formData.location || 'Coimbatore Ward 4';
+                                            const loc = formData.location || `${platformConfig.city} Central District`;
                                             let aiText = '';
                                             if (cat === 'Road Damage') {
                                                 aiText = `Severe deep pothole and road erosion logged at ${loc}. Causes vehicle damage and traffic slowdowns. Requires urgent asphalt resurfacing crew.`;
@@ -475,7 +464,7 @@ const CreateReport: React.FC = () => {
                                         }}
                                         className="py-1 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-[11px] font-extrabold transition-all flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer"
                                     >
-                                        <Sparkles size={13} /> ✨ Auto-Draft Description with AI
+                                        <Sparkles size={13} /> Auto-Draft Description with AI
                                     </button>
                                     <span className="text-[10px] text-slate-400 font-mono hidden md:inline">
                                         {formData.description.length} chars
@@ -499,10 +488,10 @@ const CreateReport: React.FC = () => {
                                 </span>
                                 <div className="flex flex-wrap gap-2">
                                     {[
-                                        { label: '🚨 High Hazard & Damage', text: `Severe hazard detected at ${formData.location || 'site'}. Causes immediate risk to vehicles and pedestrians.` },
-                                        { label: '🌊 Flooding / Leakage', text: `Continuous water flow/flooding at ${formData.location || 'site'}. Requires immediate pipeline repair.` },
-                                        { label: '🗑️ Odor & Health Risk', text: `Uncollected waste accumulation causing severe odor and health hazard.` },
-                                        { label: '💡 Nighttime Dark Spot', text: `Streetlight completely non-functional at night creating safety hazard.` }
+                                        { label: 'High Hazard & Damage', text: `Severe hazard detected at ${formData.location || 'site'}. Causes immediate risk to vehicles and pedestrians.` },
+                                        { label: 'Flooding / Leakage', text: `Continuous water flow/flooding at ${formData.location || 'site'}. Requires immediate pipeline repair.` },
+                                        { label: 'Odor & Health Risk', text: `Uncollected waste accumulation causing severe odor and health hazard.` },
+                                        { label: 'Nighttime Dark Spot', text: `Streetlight completely non-functional at night creating safety hazard.` }
                                     ].map((tmpl, idx) => (
                                         <button
                                             key={idx}
@@ -527,7 +516,7 @@ const CreateReport: React.FC = () => {
                                 loading={loading}
                                 className="w-full md:w-max px-10 py-3 text-sm font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.3)] rounded-2xl"
                             >
-                                Dispatch Incident Report ➔
+                                Dispatch Incident Report
                             </Button>
                         </div>
                     </form>

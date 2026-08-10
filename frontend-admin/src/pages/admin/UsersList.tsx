@@ -50,7 +50,7 @@ const UsersList: React.FC = () => {
                 phone: newAdminPhone,
                 role: 'ADMIN'
             });
-            alert('🎉 New Administrator successfully enrolled!');
+            alert('New Administrator successfully enrolled!');
             setShowModal(false);
             setNewAdminEmail('');
             setNewAdminPass('');

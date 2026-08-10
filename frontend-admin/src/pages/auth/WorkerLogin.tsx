@@ -1,73 +1,43 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, ShieldCheck, AlertCircle, ArrowRight, Key, Sparkles, CheckCircle2, Zap } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, HardHat, AlertCircle, ArrowRight } from 'lucide-react';
 import AuthLayout from '../../layouts/AuthLayout';
 import Button from '../../components/ui/Button';
 import api from '../../api/axios';
 
-const AdminLogin: React.FC = () => {
+const WorkerLogin: React.FC = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [securityPin, setSecurityPin] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    const [clickCount, setClickCount] = useState(0);
-    const [secretUnlocked, setSecretUnlocked] = useState(false);
-
-    // Secret Trick: Clicking the Shield icon 3 times auto-fills Admin credentials & master PIN
-    const handleSecretShieldClick = () => {
-        const newCount = clickCount + 1;
-        setClickCount(newCount);
-        if (newCount >= 3) {
-            setEmail('admin@civic.com');
-            setPassword('admin123');
-            setSecurityPin('9900');
-            setSecretUnlocked(true);
-            setErrorMsg(null);
-        }
-    };
-
-    const handleQuickBypass = () => {
-        setEmail('admin@civic.com');
-        setPassword('admin123');
-        setSecurityPin('9900');
-        setSecretUnlocked(true);
-        setErrorMsg(null);
-    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setErrorMsg(null);
 
-        // Security check for Admin PIN if provided or enforced
-        if (securityPin && securityPin !== '9900' && securityPin !== 'CIVIC-ROOT-2026') {
-            setErrorMsg('Security Lock Triggered: Invalid Security Passcode PIN. Administrator access denied.');
-            setLoading(false);
-            return;
-        }
-
         try {
             const response = await api.post('/auth/login', { email, password });
             const data = response.data;
             const token = data.access_token || data.token;
+            const role = data.user?.role?.toUpperCase();
 
-            if (data.user && (data.user.role === 'ADMIN' || data.user.role?.toUpperCase() === 'ADMIN')) {
+            if (data.user && (role === 'WORKER' || role === 'ADMIN')) {
                 localStorage.setItem('user', JSON.stringify(data.user));
                 if (token) {
                     localStorage.setItem('token', token);
                 }
-                navigate('/admin/dashboard');
+                navigate('/worker/dashboard');
             } else {
-                setErrorMsg('Access Denied: Administrator role clearance is required for this console.');
+                setErrorMsg('Access Denied: Field Worker clearance is required for this portal.');
             }
         } catch (error: any) {
-            console.error('Admin Login Error', error);
+            console.error('Worker Login Error', error);
             if (error.code === 'ERR_NETWORK') {
-                setErrorMsg('Network Connection Error: Unable to connect to administration servers.');
+                setErrorMsg('Network Connection Error: Unable to communicate with authentication servers.');
             } else {
                 setErrorMsg(error.response?.data?.message || 'Authentication Failed: The email or password entered is incorrect.');
             }
@@ -79,49 +49,19 @@ const AdminLogin: React.FC = () => {
     return (
         <AuthLayout>
             <div className="space-y-6 text-left">
-                {/* Header with Secret Clickable Icon */}
+                {/* Header */}
                 <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                        <div 
-                            onClick={handleSecretShieldClick}
-                            className="flex items-center gap-2 text-slate-700 dark:text-slate-300 cursor-pointer select-none group"
-                            title="Secret Trick: Click 3x to auto-unlock admin master key"
-                        >
-                            <div className="p-1 rounded-lg bg-blue-500/10 group-hover:scale-110 transition-transform">
-                                <ShieldCheck size={18} className="text-blue-600 dark:text-blue-400" />
-                            </div>
-                            <span className="text-xs font-bold uppercase tracking-wider">System Governance</span>
-                        </div>
-
-                        {/* Secret Trick One-Click Fast Login Pill */}
-                        <button
-                            type="button"
-                            onClick={handleQuickBypass}
-                            className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 rounded-full transition-all cursor-pointer flex items-center gap-1 active:scale-95"
-                            title="Click for instant 1-click Secret Admin Access"
-                        >
-                            <Zap size={12} /> Secret Fast Login
-                        </button>
+                    <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                        <HardHat size={18} className="text-blue-600 dark:text-blue-400" />
+                        <span className="text-xs font-bold uppercase tracking-wider">Field Operations</span>
                     </div>
-
-                    <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white pt-1">
-                        Administrator Sign In
+                    <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                        Field Worker Sign In
                     </h1>
                     <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                        Access system configuration, user access provisioning, platform policies, and security audit logs.
+                        Access assigned work tasks, view repair locations, and submit photo proof of resolution.
                     </p>
                 </div>
-
-                {/* Secret Unlock Alert Banner */}
-                {secretUnlocked && (
-                    <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-emerald-700 dark:text-emerald-400 text-xs font-bold flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <CheckCircle2 size={16} className="text-emerald-500" />
-                            <span>Secret Master Key Auto-Filled (PIN: 9900)</span>
-                        </div>
-                        <span className="text-[10px] font-mono uppercase bg-emerald-500/20 px-2 py-0.5 rounded">UNLOCKED</span>
-                    </div>
-                )}
 
                 {/* Inline Error Alert */}
                 {errorMsg && (
@@ -138,14 +78,14 @@ const AdminLogin: React.FC = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1.5">
                         <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                            Administrator Email Address
+                            Worker Email Address
                         </label>
                         <div className="relative">
                             <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 type="email"
                                 required
-                                placeholder="admin@civic.com"
+                                placeholder="worker@civic.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full pl-10 pr-4 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
@@ -162,7 +102,7 @@ const AdminLogin: React.FC = () => {
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 required
-                                placeholder="Enter administrator password"
+                                placeholder="Enter worker password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full pl-10 pr-10 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
@@ -174,26 +114,6 @@ const AdminLogin: React.FC = () => {
                             >
                                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                             </button>
-                        </div>
-                    </div>
-
-                    {/* Secret Security Access PIN Field */}
-                    <div className="space-y-1.5">
-                        <div className="flex justify-between items-center">
-                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                Security Passcode PIN (Optional / Master Token)
-                            </label>
-                            <span className="text-[10px] font-mono font-bold text-slate-400">PIN: 9900</span>
-                        </div>
-                        <div className="relative">
-                            <Key size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                            <input
-                                type="password"
-                                placeholder="Enter PIN (e.g. 9900 or triple-click Shield)"
-                                value={securityPin}
-                                onChange={(e) => setSecurityPin(e.target.value)}
-                                className="w-full pl-10 pr-4 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
-                            />
                         </div>
                     </div>
 
@@ -220,13 +140,13 @@ const AdminLogin: React.FC = () => {
                         loading={loading}
                         className="w-full h-11 text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-sm flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white transition-all cursor-pointer mt-2"
                     >
-                        {loading ? 'Authenticating...' : 'Sign In to Admin Console'} <ArrowRight size={14} />
+                        {loading ? 'Authenticating...' : 'Sign In to Field Portal'} <ArrowRight size={14} />
                     </Button>
                 </form>
 
                 {/* Footer Link */}
                 <div className="pt-2 text-center text-xs font-medium text-slate-600 dark:text-slate-400">
-                    Not a system administrator?{' '}
+                    Not field personnel?{' '}
                     <Link to="/login" className="text-blue-600 dark:text-blue-400 font-extrabold hover:underline">
                         Citizen Portal Sign In
                     </Link>
@@ -236,4 +156,4 @@ const AdminLogin: React.FC = () => {
     );
 };
 
-export default AdminLogin;
+export default WorkerLogin;

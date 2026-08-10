@@ -5,6 +5,7 @@ import DashboardLayout from '../../layouts/DashboardLayout';
 import MapComponent from '../../components/map/MapComponent';
 import StatsCard from '../../components/dashboard/StatsCard';
 import Badge from '../../components/ui/Badge';
+import platformConfig from '../../config/platformConfig';
 
 const Monitor: React.FC = () => {
     const [reports, setReports] = useState<any[]>([]);
@@ -61,7 +62,7 @@ const Monitor: React.FC = () => {
                     <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
                         <MonitorIcon className="text-blue-500" /> Operations Center
                     </h1>
-                    <p className="text-xs text-slate-405 mt-1.5 font-medium">Real-time incident dispatches and telemetries across Coimbatore divisions.</p>
+                    <p className="text-xs text-slate-400 mt-1.5 font-medium">Real-time incident dispatches and telemetries across {platformConfig.city} divisions.</p>
                 </div>
 
                 {/* Telemetries */}

@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Login from './pages/auth/Login';
 import AdminLogin from './pages/auth/AdminLogin';
 import GovernmentLogin from './pages/auth/GovernmentLogin';
+import WorkerLogin from './pages/auth/WorkerLogin';
 import Signup from './pages/auth/Signup';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import Dashboard from './pages/Dashboard';
@@ -23,6 +24,8 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import ChatPage from './pages/ChatPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 
+import NotFoundPage from './pages/NotFoundPage';
+
 function App() {
   return (
     <ThemeProvider>
@@ -34,12 +37,45 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/government/login" element={<GovernmentLogin />} />
+        <Route path="/worker/login" element={<WorkerLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         
         <Route
           path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/government/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['OFFICIAL', 'ADMIN']}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/worker/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['WORKER', 'ADMIN']}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/citizen/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
@@ -119,6 +155,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <AIAgentWidget />
     </ThemeProvider>

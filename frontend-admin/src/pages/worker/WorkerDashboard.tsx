@@ -49,7 +49,7 @@ const WorkerDashboard: React.FC = () => {
         setActionLoading(true);
         try {
             await api.patch(`/reports/${id}/status`, { status: 'IN_PROGRESS' });
-            alert('🎉 Job dispatch accepted! Moving to location.');
+            alert('Job dispatch accepted! Moving to location.');
             fetchWorkerIssues();
         } catch (error) {
             console.error('Failed to accept job', error);
@@ -69,7 +69,7 @@ const WorkerDashboard: React.FC = () => {
         try {
             // NestJS endpoint submits proof to resolve
             await api.patch(`/reports/${id}/submit-proof`, { proof_image_url: proofImage });
-            alert('🎉 Proof submitted! Job resolved successfully.');
+            alert('Proof submitted! Job resolved successfully.');
             setSubmittingProof(null);
             setProofImage('');
             fetchWorkerIssues();

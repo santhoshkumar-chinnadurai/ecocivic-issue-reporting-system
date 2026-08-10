@@ -7,6 +7,7 @@ import Badge from '../ui/Badge';
 import Spinner from '../ui/Spinner';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Sun, Moon } from 'lucide-react';
+import platformConfig from '../../config/platformConfig';
 
 interface MapComponentProps {
     fullScreen?: boolean;
@@ -158,7 +159,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
             {/* Map Container */}
             <div className="flex-1 h-full z-0 relative">
                 <MapContainer 
-                    center={[11.0168, 76.9558]} // Coimbatore coordinates
+                    center={[platformConfig.defaultCoordinates.latitude, platformConfig.defaultCoordinates.longitude]}
                     zoom={13} 
                     scrollWheelZoom={true} 
                     style={{ height: '100%', width: '100%' }}
@@ -187,7 +188,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
                                         <p className="text-[10px] text-slate-300 mt-1">Status: <span className="font-bold">{report.status}</span></p>
                                         <div className="h-[1px] bg-slate-800 my-1.5"></div>
                                         <a href={`/issues/${report.report_id}`} className="text-[10px] text-blue-400 hover:underline font-bold block">
-                                            Inspect Incident Details ➔
+                                            Inspect Incident Details
                                         </a>
                                     </div>
                                 </Popup>

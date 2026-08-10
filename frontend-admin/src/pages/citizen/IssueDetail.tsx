@@ -64,18 +64,7 @@ const IssueDetail: React.FC = () => {
             }
         } catch (error) {
             console.error('Failed to load issue details', error);
-            setIssue({
-                report_id: id || 'mock-id',
-                category: 'Road Damage',
-                description: 'Large pothole near central crossroad blocking lane.',
-                location: 'Central Avenue Ward 4, Coimbatore',
-                status: 'IN_PROGRESS',
-                priority: 'HIGH',
-                created_at: new Date().toISOString(),
-                assigned_department: 'Roads & Bridges',
-                assigned_worker_id: 'w-1',
-                assigned_worker: { email: 'crew_member@civic.gov' }
-            });
+            setIssue(null);
         } finally {
             setLoading(false);
         }
@@ -91,7 +80,7 @@ const IssueDetail: React.FC = () => {
                 await api.patch(`/reports/${id}/assign-department`, { department: selectedDept });
             }
             await api.patch(`/reports/${id}/assign-worker`, { workerId: selectedWorkerId });
-            alert('🎉 Worker dispatched successfully!');
+            alert('Worker dispatched successfully!');
             fetchIssueDetails();
         } catch (error) {
             console.error('Failed to assign worker', error);

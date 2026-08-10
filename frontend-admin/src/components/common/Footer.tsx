@@ -1,105 +1,134 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, MapPin, Mail, Phone, ExternalLink, Heart } from 'lucide-react';
+import { Building2, MapPin, Mail, Phone, ExternalLink } from 'lucide-react';
+import platformConfig from '../../config/platformConfig';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="border-t border-slate-200 dark:border-slate-900 bg-white/90 dark:bg-[#030712]/90 backdrop-blur-md pt-12 pb-8 text-left font-sans transition-colors duration-300 relative z-10">
+        <footer className="border-t border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#030712]/90 backdrop-blur-md pt-12 pb-8 text-left font-sans transition-colors duration-300 relative z-10">
             <div className="max-w-7xl mx-auto px-6 space-y-10">
                 {/* Main 4-Column Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                     {/* Brand Column */}
-                    <div className="space-y-4">
+                    <div className="lg:col-span-2 space-y-4">
                         <div className="flex items-center space-x-2.5">
                             <div className="h-9 w-9 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-md border border-blue-400/30">
-                                <Shield className="h-5 w-5" />
+                                <Building2 className="h-5 w-5" />
                             </div>
-                            <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase">CivicConnect TN</span>
+                            <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase">{platformConfig.appName}</span>
                         </div>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                            Government of Tamil Nadu Municipal Administration & Water Supply Dept — Next-generation civic triage, AI incident classification, and smart infrastructure matrix for Coimbatore and all TN Corporations.
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium max-w-sm">
+                            {platformConfig.orgName} — Next-generation civic triage, AI incident classification, and smart infrastructure management for municipal public services.
                         </p>
-                        <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full w-fit">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            System Telemetry 100% Operational
+                        <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400 font-medium">
+                            <div className="flex items-center gap-2">
+                                <MapPin size={13} className="text-blue-500 shrink-0" />
+                                <span>{platformConfig.officeAddress}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Mail size={13} className="text-emerald-500 shrink-0" />
+                                <span>{platformConfig.supportEmail}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Phone size={13} className="text-amber-500 shrink-0" />
+                                <span>{platformConfig.supportPhone}</span>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Quick Access Portals */}
+                    {/* Section 1: Platform */}
                     <div className="space-y-3">
-                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Quick Portals</h4>
+                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Platform</h4>
                         <ul className="space-y-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
                             <li>
-                                <Link to="/login" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
-                                    Citizen Core Gate <ExternalLink size={10} />
+                                <Link to="/login" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    Report an Issue
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/government/login" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
-                                    Dispatch Terminal <ExternalLink size={10} />
+                                <Link to="/login" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    Track an Issue
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/admin/login" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
-                                    Root Matrix Terminal <ExternalLink size={10} />
-                                </Link>
+                                <a href="/#how-it-works" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    How It Works
+                                </a>
                             </li>
                             <li>
                                 <Link to="/leaderboard" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                     Community Rankings
                                 </Link>
                             </li>
+                        </ul>
+                    </div>
+
+                    {/* Section 2: Resources */}
+                    <div className="space-y-3">
+                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Resources</h4>
+                        <ul className="space-y-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
                             <li>
                                 <Link to="/faq" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                                    System Documentation
+                                    FAQ
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/about" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    About
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/contact" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    Contact
                                 </Link>
                             </li>
                         </ul>
                     </div>
 
-                    {/* Departments */}
+                    {/* Section 3: Legal & Account */}
                     <div className="space-y-3">
-                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Municipal Divisions</h4>
-                        <ul className="space-y-2 text-xs font-medium text-slate-600 dark:text-slate-400">
-                            <li>• Roads & Infrastructure Maintenance</li>
-                            <li>• Sanitation & Waste Management</li>
-                            <li>• Electrical & Streetlight Grid</li>
-                            <li>• Water Supply & Hydrant Networks</li>
-                            <li>• Traffic Signal & Public Safety</li>
+                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Account & Legal</h4>
+                        <ul className="space-y-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
+                            <li>
+                                <Link to="/login" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    Sign In
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/signup" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                    Register
+                                </Link>
+                            </li>
+                            <li>
+                                <span className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                                    Privacy Policy
+                                </span>
+                            </li>
+                            <li>
+                                <span className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                                    Terms of Service
+                                </span>
+                            </li>
+                            <li>
+                                <span className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                                    Accessibility Statement
+                                </span>
+                            </li>
                         </ul>
-                    </div>
-
-                    {/* Operational Contacts */}
-                    <div className="space-y-3">
-                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Command Telemetries</h4>
-                        <div className="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
-                            <div className="flex items-start gap-2">
-                                <MapPin size={14} className="text-blue-500 shrink-0 mt-0.5" />
-                                <span>Corporation Office Building, Coimbatore, TN 641001</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Mail size={14} className="text-emerald-500 shrink-0" />
-                                <span>support@coimbatore-municipal.gov.in</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Phone size={14} className="text-amber-500 shrink-0" />
-                                <span>+91 (422) 230-0000 / 1800-425-0000</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
                 {/* Divider & Copyright Bar */}
-                <div className="pt-6 border-t border-slate-200 dark:border-slate-900 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 dark:text-slate-400 font-medium">
-                    <p className="flex items-center gap-1">
-                        &copy; {new Date().getFullYear()} CivicConnect Matrix. Engineered with <Heart size={12} className="text-rose-500 fill-rose-500 inline" /> for Coimbatore Smart City.
+                <div className="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                    <p>
+                        &copy; {new Date().getFullYear()} {platformConfig.appName}. Designed for Modern Municipal Governance.
                     </p>
                     <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-wider">
                         <Link to="/about" className="hover:text-slate-900 dark:hover:text-white transition-colors">About</Link>
                         <Link to="/contact" className="hover:text-slate-900 dark:hover:text-white transition-colors">Contact</Link>
                         <Link to="/faq" className="hover:text-slate-900 dark:hover:text-white transition-colors">FAQ</Link>
                         <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded font-mono text-blue-600 dark:text-blue-400">
-                            v2.4.0-SPATIAL
+                            v3.0.0
                         </span>
                     </div>
                 </div>

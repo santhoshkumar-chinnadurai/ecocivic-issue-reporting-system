@@ -1,60 +1,45 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogIn, Mail, Lock, ShieldAlert, Eye, EyeOff, UserCheck } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, UserCheck, AlertCircle, ArrowRight } from 'lucide-react';
 import AuthLayout from '../../layouts/AuthLayout';
 import Button from '../../components/ui/Button';
-import Input from '../../components/ui/Input';
 import api from '../../api/axios';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('citizen@civic.com');
-    const [password, setPassword] = useState('citizen123');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
-
-    const performLogin = (userObj: any, token: string) => {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(userObj));
-        navigate('/dashboard');
-    };
-
-    const handleQuickDemoLogin = () => {
-        setLoading(true);
-        setTimeout(() => {
-            performLogin(
-                { email: 'citizen@civic.com', role: 'CITIZEN', id: 'cit-123', user_id: 'cit-123', points: 140 },
-                'demo-citizen-session-token'
-            );
-            setLoading(false);
-        }, 300);
-    };
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        try {
-            const res = await api.post('/auth/login', { email, password });
-            performLogin(res.data.user, res.data.access_token);
-        } catch (error) {
-            console.warn('Login failed, using mock fallbacks', error);
-            let role = 'CITIZEN';
-            let mockUserId = 'cit-123';
-            if (email.includes('admin')) {
-                role = 'ADMIN';
-                mockUserId = 'adm-123';
-            } else if (email.includes('worker') || email.includes('crew')) {
-                role = 'WORKER';
-                mockUserId = 'wrk-123';
-            } else if (email.includes('official') || email.includes('gov')) {
-                role = 'OFFICIAL';
-                mockUserId = 'off-123';
-            }
+        setErrorMsg(null);
 
-            performLogin(
-                { email: email || 'citizen@civic.com', role, id: mockUserId, user_id: mockUserId, points: 140 },
-                'mock-session-token'
-            );
+        try {
+            const response = await api.post('/auth/login', { email, password });
+            const data = response.data;
+            const token = data.access_token || data.token;
+
+            if (data.user) {
+                localStorage.setItem('user', JSON.stringify(data.user));
+                if (token) {
+                    localStorage.setItem('token', token);
+                }
+                navigate('/dashboard');
+            } else {
+                setErrorMsg('Authentication Failed: Unable to verify citizen credentials.');
+            }
+        } catch (error: any) {
+            console.error('Login Error', error);
+            if (error.code === 'ERR_NETWORK') {
+                setErrorMsg('Network Connection Error: Unable to communicate with authentication servers.');
+            } else {
+                setErrorMsg(error.response?.data?.message || 'Authentication Failed: The email or password entered is incorrect.');
+            }
         } finally {
             setLoading(false);
         }
@@ -62,69 +47,108 @@ const Login: React.FC = () => {
 
     return (
         <AuthLayout>
-            <div className="space-y-6 text-left animate-in fade-in duration-300">
+            <div className="space-y-6 text-left">
+                {/* Header */}
                 <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                        <span className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                            <UserCheck size={18} />
-                        </span>
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                            Citizen Portal
-                        </h2>
+                    <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                        <UserCheck size={18} className="text-blue-600 dark:text-blue-400" />
+                        <span className="text-xs font-bold uppercase tracking-wider">Citizen Portal Access</span>
                     </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium pt-1">
-                        Enter credentials to verify municipal identity node & access resident services.
+                    <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                        Citizen Sign In
+                    </h1>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
+                        Sign in to report community issues, monitor repair updates, and communicate with municipal services.
                     </p>
                 </div>
 
+                {/* Inline Error Alert */}
+                {errorMsg && (
+                    <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-2xl text-rose-800 dark:text-rose-300 text-xs font-medium flex items-start gap-3">
+                        <AlertCircle size={18} className="shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+                        <div>
+                            <span className="block font-extrabold text-rose-900 dark:text-rose-200 uppercase tracking-wider text-[10px]">Authentication Failed</span>
+                            <span className="block mt-0.5 leading-relaxed">{errorMsg}</span>
+                        </div>
+                    </div>
+                )}
+
+                {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <Input
-                        label="Account Email ID"
-                        type="email"
-                        placeholder="citizen@civic.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        icon={<Mail size={16} />}
-                    />
+                    <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Email Address
+                        </label>
+                        <div className="relative">
+                            <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="email"
+                                required
+                                placeholder="name@domain.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full pl-10 pr-4 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
+                            />
+                        </div>
+                    </div>
 
                     <div className="space-y-1.5">
-                        <div className="flex justify-between items-center">
-                            <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                                Security Password
-                            </label>
-                            <Link to="/forgot-password" className="text-[10px] text-blue-600 dark:text-blue-400 font-bold hover:underline">
-                                Forgot Key?
-                            </Link>
-                        </div>
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Password
+                        </label>
                         <div className="relative">
+                            <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 type={showPassword ? 'text' : 'password'}
-                                placeholder="••••••••"
+                                required
+                                placeholder="Enter your account password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all text-xs font-medium pr-10"
+                                className="w-full pl-10 pr-10 h-11 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-white"
+                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 cursor-pointer p-1"
                             >
                                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                             </button>
                         </div>
                     </div>
 
-                    <Button type="submit" className="w-full py-3 flex items-center justify-center gap-2 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl" loading={loading}>
-                        <LogIn size={15} /> Verify & Mount Citizen Console
+                    {/* Options Row */}
+                    <div className="flex items-center justify-between text-xs font-semibold">
+                        <label className="flex items-center gap-2 text-slate-600 dark:text-slate-400 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                                className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer"
+                            />
+                            <span>Keep me signed in</span>
+                        </label>
+
+                        <Link to="/forgot-password" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+                            Forgot Password?
+                        </Link>
+                    </div>
+
+                    {/* Submit Button */}
+                    <Button
+                        type="submit"
+                        loading={loading}
+                        className="w-full h-11 text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-sm flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white transition-all cursor-pointer mt-2"
+                    >
+                        {loading ? 'Authenticating...' : 'Sign In to Citizen Portal'} <ArrowRight size={14} />
                     </Button>
                 </form>
 
-                <div className="text-center pt-2">
-                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                        New resident node? <Link to="/signup" className="text-blue-600 dark:text-blue-400 font-extrabold hover:underline">Enroll new profile</Link>
-                    </p>
+                {/* Footer Link */}
+                <div className="pt-2 text-center text-xs font-medium text-slate-600 dark:text-slate-400">
+                    Need a citizen account?{' '}
+                    <Link to="/signup" className="text-blue-600 dark:text-blue-400 font-extrabold hover:underline">
+                        Register for Access
+                    </Link>
                 </div>
             </div>
         </AuthLayout>

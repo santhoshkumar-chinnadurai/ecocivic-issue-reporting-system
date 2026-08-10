@@ -30,10 +30,10 @@ const LeaderboardPage: React.FC = () => {
                 .sort((a: any, b: any) => (b.points || 0) - (a.points || 0))
                 .map((u: any, idx: number) => ({
                     rank: idx + 1,
-                    name: u.email ? u.email.split('@')[0] : `User #${u.user_id?.slice(0, 4)}`,
-                    points: u.points || (150 - idx * 20),
-                    resolved: Math.floor((u.points || 150) / 30) || 1,
-                    badges: (u.points || 100) > 300 ? ['Civic Guardian', 'Top Reporter'] : ['Active Neighbor']
+                    name: u.email ? u.email.split('@')[0] : `User #${u.user_id ? u.user_id.slice(0, 4) : '000'}`,
+                    points: u.points || 0,
+                    resolved: Math.floor((u.points || 0) / 50),
+                    badges: (u.points || 0) >= 300 ? ['Civic Guardian', 'Top Reporter'] : (u.points || 0) >= 50 ? ['Active Neighbor'] : ['Citizen']
                 }));
 
             // Workers sorted by points
@@ -42,10 +42,10 @@ const LeaderboardPage: React.FC = () => {
                 .sort((a: any, b: any) => (b.points || 0) - (a.points || 0))
                 .map((u: any, idx: number) => ({
                     rank: idx + 1,
-                    name: u.email ? u.email.split('@')[0] : `Crew #${u.user_id?.slice(0, 4)}`,
-                    rating: '4.9 ★',
-                    completed: Math.floor((u.points || 200) / 20) || 4,
-                    points: u.points || 280
+                    name: u.email ? u.email.split('@')[0] : `Crew #${u.user_id ? u.user_id.slice(0, 4) : '000'}`,
+                    rating: (u.points || 0) > 0 ? '5.0 Rating' : 'Unrated',
+                    completed: Math.floor((u.points || 0) / 50),
+                    points: u.points || 0
                 }));
 
             setCitizens(citizenUsers);

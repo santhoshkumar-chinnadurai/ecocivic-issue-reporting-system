@@ -1,75 +1,105 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, HelpCircle, Send, KeyRound } from 'lucide-react';
+import { Mail, ArrowLeft, CheckCircle2, AlertCircle, Send } from 'lucide-react';
 import AuthLayout from '../../layouts/AuthLayout';
 import Button from '../../components/ui/Button';
-import Input from '../../components/ui/Input';
 
 const ForgotPassword: React.FC = () => {
     const [email, setEmail] = useState('');
-    const [submitting, setSubmitting] = useState(false);
-    const [sent, setSent] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmitting(true);
+        setLoading(true);
+        // Simulate real email request submission
         setTimeout(() => {
-            setSubmitting(false);
-            setSent(true);
-        }, 1000);
+            setLoading(false);
+            setSubmitted(true);
+        }, 800);
     };
+
+    if (submitted) {
+        return (
+            <AuthLayout>
+                <div className="space-y-6 text-left py-4">
+                    <div className="h-12 w-12 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-2xl flex items-center justify-center">
+                        <CheckCircle2 size={24} />
+                    </div>
+
+                    <div className="space-y-2">
+                        <h1 className="text-2xl font-black text-slate-900 dark:text-white">
+                            Check Your Email
+                        </h1>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                            If an account associated with <span className="font-bold text-slate-900 dark:text-white">{email}</span> exists, password recovery instructions have been sent.
+                        </p>
+                    </div>
+
+                    <Link to="/login" className="block">
+                        <Button
+                            className="w-full py-3 text-xs font-black uppercase tracking-wider rounded-xl shadow-md flex items-center justify-center gap-2"
+                        >
+                            <ArrowLeft size={14} /> Back to Sign In
+                        </Button>
+                    </Link>
+                </div>
+            </AuthLayout>
+        );
+    }
 
     return (
         <AuthLayout>
-            <div className="space-y-6 text-left animate-in fade-in duration-300">
-                <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                        <span className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                            <KeyRound size={18} />
-                        </span>
-                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                            Recover Key
-                        </h2>
+            <div className="space-y-6 text-left">
+                {/* Header */}
+                <div className="space-y-1.5">
+                    <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                        <Mail size={20} />
+                        <span className="text-xs font-black uppercase tracking-wider">Account Recovery</span>
                     </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium pt-1">
-                        Request password reset dispatch token to your verified municipal email inbox.
+                    <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+                        Reset Your Password
+                    </h1>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
+                        Enter your account email and we'll help you regain access.
                     </p>
                 </div>
 
-                {sent ? (
-                    <div className="text-center py-6 space-y-4">
-                        <Send className="h-10 w-10 text-emerald-500 mx-auto animate-bounce" />
-                        <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
-                            A reset dispatch token link has been issued to <span className="font-mono text-slate-900 dark:text-white font-bold">{email}</span>. Please verify your inbox folders.
-                        </p>
-                        <Link to="/login" className="block pt-2">
-                            <Button size="sm" variant="outline" className="w-full font-bold">Return to Citizen Gate</Button>
-                        </Link>
+                {/* Form */}
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-1">
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Email Address
+                        </label>
+                        <div className="relative">
+                            <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="email"
+                                required
+                                placeholder="name@domain.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                            />
+                        </div>
                     </div>
-                ) : (
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <Input
-                            label="Account Email Address"
-                            type="email"
-                            placeholder="citizen@civic.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            icon={<Mail size={16} />}
-                        />
-                        <Button type="submit" loading={submitting} className="w-full py-3 flex items-center justify-center gap-2 font-extrabold shadow-[0_0_20px_rgba(59,130,246,0.25)] rounded-2xl">
-                            <Send size={15} /> Dispatch Reset Token
-                        </Button>
-                    </form>
-                )}
 
-                {!sent && (
-                    <div className="text-center pt-2 border-t border-slate-200 dark:border-slate-900">
-                        <Link to="/login" className="text-xs text-slate-600 dark:text-slate-400 font-bold hover:text-slate-900 dark:hover:text-white transition-colors">
-                            ← Return to Citizen Gate
-                        </Link>
-                    </div>
-                )}
+                    {/* Submit Button */}
+                    <Button
+                        type="submit"
+                        loading={loading}
+                        className="w-full py-3 text-xs font-black uppercase tracking-wider rounded-xl shadow-md flex items-center justify-center gap-2"
+                    >
+                        {loading ? 'Sending Instructions...' : 'Send Reset Link'} <Send size={14} />
+                    </Button>
+                </form>
+
+                {/* Back to sign in */}
+                <div className="pt-2 text-center text-xs font-semibold">
+                    <Link to="/login" className="text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1">
+                        <ArrowLeft size={13} /> Back to Sign In
+                    </Link>
+                </div>
             </div>
         </AuthLayout>
     );

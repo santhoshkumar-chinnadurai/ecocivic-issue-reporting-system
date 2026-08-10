@@ -51,7 +51,7 @@ const Reports: React.FC = () => {
     const handleAcceptReport = async (id: string) => {
         try {
             await api.patch(`/reports/${id}/status`, { status: 'APPROVED' });
-            alert('🎉 Report approved successfully!');
+            alert('Report approved successfully!');
             fetchReports();
         } catch (error) {
             console.error('Failed to accept report', error);
