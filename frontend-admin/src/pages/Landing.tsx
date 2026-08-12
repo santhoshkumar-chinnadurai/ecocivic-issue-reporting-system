@@ -123,7 +123,7 @@ const Landing: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 flex flex-col justify-between overflow-x-hidden">
+        <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 flex flex-col justify-between overflow-x-clip">
             <Navbar />
 
             <main className="flex-1 space-y-24 pb-20">

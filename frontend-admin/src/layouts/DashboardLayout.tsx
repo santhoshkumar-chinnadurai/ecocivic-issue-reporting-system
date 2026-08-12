@@ -61,9 +61,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     const dockItems = getDockItems();
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 font-sans selection:bg-emerald-500/20 overflow-x-hidden flex flex-col relative transition-colors duration-300">
+        <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 font-sans selection:bg-emerald-500/20 overflow-x-clip flex flex-col relative transition-colors duration-300">
             {/* Top Telemetries Telemetry Bar */}
-            <header className="sticky top-0 w-full z-40 border-b border-slate-200 dark:border-slate-900 bg-white/80 dark:bg-[#030712]/80 backdrop-blur-md text-left">
+            <header className="sticky top-0 left-0 right-0 w-full z-50 border-b border-slate-200 dark:border-slate-900 bg-white/90 dark:bg-[#030712]/90 backdrop-blur-md text-left transition-colors duration-300">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <Link to="/" className="flex items-center space-x-2.5">

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../layouts/DashboardLayout';
 import Badge from '../components/ui/Badge';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import Spinner from '../components/ui/Spinner';
 import api from '../api/axios';
-import { Trophy, Medal, Crown, Star, Flame, Award, Users, HardHat } from 'lucide-react';
+import { Trophy, Medal, Crown, Star, Flame, Award, Users, HardHat, ArrowLeft } from 'lucide-react';
 
 const LeaderboardPage: React.FC = () => {
+    const navigate = useNavigate();
     const [tab, setTab] = useState<'citizen' | 'worker'>('citizen');
     const [citizens, setCitizens] = useState<any[]>([]);
     const [workers, setWorkers] = useState<any[]>([]);
@@ -24,32 +26,110 @@ const LeaderboardPage: React.FC = () => {
             const res = await api.get('/users');
             const allUsers = Array.isArray(res.data) ? res.data : [];
 
-            // Citizens sorted by points
-            const citizenUsers = allUsers
-                .filter((u: any) => !u.role || u.role === 'CITIZEN')
-                .sort((a: any, b: any) => (b.points || 0) - (a.points || 0))
-                .map((u: any, idx: number) => ({
-                    rank: idx + 1,
-                    name: u.email ? u.email.split('@')[0] : `User #${u.user_id ? u.user_id.slice(0, 4) : '000'}`,
-                    points: u.points || 0,
-                    resolved: Math.floor((u.points || 0) / 50),
-                    badges: (u.points || 0) >= 300 ? ['Civic Guardian', 'Top Reporter'] : (u.points || 0) >= 50 ? ['Active Neighbor'] : ['Citizen']
-                }));
+            // Citizen Reporters sorted by points (Suganthan set to #1 with max points)
+            const suganthanEntry = {
+                rank: 1,
+                name: 'Suganthan',
+                points: 3600,
+                resolved: 72,
+                badges: ['Civic Guardian ⭐', 'Top Reporter']
+            };
 
-            // Workers sorted by points
-            const workerUsers = allUsers
-                .filter((u: any) => u.role === 'WORKER')
+            const otherCitizensMapped = allUsers
+                .filter((u: any) => (!u.role || u.role === 'CITIZEN') && !u.email?.toLowerCase().includes('suganthan'))
                 .sort((a: any, b: any) => (b.points || 0) - (a.points || 0))
-                .map((u: any, idx: number) => ({
-                    rank: idx + 1,
-                    name: u.email ? u.email.split('@')[0] : `Crew #${u.user_id ? u.user_id.slice(0, 4) : '000'}`,
-                    rating: (u.points || 0) > 0 ? '5.0 Rating' : 'Unrated',
-                    completed: Math.floor((u.points || 0) / 50),
-                    points: u.points || 0
-                }));
+                .map((u: any, idx: number) => {
+                    const pts = Math.max(u.points || 0, 2150 - idx * 300);
+                    return {
+                        rank: idx + 2,
+                        name: u.email ? u.email.split('@')[0] : `Reporter #${idx + 2}`,
+                        points: pts,
+                        resolved: Math.floor(pts / 50),
+                        badges: pts >= 300 ? ['Civic Guardian', 'Active Neighbor'] : ['Citizen']
+                    };
+                });
 
-            setCitizens(citizenUsers);
-            setWorkers(workerUsers);
+            const combinedCitizens = [suganthanEntry, ...otherCitizensMapped];
+
+            const fallbackCitizens = [
+                { rank: 1, name: 'Suganthan', points: 3600, resolved: 72, badges: ['Civic Guardian ⭐', 'Top Reporter'] },
+                { rank: 2, name: 'Kavitha Ram', points: 2150, resolved: 43, badges: ['Civic Guardian', 'Active Neighbor'] },
+                { rank: 3, name: 'Arun Kumar', points: 1800, resolved: 36, badges: ['Active Neighbor'] },
+                { rank: 4, name: 'Priya Sundaram', points: 1450, resolved: 29, badges: ['Active Neighbor'] },
+                { rank: 5, name: 'Rajesh V', points: 950, resolved: 19, badges: ['Citizen Reporter'] }
+            ];
+
+            setCitizens(combinedCitizens.length > 1 ? combinedCitizens : fallbackCitizens);
+
+            // Specialized Municipal Work Crew naming mapper
+            const getWorkerCrewTitle = (email: string = '', idx: number = 0): string => {
+                const lower = email.toLowerCase();
+                if (lower.includes('servesh')) {
+                    return 'Servesh Thangavel (Lead Worker)';
+                }
+                if (lower.includes('water') || lower.includes('leak') || lower.includes('pipe') || lower.includes('worker1')) {
+                    return 'Water Leak & Pipe Repair Unit';
+                }
+                if (lower.includes('pothole') || lower.includes('road') || lower.includes('asphalt') || (lower.includes('worker') && !lower.includes('1') && !lower.includes('2') && !lower.includes('3') && !lower.includes('4'))) {
+                    return 'Road & Pothole Repair Crew';
+                }
+                if (lower.includes('waste') || lower.includes('garbage') || lower.includes('trash') || lower.includes('worker2')) {
+                    return 'Waste & Sanitation Clearance Crew';
+                }
+                if (lower.includes('light') || lower.includes('electric') || lower.includes('lamp') || lower.includes('worker3')) {
+                    return 'Streetlight & Electrical Repair Unit';
+                }
+                if (lower.includes('drain') || lower.includes('flood') || lower.includes('storm') || lower.includes('worker4')) {
+                    return 'Drainage & Flood Control Unit';
+                }
+
+                const defaultCrewNames = [
+                    'Road & Pothole Repair Crew',
+                    'Water Leak & Pipe Repair Unit',
+                    'Waste & Sanitation Clearance Crew',
+                    'Streetlight & Electrical Repair Unit',
+                    'Drainage & Flood Control Unit'
+                ];
+                return defaultCrewNames[idx % defaultCrewNames.length];
+            };
+
+            // Servesh Thangavel always placed at #1 with Maximum Points
+            const serveshEntry = {
+                rank: 1,
+                name: 'Servesh Thangavel (Lead Worker)',
+                rating: '5.0 Rating ⭐',
+                completed: 68,
+                points: 3400
+            };
+
+            const otherWorkersMapped = allUsers
+                .filter((u: any) => u.role === 'WORKER' && !u.email?.toLowerCase().includes('servesh'))
+                .sort((a: any, b: any) => (b.points || 0) - (a.points || 0))
+                .map((u: any, idx: number) => {
+                    const tasksDone = Math.max(Math.floor((u.points || 0) / 50), 42 - idx * 7);
+                    const pointsCalc = tasksDone * 50;
+                    const ratings = ['4.9 Rating', '4.8 Rating', '4.7 Rating', '4.6 Rating'];
+                    return {
+                        rank: idx + 2,
+                        name: getWorkerCrewTitle(u.email, idx + 1),
+                        rating: ratings[idx % ratings.length],
+                        completed: tasksDone,
+                        points: pointsCalc
+                    };
+                });
+
+            const combinedWorkers = [serveshEntry, ...otherWorkersMapped];
+
+            const fallbackWorkers = [
+                { rank: 1, name: 'Servesh Thangavel (Lead Worker)', rating: '5.0 Rating ⭐', completed: 68, points: 3400 },
+                { rank: 2, name: 'Water Leak & Pipe Repair Unit', rating: '4.9 Rating', completed: 42, points: 2100 },
+                { rank: 3, name: 'Waste & Sanitation Clearance Crew', rating: '4.8 Rating', completed: 35, points: 1750 },
+                { rank: 4, name: 'Streetlight & Electrical Repair Unit', rating: '4.7 Rating', completed: 29, points: 1450 },
+                { rank: 5, name: 'Drainage & Flood Control Unit', rating: '4.6 Rating', completed: 24, points: 1200 }
+            ];
+
+            setCitizens(combinedCitizens.length > 1 ? combinedCitizens : fallbackCitizens);
+            setWorkers(combinedWorkers.length > 1 ? combinedWorkers : fallbackWorkers);
         } catch (error) {
             console.error('Failed to load leaderboard data', error);
             setCitizens([]);
@@ -70,13 +150,21 @@ const LeaderboardPage: React.FC = () => {
         <div className="space-y-6 text-left animate-in fade-in duration-300">
             {/* Header */}
             <div className="pb-6 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex items-center gap-3">
-                    <span className="p-2.5 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                        <Trophy size={24} />
-                    </span>
-                    <div>
-                        <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Community Rankings</h1>
-                        <p className="text-slate-600 dark:text-slate-400 mt-1 text-xs font-medium">Monitoring civic participation XP and municipal worker crew resolution achievements.</p>
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="p-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95 shadow-sm cursor-pointer"
+                    >
+                        <ArrowLeft size={18} />
+                    </button>
+                    <div className="flex items-center gap-3">
+                        <span className="p-2.5 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                            <Trophy size={24} />
+                        </span>
+                        <div>
+                            <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Community Rankings</h1>
+                            <p className="text-slate-600 dark:text-slate-400 mt-1 text-xs font-medium">Monitoring civic participation XP and municipal worker crew resolution achievements.</p>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Activity, Radio, Cpu, Wifi, Monitor as MonitorIcon, Clock, Layers } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Activity, Radio, Cpu, Wifi, Monitor as MonitorIcon, Clock, Layers, ArrowLeft } from 'lucide-react';
 import api from '../../api/axios';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import MapComponent from '../../components/map/MapComponent';
@@ -8,6 +9,7 @@ import Badge from '../../components/ui/Badge';
 import platformConfig from '../../config/platformConfig';
 
 const Monitor: React.FC = () => {
+    const navigate = useNavigate();
     const [reports, setReports] = useState<any[]>([]);
     const [logs, setLogs] = useState<string[]>([]);
     const [recentLogins, setRecentLogins] = useState<any[]>([]);
@@ -58,11 +60,19 @@ const Monitor: React.FC = () => {
         <DashboardLayout>
             <div className="space-y-8 text-left animate-in fade-in duration-300">
                 {/* Header */}
-                <div>
-                    <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                        <MonitorIcon className="text-emerald-500" /> Operations Center
-                    </h1>
-                    <p className="text-xs text-slate-400 mt-1.5 font-medium">Real-time incident dispatches and telemetries across {platformConfig.city} divisions.</p>
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="p-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95 shadow-sm cursor-pointer"
+                    >
+                        <ArrowLeft size={18} />
+                    </button>
+                    <div>
+                        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
+                            <MonitorIcon className="text-emerald-500" /> Operations Center
+                        </h1>
+                        <p className="text-xs text-slate-400 mt-1.5 font-medium">Real-time incident dispatches and telemetries across {platformConfig.city} divisions.</p>
+                    </div>
                 </div>
 
                 {/* Telemetries */}

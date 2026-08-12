@@ -19,7 +19,7 @@ const GovernmentLogin: React.FC = () => {
         const next = tapCount + 1;
         setTapCount(next);
         if (next >= 3) {
-            setEmail('official@civic.com');
+            setEmail('sivananth@civic.com');
             setPassword('official123');
             setErrorMsg(null);
             setTapCount(0);

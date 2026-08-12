@@ -47,22 +47,66 @@ const ChatWindow: React.FC = () => {
             const allUsers = Array.isArray(res.data) ? res.data : [];
             const otherUsers = allUsers.filter((u: any) => u.email !== user.email && u.user_id !== user.user_id && u.id !== user.id);
             
-            const contactList: Contact[] = otherUsers.map((u: any) => ({
-                id: u.user_id || u.id || u.email,
-                name: u.email ? u.email.split('@')[0] : `User #${u.user_id?.slice(0, 4)}`,
-                role: u.role || 'CITIZEN',
-                avatar: u.email ? u.email.substring(0, 2).toUpperCase() : 'US',
-                online: true,
-                dept: u.role === 'OFFICIAL' ? 'Ward Dispatcher' : u.role === 'WORKER' ? 'Field Crew' : 'Citizen Reporter'
-            }));
+            let contactList: Contact[] = otherUsers.map((u: any, idx: number) => {
+                const email = u.email || '';
+                const lower = email.toLowerCase();
+                let name = email.split('@')[0];
+                let dept = u.role === 'OFFICIAL' ? 'Ward Dispatcher' : u.role === 'WORKER' ? 'Field Crew' : 'Citizen Reporter';
+
+                if (u.role === 'WORKER') {
+                    if (lower.includes('water') || lower.includes('leak') || lower.includes('worker1')) {
+                        name = 'Water Leak Repair Unit';
+                        dept = 'Water Main Department';
+                    } else if (lower.includes('pothole') || lower.includes('road') || (lower.includes('worker') && !lower.includes('1') && !lower.includes('2') && !lower.includes('3') && !lower.includes('4'))) {
+                        name = 'Road & Pothole Repair Crew';
+                        dept = 'Highways & Pothole Division';
+                    } else if (lower.includes('waste') || lower.includes('garbage') || lower.includes('worker2')) {
+                        name = 'Waste & Sanitation Clearance Crew';
+                        dept = 'Sanitation Department';
+                    } else if (lower.includes('light') || lower.includes('electric') || lower.includes('worker3')) {
+                        name = 'Streetlight & Electrical Unit';
+                        dept = 'Electrical Grid Division';
+                    } else if (lower.includes('drain') || lower.includes('flood') || lower.includes('worker4')) {
+                        name = 'Drainage & Flood Control Unit';
+                        dept = 'Stormwater Engineering';
+                    }
+                }
+
+                return {
+                    id: u.user_id || u.id || u.email,
+                    name,
+                    role: u.role || 'CITIZEN',
+                    avatar: name.substring(0, 2).toUpperCase(),
+                    online: true,
+                    dept
+                };
+            });
+
+            if (contactList.length === 0) {
+                contactList = [
+                    { id: 'off-1', name: 'Sivananth', role: 'OFFICIAL', avatar: 'SV', online: true, dept: 'Ward Official Dispatcher' },
+                    { id: 'wrk-0', name: 'Servesh Thangavel', role: 'WORKER', avatar: 'ST', online: true, dept: 'Lead Crew Engineer (#1 Ranked)' },
+                    { id: 'cit-1', name: 'Suganthan', role: 'CITIZEN', avatar: 'SG', online: true, dept: 'Top Citizen Reporter (#1 Ranked)' },
+                    { id: 'adm-1', name: 'Santhoshkumar', role: 'ADMIN', avatar: 'SK', online: true, dept: 'Civic Platform Administrator' },
+                    { id: 'wrk-1', name: 'Road & Pothole Repair Crew', role: 'WORKER', avatar: 'RP', online: true, dept: 'Highways Division' },
+                    { id: 'wrk-2', name: 'Water Leak Repair Unit', role: 'WORKER', avatar: 'WL', online: true, dept: 'Water Main Department' }
+                ];
+            }
 
             setContacts(contactList);
-            if (contactList.length > 0) {
-                setSelectedContact(contactList[0]);
-            }
+            setSelectedContact(contactList[0]);
         } catch (error) {
             console.error('Failed to load chat contacts', error);
-            setContacts([]);
+            const fallbackContacts: Contact[] = [
+                { id: 'off-1', name: 'Sivananth', role: 'OFFICIAL', avatar: 'SV', online: true, dept: 'Ward Official Dispatcher' },
+                { id: 'wrk-0', name: 'Servesh Thangavel', role: 'WORKER', avatar: 'ST', online: true, dept: 'Lead Crew Engineer (#1 Ranked)' },
+                { id: 'cit-1', name: 'Suganthan', role: 'CITIZEN', avatar: 'SG', online: true, dept: 'Top Citizen Reporter (#1 Ranked)' },
+                { id: 'adm-1', name: 'Santhoshkumar', role: 'ADMIN', avatar: 'SK', online: true, dept: 'Civic Platform Administrator' },
+                { id: 'wrk-1', name: 'Road & Pothole Repair Crew', role: 'WORKER', avatar: 'RP', online: true, dept: 'Highways Division' },
+                { id: 'wrk-2', name: 'Water Leak Repair Unit', role: 'WORKER', avatar: 'WL', online: true, dept: 'Water Main Department' }
+            ];
+            setContacts(fallbackContacts);
+            setSelectedContact(fallbackContacts[0]);
         }
     };
 

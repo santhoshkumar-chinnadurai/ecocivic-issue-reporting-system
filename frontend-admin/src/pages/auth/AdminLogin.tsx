@@ -22,7 +22,7 @@ const AdminLogin: React.FC = () => {
         const newCount = clickCount + 1;
         setClickCount(newCount);
         if (newCount >= 3) {
-            setEmail('admin@civic.com');
+            setEmail('santhoshkumar@civic.com');
             setPassword('admin123');
             setSecurityPin('9900');
             setSecretUnlocked(true);
@@ -31,7 +31,7 @@ const AdminLogin: React.FC = () => {
     };
 
     const handleQuickBypass = () => {
-        setEmail('admin@civic.com');
+        setEmail('santhoshkumar@civic.com');
         setPassword('admin123');
         setSecurityPin('9900');
         setSecretUnlocked(true);

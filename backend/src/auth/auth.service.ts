@@ -14,61 +14,84 @@ export class AuthService implements OnModuleInit {
     ) { }
 
     async onModuleInit() {
-        // Create Default Admin from Docs
-        const adminEmail = 'admin@civic.com';
-        const existingAdmin = await this.usersRepository.findOneBy({ email: adminEmail });
-
-        if (!existingAdmin) {
-            console.log('Creating Default Admin User...');
-            const hashedPassword = await bcrypt.hash('admin123', 10);
-            const admin = this.usersRepository.create({
-                email: adminEmail,
-                password: hashedPassword,
-                role: UserRole.ADMIN,
-                provider: 'LOCAL',
-            });
-            await this.usersRepository.save(admin);
-            console.log(`Default Admin Created: ${adminEmail} / admin123`);
+        // Create Admin Accounts
+        const adminEmails = ['santhoshkumar@civic.com', 'admin@civic.com'];
+        for (const email of adminEmails) {
+            const existing = await this.usersRepository.findOneBy({ email });
+            if (!existing) {
+                const hashedPassword = await bcrypt.hash('admin123', 10);
+                const admin = this.usersRepository.create({
+                    email,
+                    password: hashedPassword,
+                    role: UserRole.ADMIN,
+                    provider: 'LOCAL',
+                });
+                await this.usersRepository.save(admin);
+                console.log(`Admin Created: ${email} / admin123`);
+            }
         }
 
-        // Create Default Official
-        const officialEmail = 'official@civic.com';
-        const existingOfficial = await this.usersRepository.findOneBy({ email: officialEmail });
-
-        if (!existingOfficial) {
-            console.log('Creating Default Official User...');
-            const hashedPassword = await bcrypt.hash('official123', 10);
-            const official = this.usersRepository.create({
-                email: officialEmail,
-                password: hashedPassword,
-                role: UserRole.OFFICIAL,
-                provider: 'LOCAL',
-            });
-            await this.usersRepository.save(official);
-            console.log(`Default Official Created: ${officialEmail} / official123`);
+        // Create Official Accounts
+        const officialEmails = ['sivananth@civic.com', 'official@civic.com'];
+        for (const email of officialEmails) {
+            const existing = await this.usersRepository.findOneBy({ email });
+            if (!existing) {
+                const hashedPassword = await bcrypt.hash('official123', 10);
+                const official = this.usersRepository.create({
+                    email,
+                    password: hashedPassword,
+                    role: UserRole.OFFICIAL,
+                    provider: 'LOCAL',
+                });
+                await this.usersRepository.save(official);
+                console.log(`Official Created: ${email} / official123`);
+            }
         }
 
-        // Create Worker Accounts
+        // Create Citizen Accounts
+        const citizenEmails = [{ email: 'suganthan@civic.com', points: 3600 }];
+        for (const c of citizenEmails) {
+            const existing = await this.usersRepository.findOneBy({ email: c.email });
+            if (!existing) {
+                const hashedPassword = await bcrypt.hash('citizen123', 10);
+                const citizen = this.usersRepository.create({
+                    email: c.email,
+                    password: hashedPassword,
+                    role: UserRole.CITIZEN,
+                    points: c.points,
+                    provider: 'LOCAL',
+                });
+                await this.usersRepository.save(citizen);
+                console.log(`Citizen Created: ${c.email} / citizen123 (${c.points} XP)`);
+            }
+        }
+
+        // Create Worker Accounts (Servesh Thangavel as Lead Worker)
         const workerEmails = [
-            'worker@civic.com',
-            'worker2@civic.com',
-            'worker3@civic.com',
-            'worker4@civic.com'
+            { email: 'servesh@civic.com', points: 3400 },
+            { email: 'worker@civic.com', points: 2100 },
+            { email: 'worker2@civic.com', points: 1750 },
+            { email: 'worker3@civic.com', points: 1450 },
+            { email: 'worker4@civic.com', points: 1200 }
         ];
 
-        for (const wEmail of workerEmails) {
-            const existingWorker = await this.usersRepository.findOneBy({ email: wEmail });
+        for (const w of workerEmails) {
+            const existingWorker = await this.usersRepository.findOneBy({ email: w.email });
             if (!existingWorker) {
-                console.log(`Creating Worker User (${wEmail})...`);
+                console.log(`Creating Worker User (${w.email})...`);
                 const hashedPassword = await bcrypt.hash('worker123', 10);
                 const worker = this.usersRepository.create({
-                    email: wEmail,
+                    email: w.email,
                     password: hashedPassword,
                     role: UserRole.WORKER,
+                    points: w.points,
                     provider: 'LOCAL',
                 });
                 await this.usersRepository.save(worker);
-                console.log(`Worker Created: ${wEmail} / worker123`);
+                console.log(`Worker Created: ${w.email} / worker123 (${w.points} XP)`);
+            } else if (w.email === 'servesh@civic.com' || existingWorker.points < w.points) {
+                existingWorker.points = w.points;
+                await this.usersRepository.save(existingWorker);
             }
         }
     }

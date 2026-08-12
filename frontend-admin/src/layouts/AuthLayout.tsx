@@ -19,30 +19,33 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 flex flex-col items-center justify-center p-4 sm:p-6 transition-colors duration-300 relative font-sans overflow-x-hidden">
+        <div className="min-h-screen bg-slate-50 dark:bg-[#030712] text-slate-900 dark:text-slate-100 flex flex-col items-center justify-between transition-colors duration-300 relative font-sans">
             
             {/* Top Navigation Bar */}
-            <header className="absolute top-0 left-0 right-0 h-20 max-w-7xl mx-auto px-6 flex justify-between items-center z-20">
-                <Link to="/" className="flex items-center gap-3 group text-left">
-                    <div className="h-10 w-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-md border border-emerald-400/30 group-hover:scale-105 transition-transform">
-                        <Building2 className="h-5 w-5" />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-base font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none">{platformConfig.appName}</span>
-                        <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase mt-0.5">Municipal Civic Platform</span>
-                    </div>
-                </Link>
-
-                <div className="flex items-center gap-4">
-                    <ThemeToggle />
-                    <Link to="/" className="text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1.5 bg-white dark:bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs">
-                        <ArrowLeft size={14} /> Home Page
+            <header className="sticky top-0 left-0 right-0 w-full h-16 z-50 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#030712]/90 backdrop-blur-md">
+                <div className="max-w-7xl mx-auto px-6 h-full flex justify-between items-center">
+                    <Link to="/" className="flex items-center gap-3 group text-left">
+                        <div className="h-9 w-9 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-md border border-emerald-400/30 group-hover:scale-105 transition-transform">
+                            <Building2 className="h-5 w-5" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-base font-black tracking-tight text-slate-900 dark:text-white uppercase leading-none">{platformConfig.appName}</span>
+                            <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase mt-0.5">Municipal Civic Platform</span>
+                        </div>
                     </Link>
+
+                    <div className="flex items-center gap-4">
+                        <ThemeToggle />
+                        <Link to="/" className="text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1.5 bg-white dark:bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs">
+                            <ArrowLeft size={14} /> Home Page
+                        </Link>
+                    </div>
                 </div>
             </header>
 
             {/* Single Clean Centered Card Container */}
-            <div className="w-full max-w-md bg-white dark:bg-[#090d16] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 relative z-10 my-20">
+            <main className="flex-1 w-full max-w-md flex items-center justify-center p-4 sm:p-6 my-8">
+                <div className="w-full bg-white dark:bg-[#090d16] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 relative z-10">
                 
                 {/* Role Clearance Switcher */}
                 <div>
@@ -73,7 +76,8 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
                     {children}
                 </div>
             </div>
-        </div>
+        </main>
+    </div>
     );
 };
 

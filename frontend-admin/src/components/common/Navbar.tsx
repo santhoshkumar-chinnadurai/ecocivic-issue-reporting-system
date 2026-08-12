@@ -46,11 +46,12 @@ const Navbar: React.FC = () => {
             }
         } else {
             navigate(path);
+            window.scrollTo(0, 0);
         }
     };
 
     return (
-        <nav className="sticky top-0 w-full z-50 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#030712]/90 backdrop-blur-md transition-colors duration-300">
+        <nav className="sticky top-0 left-0 right-0 w-full z-50 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#030712]/90 backdrop-blur-md transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center text-left">
                 {/* Brand Logo */}
                 <div className="flex items-center gap-4">

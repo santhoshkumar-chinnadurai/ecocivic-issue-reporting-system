@@ -1,12 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Shield, ArrowRight, Target, Award, Users, Compass, Cpu, Layers, ShieldCheck, HeartHandshake, Eye } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Shield, ArrowRight, Target, Award, Users, Compass, Cpu, Layers, ShieldCheck, HeartHandshake, Eye, ArrowLeft } from 'lucide-react';
 import platformConfig from '../config/platformConfig';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import Button from '../components/ui/Button';
 
 const AboutPage: React.FC = () => {
+    const navigate = useNavigate();
     const coreValues = [
         { title: 'Public Transparency', desc: 'Every ticket lifecycle step from submission to field crew resolution is publicly verifiable.', icon: Eye, color: 'text-emerald-600 bg-emerald-500/10 border-emerald-500/20' },
         { title: 'Sub-15 Min AI Dispatch', desc: 'AI-driven NLP auto-routes reports to ward department dispatches within minutes, slashing latency.', icon: Target, color: 'text-teal-600 bg-teal-500/10 border-teal-500/20' },
@@ -35,8 +36,16 @@ const AboutPage: React.FC = () => {
                 
                 {/* Header Banner */}
                 <div className="space-y-4 max-w-3xl">
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-500/10 border border-emerald-500/25 rounded-full text-emerald-700 dark:text-emerald-400 text-xs font-black uppercase tracking-wider">
-                        🌱 EcoCivic Municipal Platform
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95 shadow-2xs cursor-pointer"
+                        >
+                            <ArrowLeft size={16} />
+                        </button>
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-500/10 border border-emerald-500/25 rounded-full text-emerald-700 dark:text-emerald-400 text-xs font-black uppercase tracking-wider">
+                            🌱 EcoCivic Municipal Platform
+                        </div>
                     </div>
                     <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
                         Pioneering Smart, Sustainable & Greener Community Governance.

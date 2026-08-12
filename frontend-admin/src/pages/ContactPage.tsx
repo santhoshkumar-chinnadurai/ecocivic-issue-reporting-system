@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, MessageSquare, CheckCircle2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Mail, Phone, MapPin, Send, MessageSquare, CheckCircle2, ArrowLeft } from 'lucide-react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import Button from '../components/ui/Button';
@@ -7,6 +8,7 @@ import Input from '../components/ui/Input';
 import platformConfig from '../config/platformConfig';
 
 const ContactPage: React.FC = () => {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
@@ -28,8 +30,16 @@ const ContactPage: React.FC = () => {
 
             <main className="max-w-6xl mx-auto px-6 py-16 text-left space-y-10 animate-in fade-in duration-300 flex-1">
                 <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-600 dark:text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest mb-3">
-                        24/7 Operations Support
+                    <div className="flex items-center gap-3 mb-3">
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95 shadow-2xs cursor-pointer"
+                        >
+                            <ArrowLeft size={16} />
+                        </button>
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-600 dark:text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest">
+                            24/7 Operations Support
+                        </div>
                     </div>
                     <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Contact Operations Command</h1>
                     <p className="text-slate-600 dark:text-slate-400 mt-1.5 text-sm font-medium">Reach out to our municipal operations team regarding routing errors, platform assistance, or ward emergencies.</p>

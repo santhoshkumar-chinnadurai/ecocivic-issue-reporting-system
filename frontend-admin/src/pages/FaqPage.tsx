@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Search, ChevronDown, ChevronUp, HelpCircle, Shield, Cpu, UserCheck, Wrench, Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Search, ChevronDown, ChevronUp, HelpCircle, Shield, Cpu, UserCheck, Wrench, Lock, ArrowLeft } from 'lucide-react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import Input from '../components/ui/Input';
 import platformConfig from '../config/platformConfig';
 
 const FaqPage: React.FC = () => {
+    const navigate = useNavigate();
     const categories = [
         { id: 'all', label: 'All FAQs', icon: HelpCircle },
         { id: 'citizen', label: 'Citizen Reporting', icon: UserCheck },
@@ -73,8 +75,16 @@ const FaqPage: React.FC = () => {
             <main className="max-w-4xl mx-auto px-6 py-16 text-left space-y-10 animate-in fade-in duration-300 flex-1">
                 {/* Header */}
                 <div className="space-y-3">
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-500/10 border border-emerald-500/25 rounded-full text-emerald-700 dark:text-emerald-400 text-xs font-black uppercase tracking-wider">
-                        🌱 Knowledge Base & Support
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95 shadow-2xs cursor-pointer"
+                        >
+                            <ArrowLeft size={16} />
+                        </button>
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-emerald-500/10 border border-emerald-500/25 rounded-full text-emerald-700 dark:text-emerald-400 text-xs font-black uppercase tracking-wider">
+                            🌱 Knowledge Base & Support
+                        </div>
                     </div>
                     <h1 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                         Frequently Asked Questions

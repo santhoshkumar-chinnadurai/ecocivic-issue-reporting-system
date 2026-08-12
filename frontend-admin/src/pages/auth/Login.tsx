@@ -19,7 +19,7 @@ const Login: React.FC = () => {
         const next = tapCount + 1;
         setTapCount(next);
         if (next >= 3) {
-            setEmail('citizen@civic.com');
+            setEmail('suganthan@civic.com');
             setPassword('citizen123');
             setErrorMsg(null);
             setTapCount(0);
