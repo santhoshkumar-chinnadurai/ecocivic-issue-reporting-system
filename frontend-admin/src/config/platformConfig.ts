@@ -12,6 +12,7 @@ export interface PlatformConfig {
         latitude: number;
         longitude: number;
     };
+    googleMapsApiKey?: string;
 }
 
 export const platformConfig: PlatformConfig = {
@@ -27,7 +28,8 @@ export const platformConfig: PlatformConfig = {
     defaultCoordinates: {
         latitude: 11.0168,
         longitude: 76.9558
-    }
+    },
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyA90pvkeLfhraDXES8REKm_1anHZPhVJBc'
 };
 
 export default platformConfig;

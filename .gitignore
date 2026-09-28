@@ -14,6 +14,10 @@ yarn-debug.log*
 .env.production
 !.env.example
 
+# Databases
+*.sqlite
+*.sqlite-journal
+
 # OS & Editor
 .DS_Store
 Thumbs.db

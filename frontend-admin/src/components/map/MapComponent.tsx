@@ -6,8 +6,9 @@ import api from '../../api/axios';
 import Badge from '../ui/Badge';
 import Spinner from '../ui/Spinner';
 import { useTheme } from '../../contexts/ThemeContext';
-import { Sun, Moon } from 'lucide-react';
+import { Layers, Navigation, ExternalLink, MapPin } from 'lucide-react';
 import platformConfig from '../../config/platformConfig';
+import { MAP_LAYERS, type MapTileMode } from '../../config/mapConfig';
 
 interface MapComponentProps {
     fullScreen?: boolean;
@@ -17,7 +18,7 @@ const CATEGORIES = ['ALL', 'Garbage Dump', 'Road Damage', 'Water Leak', 'Electri
 
 const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
     const { theme } = useTheme();
-    const [mapMode, setMapMode] = useState<'light' | 'dark'>(theme);
+    const [mapLayer, setMapLayer] = useState<MapTileMode>('google-streets');
     const [reports, setReports] = useState<any[]>([]);
     const [filteredReports, setFilteredReports] = useState<any[]>([]);
     const [selectedCategory, setSelectedCategory] = useState('ALL');
@@ -25,7 +26,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setMapMode(theme);
+        // If dark theme is initially active, default to dark layer or google streets
+        if (theme === 'dark') {
+            setMapLayer('dark');
+        } else {
+            setMapLayer('google-streets');
+        }
     }, [theme]);
 
     useEffect(() => {
@@ -79,10 +85,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
         });
     };
 
-    const isDark = mapMode === 'dark';
-    const tileUrl = isDark
-        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-        : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+    const currentLayer = MAP_LAYERS[mapLayer] || MAP_LAYERS['google-streets'];
 
     if (loading) {
         return (
@@ -96,19 +99,77 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
         <div className={`relative w-full ${fullScreen ? 'h-[75vh]' : 'h-96'} rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-900 bg-slate-100 dark:bg-slate-950 flex flex-col md:flex-row z-0 shadow-2xl transition-colors duration-300`}>
             
             {/* Sidebar Map Controls */}
-            <div className="w-full md:w-60 bg-white/95 dark:bg-[#060814]/95 backdrop-blur-md border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-900 p-4 space-y-4 z-10 text-left">
-                <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-900">
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-black">Spatial Filters</span>
-                    <button
-                        onClick={() => setMapMode(isDark ? 'light' : 'dark')}
-                        className="p-1 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors flex items-center gap-1 text-[10px] font-bold"
-                        title="Toggle Map Style"
-                    >
-                        {isDark ? <Sun size={12} className="text-amber-400" /> : <Moon size={12} className="text-teal-600" />}
-                        <span>{isDark ? 'Light Map' : 'Dark Map'}</span>
-                    </button>
+            <div className="w-full md:w-64 bg-white/95 dark:bg-[#060814]/95 backdrop-blur-md border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-900 p-4 space-y-4 z-10 text-left overflow-y-auto max-h-[75vh]">
+                
+                {/* Header & Google Maps badge */}
+                <div className="pb-3 border-b border-slate-200 dark:border-slate-900">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-black">
+                            Map Engine
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                            Google Maps API
+                        </span>
+                    </div>
+
+                    {/* Layer Selector */}
+                    <div className="grid grid-cols-2 gap-1.5 mt-2.5">
+                        <button
+                            type="button"
+                            onClick={() => setMapLayer('google-streets')}
+                            className={`px-2 py-1.5 rounded-lg text-[11px] font-bold transition-all text-left flex items-center gap-1.5 ${
+                                mapLayer === 'google-streets'
+                                    ? 'bg-blue-600 text-white shadow-sm'
+                                    : 'bg-slate-100 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800'
+                            }`}
+                        >
+                            <span>🗺️</span>
+                            <span className="truncate">Streets</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setMapLayer('google-satellite')}
+                            className={`px-2 py-1.5 rounded-lg text-[11px] font-bold transition-all text-left flex items-center gap-1.5 ${
+                                mapLayer === 'google-satellite'
+                                    ? 'bg-blue-600 text-white shadow-sm'
+                                    : 'bg-slate-100 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800'
+                            }`}
+                        >
+                            <span>🛰️</span>
+                            <span className="truncate">Satellite</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setMapLayer('google-hybrid')}
+                            className={`px-2 py-1.5 rounded-lg text-[11px] font-bold transition-all text-left flex items-center gap-1.5 ${
+                                mapLayer === 'google-hybrid'
+                                    ? 'bg-blue-600 text-white shadow-sm'
+                                    : 'bg-slate-100 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800'
+                            }`}
+                        >
+                            <span>🔀</span>
+                            <span className="truncate">Hybrid</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setMapLayer('dark')}
+                            className={`px-2 py-1.5 rounded-lg text-[11px] font-bold transition-all text-left flex items-center gap-1.5 ${
+                                mapLayer === 'dark'
+                                    ? 'bg-blue-600 text-white shadow-sm'
+                                    : 'bg-slate-100 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800'
+                            }`}
+                        >
+                            <span>🌙</span>
+                            <span className="truncate">Dark</span>
+                        </button>
+                    </div>
                 </div>
 
+                {/* Spatial Category Filter */}
                 <div>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-black">Category Filter</span>
                     <div className="flex flex-wrap md:flex-col gap-1.5 mt-2">
@@ -128,6 +189,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
                     </div>
                 </div>
 
+                {/* Status Legend */}
                 <div className="pt-2 border-t border-slate-200 dark:border-slate-900">
                     <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-black">Status Legend</span>
                     <div className="space-y-2 mt-2 text-xs font-medium">
@@ -165,8 +227,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
                     style={{ height: '100%', width: '100%' }}
                 >
                     <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                        url={tileUrl}
+                        key={mapLayer}
+                        attribution={currentLayer.attribution}
+                        url={currentLayer.url}
+                        subdomains={currentLayer.subdomains || ['0', '1', '2', '3']}
+                        maxZoom={currentLayer.maxZoom}
                     />
                     {filteredReports.map((report, idx) => {
                         const lat = Number(report.latitude);
@@ -180,16 +245,33 @@ const MapComponent: React.FC<MapComponentProps> = ({ fullScreen = false }) => {
                                 icon={getMarkerIcon(report.status)}
                             >
                                 <Popup>
-                                    <div className="p-2 text-left font-sans min-w-[150px] bg-slate-900 dark:bg-slate-950 text-white rounded-lg shadow-lg">
+                                    <div className="p-2.5 text-left font-sans min-w-[180px] bg-slate-900 dark:bg-slate-950 text-white rounded-xl shadow-2xl border border-slate-800">
                                         <div className="flex justify-between items-center gap-2">
                                             <span className="text-xs font-bold text-white leading-tight">{report.category}</span>
                                             <span className="text-[9px] text-slate-400 font-mono">#{report.report_id?.slice(0, 4) || idx}</span>
                                         </div>
-                                        <p className="text-[10px] text-slate-300 mt-1">Status: <span className="font-bold">{report.status}</span></p>
-                                        <div className="h-[1px] bg-slate-800 my-1.5"></div>
-                                        <a href={`/issues/${report.report_id}`} className="text-[10px] text-emerald-400 hover:underline font-bold block">
-                                            Inspect Incident Details
-                                        </a>
+                                        <p className="text-[10px] text-slate-300 mt-1">Status: <span className="font-bold text-emerald-400">{report.status}</span></p>
+                                        
+                                        <div className="h-[1px] bg-slate-800 my-2"></div>
+                                        
+                                        <div className="space-y-1.5">
+                                            <a 
+                                                href={`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-1.5 text-[11px] text-blue-400 hover:text-blue-300 font-semibold"
+                                            >
+                                                <Navigation size={12} />
+                                                <span>Navigate with Google Maps</span>
+                                            </a>
+                                            <a 
+                                                href={`/issues/${report.report_id}`} 
+                                                className="flex items-center gap-1.5 text-[11px] text-emerald-400 hover:text-emerald-300 font-semibold"
+                                            >
+                                                <ExternalLink size={12} />
+                                                <span>Inspect Incident Details</span>
+                                            </a>
+                                        </div>
                                     </div>
                                 </Popup>
                             </Marker>

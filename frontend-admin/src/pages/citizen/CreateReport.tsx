@@ -12,6 +12,7 @@ import ImageUploader from '../../components/forms/ImageUploader';
 import Badge from '../../components/ui/Badge';
 import { useTheme } from '../../contexts/ThemeContext';
 import platformConfig from '../../config/platformConfig';
+import { MAP_LAYERS, type MapTileMode } from '../../config/mapConfig';
 
 const CATEGORY_OPTIONS = [
     { value: 'Road Damage', label: 'Road / Potholes', icon: AlertCircle, priority: 'HIGH PRIORITY', sla: 'SLA: 24h', color: 'rose' },
@@ -54,6 +55,7 @@ const CreateReport: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [locationLoading, setLocationLoading] = useState(false);
     const [mapPosition, setMapPosition] = useState<[number, number]>([11.0168, 76.9558]);
+    const [mapLayer, setMapLayer] = useState<MapTileMode>('google-streets');
 
     const user = (() => {
         try {
@@ -387,18 +389,33 @@ const CreateReport: React.FC = () => {
                                 </div>
                             </div>
 
-                            {/* Interactive Spatial Leaflet Mini-Map Picker */}
+                            {/* Interactive Spatial Leaflet Mini-Map Picker powered by Google Maps */}
                             <div className="space-y-2">
-                                <div className="flex justify-between items-center">
-                                    <span className="block text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                                        GPS Pin Map (Click Map to Drop Pin)
-                                    </span>
-                                    <span className="text-[10px] text-slate-500 font-mono">
-                                        {formData.latitude}, {formData.longitude}
-                                    </span>
+                                <div className="flex flex-wrap justify-between items-center gap-2">
+                                    <div className="flex items-center gap-2">
+                                        <span className="block text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                                            GPS Pin Map (Click Map to Drop Pin)
+                                        </span>
+                                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                                            Google Maps
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setMapLayer(mapLayer === 'google-streets' ? 'google-satellite' : 'google-streets')}
+                                            className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                                        >
+                                            {mapLayer === 'google-streets' ? '🛰️ Switch to Satellite' : '🗺️ Switch to Streets'}
+                                        </button>
+                                        <span className="text-[10px] text-slate-500 font-mono">
+                                            {formData.latitude}, {formData.longitude}
+                                        </span>
+                                    </div>
                                 </div>
                                 
-                                <div className="h-44 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 relative shadow-inner">
+                                <div className="h-52 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 relative shadow-inner">
                                     <MapContainer
                                         center={mapPosition}
                                         zoom={13}
@@ -406,8 +423,11 @@ const CreateReport: React.FC = () => {
                                         style={{ height: '100%', width: '100%' }}
                                     >
                                         <TileLayer
-                                            attribution='&copy; CARTO'
-                                            url={tileUrl}
+                                            key={mapLayer}
+                                            attribution={MAP_LAYERS[mapLayer].attribution}
+                                            url={MAP_LAYERS[mapLayer].url}
+                                            subdomains={MAP_LAYERS[mapLayer].subdomains || ['0', '1', '2', '3']}
+                                            maxZoom={MAP_LAYERS[mapLayer].maxZoom}
                                         />
                                         <LocationPickerMarker
                                             position={mapPosition}
